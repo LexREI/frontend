@@ -1,5 +1,23 @@
+import React from 'react';
+import Layout from '@/layouts/Layout';
+import PDFViewer from '@/pages/Dashboard/components/PDFViewer';
+import Chatbot from '@/pages/Dashboard/components/Chatbot';
+import Relevant from '@/pages/Dashboard/components/Relevant';
+import RelatedQuestion from '@/pages/Dashboard/components/RelatedQuestion';
+
 function Dashboard() {
-  return <h1>Dashboard</h1>;
+  return (
+    <Layout
+      component={
+        <main className="grid grid-cols-2 gap-4">
+          <PDFViewer />
+          <Chatbot />
+          <Relevant />
+          <RelatedQuestion />
+        </main>
+      }
+    />
+  );
 }
 
 export default Dashboard;
