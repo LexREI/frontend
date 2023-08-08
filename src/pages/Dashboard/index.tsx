@@ -1,9 +1,9 @@
 import React from 'react';
 import Layout from '@/layouts/Layout';
-import PDFViewer from '@/pages/Dashboard/components/PDFViewer';
 import Chatbot from '@/pages/Dashboard/components/Chatbot';
 import Relevant from '@/pages/Dashboard/components/Relevant';
 import RelatedQuestion from '@/pages/Dashboard/components/RelatedQuestion';
+import PDFViewer from '@/pages/Dashboard/components/PDFViewer';
 
 function Dashboard() {
   return (

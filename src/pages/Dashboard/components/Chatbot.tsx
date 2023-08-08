@@ -8,7 +8,7 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 
 function Chatbot() {
   return (
-    <section className="h-[600px]">
+    <section className="h-[700px]">
       <div className="w-full h-full sm:col-span-7 self-start rounded-2xl">
         <Card className="flex flex-col rounded-l-2xl rounded-r-none h-full">
           <CardHeader className="border-b-2 drop-shadow-md">

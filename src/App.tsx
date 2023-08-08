@@ -4,7 +4,7 @@ import { Home, Dashboard, Error, PrivateRoute } from './pages';
 
 const routes = [
   { path: '/', element: <Home />, auth: false },
-  { path: '/dashboard', element: <Dashboard />, auth: true },
+  { path: '/dashboard', element: <Dashboard />, auth: false },
   { path: '*', element: <Error />, auth: false },
 ];
 

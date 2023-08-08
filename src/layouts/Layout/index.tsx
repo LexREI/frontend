@@ -187,7 +187,7 @@ function Layout(props: Props) {
         </Transition.Root>
 
         {/* Static sidebar for desktop */}
-        <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+        <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
             <div className="flex h-16 shrink-0 items-center">
@@ -293,7 +293,7 @@ function Layout(props: Props) {
         </div>
 
         <main className="py-10 lg:pl-72 bg-gray-200">
-          <div className="px-4 sm:px-6 lg:px-8">{component}</div>
+          <div className="px-2">{component}</div>
         </main>
       </div>
     </>
