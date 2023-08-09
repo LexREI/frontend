@@ -1,1 +1,5 @@
-declare namespace API {}
+declare namespace API {
+  type OpenAIChatUsingPostBody = {
+    message: string;
+  };
+}
