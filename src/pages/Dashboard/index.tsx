@@ -7,16 +7,22 @@ import PDFViewer from '@/pages/Dashboard/components/PDFViewer';
 
 function Dashboard() {
   return (
-    <Layout
-      component={
-        <main className="grid grid-cols-2 gap-4">
-          <PDFViewer />
-          <Chatbot />
-          <Relevant />
-          <RelatedQuestion />
-        </main>
-      }
-    />
+    // <Layout
+    //   component={
+    //     <main className="grid grid-cols-2 gap-4">
+    //       <PDFViewer />
+    //       <Chatbot />
+    //       <Relevant />
+    //       <RelatedQuestion />
+    //     </main>
+    //   }
+    // />
+    <section className="grid grid-cols-2 gap-4">
+      <PDFViewer />
+      <Chatbot />
+      <Relevant />
+      {/*<RelatedQuestion />*/}
+    </section>
   );
 }
 
