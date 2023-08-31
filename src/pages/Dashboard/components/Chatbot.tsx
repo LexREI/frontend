@@ -11,17 +11,15 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { doChaClientSideUsingPost } from '@/services/ChatbotController';
 import logo from '@/assets/react.svg';
 
-function Chatbot() {
+type ChatbotProps = {
+  messages: any[];
+  setMessages: any;
+};
+
+function Chatbot(props: ChatbotProps) {
+  const { messages, setMessages } = props;
   const [userMessage, setUserMessage] = useState<string>(''); // user input
-  const [suggestions, setSuggestions] = useState<any[]>([]); // suggestions items get from backend
   const [isTyping, setIsTyping] = useState<boolean>(false); // is typing
-  const [messages, setMessages] = useState<any[]>([
-    {
-      message: '👋 Hello, How I can help you today?',
-      sender: 'ChatGPT',
-      suggestion: null,
-    },
-  ]);
 
   const handleSendOnChange = (message: string) => {
     setUserMessage(message);
@@ -33,18 +31,14 @@ function Chatbot() {
     };
     setUserMessage('');
     const response = await doChaClientSideUsingPost(body);
-    console.log(response.data.message);
+    console.log(response.data.answer);
 
     const newMessage = {
-      message: response.data.message,
+      message: response.data.answer,
       sender: 'ChatGPT',
-      suggestion: null,
+      metadata: response.data.metadata,
     };
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
-    setSuggestions((prevSuggestions) => [
-      ...prevSuggestions,
-      [...response.data.message],
-    ]);
+    setMessages((prevMessages: any) => [...prevMessages, newMessage]);
 
     setIsTyping(false);
   };
@@ -55,10 +49,10 @@ function Chatbot() {
     const newMessage = {
       message: userMessage,
       sender: 'user',
-      suggestion: null,
+      metadata: null,
     };
 
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setMessages((prevMessages: any) => [...prevMessages, newMessage]);
     // Initial system message
     await processMessage(userMessage);
   };
