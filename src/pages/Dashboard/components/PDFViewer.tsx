@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import WebViewer from '@pdftron/webviewer';
-import examplePDF from '@/assets/pdf/example.pdf';
+import examplePDF from '@/assets/pdf/Fair Labor Standards Act.pdf';
 
 type PDFViewerProps = {
   page: number;
