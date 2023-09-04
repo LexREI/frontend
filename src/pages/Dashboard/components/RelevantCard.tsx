@@ -26,7 +26,7 @@ export function CardWithForm(props: CardWithFormProps) {
   const { metadata, setPage } = props;
   return (
     <Card
-      onClick={() => setPage(metadata.pageNumber)}
+      onClick={() => setPage(metadata.pageNumber + 1)}
       className="cursor-pointer"
     >
       <CardHeader>
