@@ -7,6 +7,7 @@ import PDFViewer from '@/pages/Dashboard/components/PDFViewer';
 
 function Dashboard() {
   const [page, setPage] = useState<number>(1);
+  const [searchText, setSearchText] = useState<string>('');
   const [messages, setMessages] = useState<any[]>([
     {
       message: '👋 Hello, How I can help you today?',
@@ -14,6 +15,12 @@ function Dashboard() {
       metadata: null,
     },
   ]);
+
+  const onClickSearch = (pageNumber: number, pageTextHighlight: string) => {
+    setPage(pageNumber);
+    setSearchText(pageTextHighlight);
+  };
+
   return (
     // <Layout
     //   component={
@@ -26,11 +33,11 @@ function Dashboard() {
     //   }
     // />
     <section className="grid grid-cols-2 gap-4">
-      <PDFViewer page={page} />
+      <PDFViewer page={page} searchText={searchText} />
       <Chatbot messages={messages} setMessages={setMessages} />
       <Relevant
         metadatas={messages[messages.length - 1].metadata}
-        setPage={setPage}
+        onClickSearch={onClickSearch}
       />
       {/* <RelatedQuestion /> */}
     </section>

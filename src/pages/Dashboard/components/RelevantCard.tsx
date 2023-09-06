@@ -7,7 +7,7 @@ import { Card, CardDescription, CardHeader } from '@/components/ui/card';
 
 type CardWithFormProps = {
   metadata: any;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
+  onClickSearch: (pageNumber: number, pageTextHighlight: string) => void;
 };
 
 const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -23,10 +23,12 @@ const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
 }));
 
 export function CardWithForm(props: CardWithFormProps) {
-  const { metadata, setPage } = props;
+  const { metadata, onClickSearch } = props;
   return (
     <Card
-      onClick={() => setPage(metadata.pageNumber + 1)}
+      onClick={() =>
+        onClickSearch(metadata.pageNumber + 1, metadata.pageContent)
+      }
       className="cursor-pointer"
     >
       <CardHeader>
@@ -45,11 +47,11 @@ export function CardWithForm(props: CardWithFormProps) {
         <CardDescription>
           <Button>
             <a href={metadata.download_link} target="_blank" rel="noreferrer">
-              Download Link
+              View PDF
             </a>
           </Button>
         </CardDescription>
-        <CardDescription>page: {metadata.pageNumber}</CardDescription>
+        <CardDescription>page: {metadata.pageNumber + 1}</CardDescription>
       </CardHeader>
     </Card>
   );

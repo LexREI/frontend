@@ -4,12 +4,16 @@ import examplePDF from '@/assets/pdf/Fair Labor Standards Act.pdf';
 
 type PDFViewerProps = {
   page: number;
+  searchText: string;
 };
 
 function PDFViewer(props: PDFViewerProps) {
-  const { page } = props;
+  const { page, searchText } = props;
   const viewerDiv = useRef<HTMLDivElement>(null);
+
   const [documentViewerCopy, setDocumentViewerCopy] = React.useState<any>(null);
+  const [instanceCopy, setInstanceCopy] = React.useState<any>(null);
+
   useEffect(() => {
     WebViewer(
       {
@@ -24,53 +28,56 @@ function PDFViewer(props: PDFViewerProps) {
       // console.log('instant: ', instance.Core.documentViewer.getPageCount());
       const { documentViewer, annotationManager, Annotations, Search } =
         instance.Core;
+      setInstanceCopy(instance);
       setDocumentViewerCopy(documentViewer);
 
       documentViewer.setSearchHighlightColors({
         // setSearchHighlightColors accepts both Annotations.Color objects or 'rgba' strings
-        searchResult: new Annotations.Color(0, 0, 255, 0.5),
-        activeSearchResult: 'rgba(0, 255, 0, 0.5)',
-      });
-
-      documentViewer.addEventListener('documentLoaded', () => {
-        console.log('documentload');
-        const searchText =
-          'bahwa tujuan pembangunan nasional adalah terciptanya suatu';
-        const mode = Search.Mode.PAGE_STOP | Search.Mode.HIGHLIGHT;
-        const searchOptions = {
-          // If true, a search of the entire document will be performed. Otherwise, a single search will be performed.
-          fullSearch: true,
-          // The callback function that is called when the search returns a result.
-          onResult: (result: {
-            resultCode: number;
-            quads: { getPoints: () => any }[];
-            pageNum: number;
-          }) => {
-            // with 'PAGE_STOP' mode, the callback is invoked after each page has been searched.
-            if (result.resultCode === Search.ResultCode.FOUND) {
-              const textQuad = result.quads[0].getPoints(); // getPoints will return Quad objects
-              console.log('textqiad:', textQuad);
-              const annot = new Annotations.TextHighlightAnnotation({
-                PageNumber: result.pageNum,
-                Quads: result.quads,
-                StrokeColor: new Annotations.Color(255, 0, 0, 1),
-              });
-
-              annotationManager.addAnnotation(annot);
-              annotationManager.redrawAnnotation(annot);
-              // now that we have the result Quads, it's possible to highlight text or create annotations on top of the text
-            }
-          },
-        };
-
-        documentViewer.textSearchInit(searchText, mode, searchOptions);
+        searchResult: new Annotations.Color(165, 217, 255, 0.8),
+        activeSearchResult: 'rgba(165, 217, 255, 0.8)',
       });
     });
   }, []);
 
+  const HighlightText = (text: string) => {
+    const { documentViewer, annotationManager, Annotations, Search } =
+      instanceCopy.Core;
+    const mode = Search.Mode.PAGE_STOP | Search.Mode.HIGHLIGHT;
+    const searchOptions = {
+      // If true, a search of the entire document will be performed. Otherwise, a single search will be performed.
+      fullSearch: true,
+      // The callback function that is called when the search returns a result.
+      onResult: (result: {
+        resultCode: number;
+        quads: { getPoints: () => any }[];
+        pageNum: number;
+      }) => {
+        // with 'PAGE_STOP' mode, the callback is invoked after each page has been searched.
+        if (result.resultCode === Search.ResultCode.FOUND) {
+          for (let i = 0; i < result.quads.length; i++) {
+            const quad = result.quads[i].getPoints();
+            const annot = new Annotations.TextHighlightAnnotation({
+              PageNumber: result.pageNum,
+              Quads: [quad],
+              StrokeColor: new Annotations.Color(165, 217, 255, 0.8),
+            });
+
+            annotationManager.addAnnotation(annot);
+            annotationManager.redrawAnnotation(annot);
+          }
+        }
+      },
+    };
+
+    documentViewer.textSearchInit(text, mode, searchOptions);
+  };
+
   useEffect(() => {
     documentViewerCopy?.setCurrentPage(page, false);
-  }, [page]);
+    if (documentViewerCopy) {
+      HighlightText(searchText);
+    }
+  }, [page, searchText]);
 
   return <div className="prose h-[700px] webviewer" ref={viewerDiv} />;
 }
