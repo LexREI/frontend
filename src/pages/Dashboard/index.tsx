@@ -4,6 +4,7 @@ import Chatbot from '@/pages/Dashboard/components/Chatbot';
 import Relevant from '@/pages/Dashboard/components/Relevant';
 import RelatedQuestion from '@/pages/Dashboard/components/RelatedQuestion';
 import PDFViewer from '@/pages/Dashboard/components/PDFViewer';
+import { Button } from '@/components/ui/button';
 
 function Dashboard() {
   const [page, setPage] = useState<number>(1);

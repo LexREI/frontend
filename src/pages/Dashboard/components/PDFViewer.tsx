@@ -1,6 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import WebViewer from '@pdftron/webviewer';
 import examplePDF from '@/assets/pdf/Fair Labor Standards Act.pdf';
+import examplePDF1 from '@/assets/pdf/example.pdf';
+import { Button } from '@/components/ui/button';
 
 type PDFViewerProps = {
   page: number;
@@ -72,6 +74,12 @@ function PDFViewer(props: PDFViewerProps) {
     documentViewer.textSearchInit(text, mode, searchOptions);
   };
 
+  const loadPDF = () => {
+    documentViewerCopy.loadDocument(examplePDF1, {
+      filename: 'examplePDF1.pdf',
+    });
+  };
+
   useEffect(() => {
     documentViewerCopy?.setCurrentPage(page, false);
     if (documentViewerCopy) {
@@ -79,7 +87,12 @@ function PDFViewer(props: PDFViewerProps) {
     }
   }, [page, searchText]);
 
-  return <div className="prose h-[700px] webviewer" ref={viewerDiv} />;
+  return (
+    <section className="block">
+      <div className="prose h-[700px] webviewer" ref={viewerDiv} />
+      <Button onClick={loadPDF}>open exmaple.pdf</Button>
+    </section>
+  );
 }
 
 export default PDFViewer;
