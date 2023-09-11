@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 
 function Dashboard() {
   const [page, setPage] = useState<number>(1);
+  const [document, setDocument] = useState<string>('');
   const [searchText, setSearchText] = useState<string>('');
   const [messages, setMessages] = useState<any[]>([
     {
@@ -34,9 +35,10 @@ function Dashboard() {
     //   }
     // />
     <section className="grid grid-cols-2 gap-4">
-      <PDFViewer page={page} searchText={searchText} />
+      <PDFViewer document={document} page={page} searchText={searchText} />
       <Chatbot messages={messages} setMessages={setMessages} />
       <Relevant
+        setDocument={setDocument}
         metadatas={messages[messages.length - 1].metadata}
         onClickSearch={onClickSearch}
       />

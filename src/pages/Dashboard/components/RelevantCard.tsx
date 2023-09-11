@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { Card, CardDescription, CardHeader } from '@/components/ui/card';
 
 type CardWithFormProps = {
+  setDocument: (document: string) => void;
   metadata: any;
   onClickSearch: (pageNumber: number, pageTextHighlight: string) => void;
 };
@@ -23,7 +24,7 @@ const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
 }));
 
 export function CardWithForm(props: CardWithFormProps) {
-  const { metadata, onClickSearch } = props;
+  const { setDocument, metadata, onClickSearch } = props;
   return (
     <Card
       onClick={() =>
@@ -45,10 +46,8 @@ export function CardWithForm(props: CardWithFormProps) {
           </HtmlTooltip>
         </CardDescription>
         <CardDescription>
-          <Button>
-            <a href={metadata.download_link} target="_blank" rel="noreferrer">
-              View PDF
-            </a>
+          <Button onClick={() => setDocument(metadata.download_link)}>
+            View PDF
           </Button>
         </CardDescription>
         <CardDescription>page: {metadata.pageNumber + 1}</CardDescription>

@@ -5,12 +5,13 @@ import examplePDF1 from '@/assets/pdf/example.pdf';
 import { Button } from '@/components/ui/button';
 
 type PDFViewerProps = {
+  document: string;
   page: number;
   searchText: string;
 };
 
 function PDFViewer(props: PDFViewerProps) {
-  const { page, searchText } = props;
+  const { document, page, searchText } = props;
   const viewerDiv = useRef<HTMLDivElement>(null);
 
   const [documentViewerCopy, setDocumentViewerCopy] = React.useState<any>(null);
@@ -73,12 +74,12 @@ function PDFViewer(props: PDFViewerProps) {
 
     documentViewer.textSearchInit(text, mode, searchOptions);
   };
-
-  const loadPDF = () => {
-    documentViewerCopy.loadDocument(examplePDF1, {
-      filename: 'examplePDF1.pdf',
+  useEffect(() => {
+    if (document === '') return;
+    documentViewerCopy.loadDocument(document, {
+      filename: 'document.pdf',
     });
-  };
+  }, [document]);
 
   useEffect(() => {
     documentViewerCopy?.setCurrentPage(page, false);
@@ -90,7 +91,6 @@ function PDFViewer(props: PDFViewerProps) {
   return (
     <section className="block">
       <div className="prose h-[700px] webviewer" ref={viewerDiv} />
-      <Button onClick={loadPDF}>open exmaple.pdf</Button>
     </section>
   );
 }
