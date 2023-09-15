@@ -1,10 +1,11 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Home, Dashboard, Error, PrivateRoute } from './pages';
+import { Home, Dashboard, Discovery, Error, PrivateRoute } from './pages';
 
 const routes = [
   { path: '/', element: <Home />, auth: false },
   { path: '/dashboard', element: <Dashboard />, auth: false },
+  { path: '/discovery', element: <Discovery />, auth: false },
   { path: '*', element: <Error />, auth: false },
 ];
 
