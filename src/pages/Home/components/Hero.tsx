@@ -41,6 +41,12 @@ function Hero() {
             >
               Get started
             </Link>
+            <Link
+              to="/discovery"
+              className="rounded-md bg-primary text-primary-foreground px-3.5 py-2.5 text-sm font-semibold text-white shadow hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Discovery
+            </Link>
             <a
               href="#"
               className="text-sm font-semibold leading-6 text-gray-900"
