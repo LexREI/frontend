@@ -59,7 +59,7 @@ function Chatbot(props: ChatbotProps) {
 
   return (
     <section>
-      <div className="w-full h-full sm:col-span-7 self-start rounded-2xl">
+      <div className="w-full h-full self-start">
         <div className="flex flex-col h-full">
           <CardHeader className="bg-indigo-400/50">
             <CardTitle>AI Chat</CardTitle>
@@ -82,16 +82,6 @@ function Chatbot(props: ChatbotProps) {
                             {message.message}
                           </div>
                           <div className="flex items-center mt-4">
-                            <div>
-                              <div className="flex gap-2">
-                                <div className="bg-white rounded-full p-2">
-                                  <HandThumbUpIcon className="h-4 w-4" />
-                                </div>
-                                <div className="bg-white rounded-full p-2">
-                                  <HandThumbDownIcon className="h-4 w-4" />
-                                </div>
-                              </div>
-                            </div>
                             <button
                               type="button"
                               className="ml-auto bg-white text-gray-500 p-2 rounded-xl text-sm cursor-pointer hover:bg-green-100 transition duration-300"

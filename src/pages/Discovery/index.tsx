@@ -24,7 +24,7 @@ function Discovery() {
   return (
     <Layout
       component={
-        <main className="flex w-full">
+        <main className="flex w-full h-full">
           <Actions />
           <div className="grid grid-cols-2 w-full">
             <PDFViewer

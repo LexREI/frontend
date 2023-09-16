@@ -90,7 +90,7 @@ function PDFViewer(props: PDFViewerProps) {
 
   return (
     <section className="border-l-2 border-r-2">
-      <div className="prose h-[700px] webviewer" ref={viewerDiv} />
+      <div className="prose h-full webviewer" ref={viewerDiv} />
     </section>
   );
 }
