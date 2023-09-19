@@ -10,6 +10,7 @@ import UseAnimations from 'react-useanimations';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import { doChaClientSideUsingPost } from '@/services/ChatbotController';
 import logo from '@/assets/react.svg';
+import { Button } from '@/components/ui/button';
 
 type ChatbotProps = {
   messages: any[];
@@ -59,10 +60,10 @@ function Chatbot(props: ChatbotProps) {
 
   return (
     <section>
-      <div className="w-full h-full self-start">
+      <div className="w-full h-full self-start bg-slate-100">
         <div className="flex flex-col h-full">
-          <CardHeader className="bg-indigo-400/50">
-            <CardTitle>AI Chat</CardTitle>
+          <CardHeader>
+            <CardTitle>Chatbot name in here</CardTitle>
           </CardHeader>
           <div className="flex flex-col overflow-auto p-4">
             <div>
@@ -71,7 +72,7 @@ function Chatbot(props: ChatbotProps) {
                   <div key={message.message}>
                     {message.sender === 'ChatGPT' ||
                     message.sender === 'assistant' ? (
-                      <div className="flex p-4 gap-2 backdrop-blur-lg bg-green-100/30 rounded-2xl shadow-lg shadow-green-50/40">
+                      <div className="flex p-4 gap-2 backdrop-blur-lg bg-background rounded-2xl shadow-lg">
                         <img
                           className="rounded-full w-12 h-12 bg-amber-50"
                           src={logo}
@@ -84,7 +85,7 @@ function Chatbot(props: ChatbotProps) {
                           <div className="flex items-center mt-4">
                             <button
                               type="button"
-                              className="ml-auto bg-white text-gray-500 p-2 rounded-xl text-sm cursor-pointer hover:bg-green-100 transition duration-300"
+                              className="ml-auto bg-white text-gray-500 p-2 rounded-xl text-sm cursor-pointer hover:bg-accent transition duration-300"
                             >
                               <ClipboardIcon className="inline-block h-4 w-4" />
                               copy
@@ -113,49 +114,41 @@ function Chatbot(props: ChatbotProps) {
                 );
               })}
               {/* presentation */}
-              {/*<div className="flex p-4 gap-2 pt-6">*/}
-              {/*  <img*/}
-              {/*    className="rounded-full w-12 h-12 bg-amber-50"*/}
-              {/*    src={userAvatar}*/}
-              {/*    alt="bot"*/}
-              {/*  />*/}
-              {/*  <div className="flex flex-col w-full">*/}
-              {/*    <div className="__chat_box pt-3 text-gray-600">*/}
-              {/*      What is PresetAI?*/}
-              {/*    </div>*/}
-              {/*  </div>*/}
-              {/*</div>*/}
-              {/*<div className="flex p-4 gap-2 backdrop-blur-lg bg-green-100/30 rounded-2xl shadow-lg shadow-green-50/40">*/}
-              {/*  <img*/}
-              {/*    className="rounded-full w-12 h-12 bg-amber-50"*/}
-              {/*    src={logo}*/}
-              {/*    alt="bot"*/}
-              {/*  />*/}
-              {/*  <div className="flex flex-col w-full">*/}
-              {/*    <div className="__chat_box pt-2 text-gray-600">*/}
-              {/*      PresetAI is a powerhouse for chat-based search operations. We*/}
-              {/*      specialize in addressing developer documentation queries with*/}
-              {/*      simplicity and efficiency. Integration is effortless, and*/}
-              {/*      achievable everywhere with just a single line of code.*/}
-              {/*    </div>*/}
-              {/*    <div className="flex items-center mt-4">*/}
-              {/*      <div>*/}
-              {/*        <div className="flex gap-2">*/}
-              {/*          <div className="bg-white rounded-full p-2">*/}
-              {/*            <HandThumbUpIcon className="h-4 w-4" />*/}
-              {/*          </div>*/}
-              {/*          <div className="bg-white rounded-full p-2">*/}
-              {/*            <HandThumbDownIcon className="h-4 w-4" />*/}
-              {/*          </div>*/}
-              {/*        </div>*/}
-              {/*      </div>*/}
-              {/*      <div className="ml-auto bg-white text-gray-500 p-2 rounded-xl text-sm">*/}
-              {/*        <ClipboardIcon className="inline-block h-4 w-4" />*/}
-              {/*        copy*/}
-              {/*      </div>*/}
-              {/*    </div>*/}
-              {/*  </div>*/}
-              {/*</div>*/}
+              <div className="flex flex-col items-end p-4 pt-6">
+                <div className="flex gap-2 items-center">
+                  <span className="text-muted-foreground">11:19 AM</span>
+                  <img
+                    className="rounded-full w-4 h-4 bg-amber-50"
+                    src={logo}
+                    alt="bot"
+                  />
+                  <span>Jaying Young</span>
+                </div>
+
+                <div className="flex bg-primary/30 rounded-l-xl rounded-br-xl">
+                  <div className="p-3">What is Lexari :)</div>
+                </div>
+              </div>
+              <div className="flex p-4 gap-2 backdrop-blur-lg bg-background rounded-2xl shadow-lg">
+                <img
+                  className="rounded-full w-12 h-12 bg-amber-50"
+                  src={logo}
+                  alt="bot"
+                />
+                <div className="flex flex-col w-full">
+                  <div className="pt-2 text-gray-600">
+                    LexREI is a legal research assistant that helps you find.
+                    FEAW FNEWAK NFKJEWAN FLKEAWN FKLKNWA ELKFN EAA
+                    FEWAFEAWFEAWFEWAFEWAFEWAGAEWMRGKWF MAWELK MFWEA FMAWEF
+                  </div>
+                  <div className="flex items-center mt-4">
+                    <div className="ml-auto bg-white text-gray-500 p-2 rounded-xl text-sm">
+                      <ClipboardIcon className="inline-block h-4 w-4" />
+                      copy
+                    </div>
+                  </div>
+                </div>
+              </div>
               {/* presentation */}
 
               {isTyping && (
@@ -190,7 +183,7 @@ function Chatbot(props: ChatbotProps) {
                 <input
                   type="text"
                   id="simple-search"
-                  className="bg-gray-100 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 py-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-background text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 py-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Chat here..."
                   value={userMessage}
                   autoComplete="off"
@@ -199,23 +192,23 @@ function Chatbot(props: ChatbotProps) {
                 />
               </div>
               {isTyping ? (
-                <button
+                <Button
                   type="submit"
-                  className="p-2.5 ml-2 text-sm font-medium text-white bg-gray-600 rounded-lg border border-blue-700 "
+                  className="w-10 h-10 ml-2 text-sm font-medium text-white bg-gray-600 rounded-lg border border-blue-700 "
                   disabled
                 >
                   <SendRoundedIcon />
                   <span className="sr-only">Search</span>
-                </button>
+                </Button>
               ) : (
-                <button
+                <Button
                   type="submit"
-                  className="p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  className="w-10 h-10 ml-2 text-sm font-medium text-white rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   onClick={(e) => handleSend(e)}
                 >
                   <SendRoundedIcon />
                   <span className="sr-only">Search</span>
-                </button>
+                </Button>
               )}
             </form>
             <h3 className="flex mt-2 ml-auto text-sm text-gray-500">
