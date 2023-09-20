@@ -36,7 +36,7 @@ export default function Layout(props: Props) {
         {({ open }) => (
           <>
             <div className="px-4">
-              <div className="flex h-16 justify-between">
+              <div className="flex h-[8vh] justify-between">
                 <div className="flex">
                   <div className="flex flex-shrink-0 items-center">
                     <img

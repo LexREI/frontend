@@ -71,7 +71,7 @@ function TabList(props: Props) {
           <TabsContent
             value="question"
             className={`${
-              activeTab === 'question'
+              activeTab === 'questions'
             } ? 'flex flex-col h-full pb-4' : '' `}
           >
             <div className="flex flex-col h-full pb-4">

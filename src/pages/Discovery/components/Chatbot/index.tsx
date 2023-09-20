@@ -1,24 +1,23 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import {
-  ClipboardIcon,
-  HandThumbDownIcon,
-  HandThumbUpIcon,
-} from '@heroicons/react/24/outline';
+import { ClipboardIcon } from '@heroicons/react/24/outline';
 import loading from 'react-useanimations/lib/loading';
 import UseAnimations from 'react-useanimations';
-import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { doChaClientSideUsingPost } from '@/services/ChatbotController';
 import logo from '@/assets/react.svg';
 import { Button } from '@/components/ui/button';
+import RevelantCard from '@/pages/Discovery/components/Chatbot/components/RelevantCard';
 
 type ChatbotProps = {
   messages: any[];
   setMessages: any;
+  setDocument: (document: string) => void;
+  onClickSearch: (pageNumber: number, pageTextHighlight: string) => void;
 };
 
 function Chatbot(props: ChatbotProps) {
-  const { messages, setMessages } = props;
+  const { messages, setMessages, setDocument, onClickSearch } = props;
   const [userMessage, setUserMessage] = useState<string>(''); // user input
   const [isTyping, setIsTyping] = useState<boolean>(false); // is typing
 
@@ -59,7 +58,7 @@ function Chatbot(props: ChatbotProps) {
   };
 
   return (
-    <section>
+    <section className="h-[92vh]">
       <div className="w-full h-full self-start bg-slate-100">
         <div className="flex flex-col h-full">
           <CardHeader>
@@ -74,14 +73,33 @@ function Chatbot(props: ChatbotProps) {
                     message.sender === 'assistant' ? (
                       <div className="flex p-4 gap-2 backdrop-blur-lg bg-background rounded-2xl shadow-lg">
                         <img
-                          className="rounded-full w-12 h-12 bg-amber-50"
+                          className="rounded-full w-10 h-10 "
                           src={logo}
                           alt="bot"
                         />
                         <div className="flex flex-col w-full">
-                          <div className="__chat_box pt-3 text-gray-600 animate__animated animate__fadeInDown">
+                          <div className="text-gray-600 animate__animated animate__fadeInDown">
                             {message.message}
                           </div>
+                          {message.metadata && (
+                            <Card className="mt-2">
+                              <CardHeader>
+                                <CardTitle>Relevant</CardTitle>
+                                <CardContent className="grid grid-cols-2 p-0 gap-4 items-start">
+                                  {message.metadata.map((metadata: any) => {
+                                    return (
+                                      <RevelantCard
+                                        key={metadata}
+                                        setDocument={setDocument}
+                                        metadata={metadata}
+                                        onClickSearch={onClickSearch}
+                                      />
+                                    );
+                                  })}
+                                </CardContent>
+                              </CardHeader>
+                            </Card>
+                          )}
                           <div className="flex items-center mt-4">
                             <button
                               type="button"
@@ -94,62 +112,32 @@ function Chatbot(props: ChatbotProps) {
                         </div>
                       </div>
                     ) : (
-                      <div className="flex gap-2 mb-2">
-                        <div className="ml-auto flex flex-col">
-                          <p className="text-gray-900 font-semibold tracking-wide ml-auto">
-                            You
-                          </p>
-                          <div className="__chat_box bg-sky-300 p-3 rounded-xl">
-                            {message.message}
+                      <div className="flex gap-2 my-4">
+                        <div className="ml-auto flex-col">
+                          <div className="flex gap-2 items-center ml-auto">
+                            <span className="text-muted-foreground">
+                              11:19 AM
+                            </span>
+                            <img
+                              className="rounded-full w-4 h-4 bg-amber-50"
+                              src={logo}
+                              alt="bot"
+                            />
+                            <span>Jaying Young</span>
+                          </div>
+                          <div className="flex ml-auto">
+                            <div className="bg-primary/30 rounded-l-xl rounded-br-xl inline-block ml-auto">
+                              <div className="p-3 whitespace-nowrap">
+                                {message.message}
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <img
-                          className="rounded-full w-12 h-12"
-                          src={logo}
-                          alt="user"
-                        />
                       </div>
                     )}
                   </div>
                 );
               })}
-              {/* presentation */}
-              <div className="flex flex-col items-end p-4 pt-6">
-                <div className="flex gap-2 items-center">
-                  <span className="text-muted-foreground">11:19 AM</span>
-                  <img
-                    className="rounded-full w-4 h-4 bg-amber-50"
-                    src={logo}
-                    alt="bot"
-                  />
-                  <span>Jaying Young</span>
-                </div>
-
-                <div className="flex bg-primary/30 rounded-l-xl rounded-br-xl">
-                  <div className="p-3">What is Lexari :)</div>
-                </div>
-              </div>
-              <div className="flex p-4 gap-2 backdrop-blur-lg bg-background rounded-2xl shadow-lg">
-                <img
-                  className="rounded-full w-12 h-12 bg-amber-50"
-                  src={logo}
-                  alt="bot"
-                />
-                <div className="flex flex-col w-full">
-                  <div className="pt-2 text-gray-600">
-                    LexREI is a legal research assistant that helps you find.
-                    FEAW FNEWAK NFKJEWAN FLKEAWN FKLKNWA ELKFN EAA
-                    FEWAFEAWFEAWFEWAFEWAFEWAGAEWMRGKWF MAWELK MFWEA FMAWEF
-                  </div>
-                  <div className="flex items-center mt-4">
-                    <div className="ml-auto bg-white text-gray-500 p-2 rounded-xl text-sm">
-                      <ClipboardIcon className="inline-block h-4 w-4" />
-                      copy
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* presentation */}
 
               {isTyping && (
                 <div className="text-black mt-2 flex gap-2">
@@ -159,7 +147,7 @@ function Chatbot(props: ChatbotProps) {
               )}
             </div>
           </div>
-          <div className="mt-auto p-6">
+          <div className="mt-auto px-6 py-2">
             <form className="flex items-center">
               <label htmlFor="simple-search" className="sr-only">
                 Chat here...

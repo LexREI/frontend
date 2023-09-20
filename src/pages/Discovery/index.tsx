@@ -32,7 +32,12 @@ function Discovery() {
               page={page}
               searchText={searchText}
             />
-            <Chatbot messages={messages} setMessages={setMessages} />
+            <Chatbot
+              messages={messages}
+              setMessages={setMessages}
+              setDocument={setDocument}
+              onClickSearch={onClickSearch}
+            />
           </div>
         </main>
       }

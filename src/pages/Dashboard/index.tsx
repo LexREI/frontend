@@ -28,7 +28,7 @@ function Dashboard() {
     //   component={
     //     <main className="grid grid-cols-2 gap-4">
     //       <PDFViewer />
-    //       <Chatbot />
+    //       <Index />
     //       <Relevant />
     //       <RelatedQuestion />
     //     </main>
