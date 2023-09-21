@@ -3,6 +3,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import DriveFolderUploadRoundedIcon from '@mui/icons-material/DriveFolderUploadRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
+import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
+import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import TocRoundedIcon from '@mui/icons-material/TocRounded';
 import {
   Card,
@@ -69,7 +71,7 @@ function TabList(props: Props) {
       {expanded && (
         <div className="h-full">
           <TabsContent
-            value="question"
+            value="questions"
             className={`${
               activeTab === 'questions'
             } ? 'flex flex-col h-full pb-4' : '' `}
@@ -301,47 +303,75 @@ function TabList(props: Props) {
             } ? 'flex flex-col h-full pb-4' : '' `}
           >
             <div className="flex flex-col h-full pb-4">
-              <div className="flex flex-col gap-2 px-2 h-full">
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="terms" />
-                  <InsertDriveFileRoundedIcon />
-                  <label
-                    htmlFor="terms"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    pdf1g ewa aw f
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2">
+              <div className="space-y-4 px-2 h-full">
+                <Card className="flex items-center space-x-2 px-2 py-2 shadow-md">
                   <Checkbox id="terms1" />
-                  <InsertDriveFileRoundedIcon />
+                  <div className="text-muted-foreground/70 w-14 h-14">
+                    <DocumentTextIcon />
+                  </div>
+
                   <label
                     htmlFor="terms1"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className="space-y-0.5 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    pdf2 greawe fg
+                    <div className="text-sm">The Fair Labor Standards</div>
+                    <div className="text-xs text-muted-foreground space-x-2">
+                      <span>Size: 12MB</span>
+                      <span>FORMAT: PDF</span>
+                    </div>
                   </label>
-                </div>
-                <div className="flex items-center space-x-2">
+                </Card>
+                <Card className="flex items-center space-x-2 px-2 py-2 shadow-md">
                   <Checkbox id="terms2" />
-                  <InsertDriveFileRoundedIcon />
+                  <div className="text-muted-foreground/70 w-14 h-14">
+                    <DocumentTextIcon />
+                  </div>
+
                   <label
                     htmlFor="terms2"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className="space-y-0.5 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    pdf3brseb
+                    <div className="text-sm">The Fair Labor Standards</div>
+                    <div className="text-xs text-muted-foreground space-x-2">
+                      <span>Size: 12MB</span>
+                      <span>FORMAT: PDF</span>
+                    </div>
                   </label>
-                </div>
-                <div className="flex items-center space-x-2">
+                </Card>
+                <Card className="flex items-center space-x-2 px-2 py-2 shadow-md">
                   <Checkbox id="terms3" />
-                  <InsertDriveFileRoundedIcon />
+                  <div className="text-muted-foreground/70 w-14 h-14">
+                    <DocumentTextIcon />
+                  </div>
+
                   <label
                     htmlFor="terms3"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className="space-y-0.5 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    pdf4 fewaf ew
+                    <div className="text-sm">The Fair Labor Standards</div>
+                    <div className="text-xs text-muted-foreground space-x-2">
+                      <span>Size: 12MB</span>
+                      <span>FORMAT: PDF</span>
+                    </div>
                   </label>
-                </div>
+                </Card>
+                <Card className="flex items-center space-x-2 px-2 py-2 shadow-md">
+                  <Checkbox id="terms4" />
+                  <div className="text-muted-foreground/70 w-14 h-14">
+                    <DocumentTextIcon />
+                  </div>
+
+                  <label
+                    htmlFor="terms4"
+                    className="space-y-0.5 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    <div className="text-sm">The Fair Labor Standards</div>
+                    <div className="text-xs text-muted-foreground space-x-2">
+                      <span>Size: 12MB</span>
+                      <span>FORMAT: PDF</span>
+                    </div>
+                  </label>
+                </Card>
               </div>
               <div className="px-4 flex justify-between">
                 <Button variant="secondary">Clear</Button>

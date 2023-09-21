@@ -45,15 +45,24 @@ export default function RevelantCard(props: RevelantCardProps) {
       <CardHeader title="PDF Title Here" />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
+          page: {metadata.pageNumber + 1}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          download_link: {metadata.download_link}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
         <div className="flex gap-2">
-          <Button>Open</Button>
-          <Button>Navigate</Button>
+          <Button onClick={() => setDocument(metadata.download_link)}>
+            Open
+          </Button>
+          <Button
+            onClick={() =>
+              onClickSearch(metadata.pageNumber + 1, metadata.pageContent)
+            }
+          >
+            Navigate
+          </Button>
         </div>
 
         <ExpandMore

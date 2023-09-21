@@ -13,6 +13,7 @@ function Discovery() {
       message: '👋 Hello, How I can help you today?',
       sender: 'ChatGPT',
       metadata: null,
+      contentEditable: false,
     },
   ]);
 

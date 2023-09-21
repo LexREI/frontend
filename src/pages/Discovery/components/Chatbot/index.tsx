@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import { ClipboardIcon } from '@heroicons/react/24/outline';
 import loading from 'react-useanimations/lib/loading';
 import UseAnimations from 'react-useanimations';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,6 +7,11 @@ import { doChaClientSideUsingPost } from '@/services/ChatbotController';
 import logo from '@/assets/react.svg';
 import { Button } from '@/components/ui/button';
 import RevelantCard from '@/pages/Discovery/components/Chatbot/components/RelevantCard';
+import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
+import IconButton from '@mui/material/IconButton';
+import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
+import Tooltip from '@mui/material/Tooltip';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 
 type ChatbotProps = {
   messages: any[];
@@ -20,6 +24,7 @@ function Chatbot(props: ChatbotProps) {
   const { messages, setMessages, setDocument, onClickSearch } = props;
   const [userMessage, setUserMessage] = useState<string>(''); // user input
   const [isTyping, setIsTyping] = useState<boolean>(false); // is typing
+  const divEditRef = useRef<HTMLDivElement>(null);
 
   const handleSendOnChange = (message: string) => {
     setUserMessage(message);
@@ -31,12 +36,12 @@ function Chatbot(props: ChatbotProps) {
     };
     setUserMessage('');
     const response = await doChaClientSideUsingPost(body);
-    console.log(response.data.answer);
 
     const newMessage = {
       message: response.data.answer,
       sender: 'ChatGPT',
       metadata: response.data.metadata,
+      contentEditable: false,
     };
     setMessages((prevMessages: any) => [...prevMessages, newMessage]);
 
@@ -50,12 +55,35 @@ function Chatbot(props: ChatbotProps) {
       message: userMessage,
       sender: 'user',
       metadata: null,
+      contentEditable: false,
     };
 
     setMessages((prevMessages: any) => [...prevMessages, newMessage]);
     // Initial system message
     await processMessage(userMessage);
   };
+
+  // Confirm the contentEditable is True, allow user to edit
+  const onClickEdit = (index: number) => () => {
+    const newMessages = [...messages];
+    newMessages[index].contentEditable = true;
+    setMessages(newMessages);
+  };
+
+  // Confirm the contentEditable is False, confirm and save the message
+  const onClickConfirm = (index: number) => () => {
+    const newMessages = [...messages];
+    newMessages[index].contentEditable = false;
+    setMessages(newMessages);
+  };
+
+  // Focus on the contentEditable is True
+  useEffect(() => {
+    const editableMessage = messages.find((m) => m.contentEditable);
+    if (editableMessage && divEditRef.current) {
+      divEditRef.current.focus();
+    }
+  }, [messages]);
 
   return (
     <section className="h-[92vh]">
@@ -66,7 +94,7 @@ function Chatbot(props: ChatbotProps) {
           </CardHeader>
           <div className="flex flex-col overflow-auto p-4">
             <div>
-              {messages.map((message) => {
+              {messages.map((message, index) => {
                 return (
                   <div key={message.message}>
                     {message.sender === 'ChatGPT' ||
@@ -78,7 +106,11 @@ function Chatbot(props: ChatbotProps) {
                           alt="bot"
                         />
                         <div className="flex flex-col w-full">
-                          <div className="text-gray-600 animate__animated animate__fadeInDown">
+                          <div
+                            className="text-gray-600"
+                            contentEditable={message.contentEditable}
+                            ref={message.contentEditable ? divEditRef : null}
+                          >
                             {message.message}
                           </div>
                           {message.metadata && (
@@ -100,14 +132,31 @@ function Chatbot(props: ChatbotProps) {
                               </CardHeader>
                             </Card>
                           )}
-                          <div className="flex items-center mt-4">
-                            <button
-                              type="button"
-                              className="ml-auto bg-white text-gray-500 p-2 rounded-xl text-sm cursor-pointer hover:bg-accent transition duration-300"
-                            >
-                              <ClipboardIcon className="inline-block h-4 w-4" />
-                              copy
-                            </button>
+                          <div className="flex items-center mt-4 ml-auto">
+                            <Tooltip title="Copy">
+                              <IconButton aria-label="copy" size="medium">
+                                <ContentCopyRoundedIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
+                            {message.contentEditable ? (
+                              <Tooltip
+                                title="Confirm"
+                                onClick={onClickConfirm(index)}
+                              >
+                                <IconButton aria-label="confirm" size="medium">
+                                  <CheckRoundedIcon fontSize="small" />
+                                </IconButton>
+                              </Tooltip>
+                            ) : (
+                              <Tooltip
+                                title="Update"
+                                onClick={onClickEdit(index)}
+                              >
+                                <IconButton aria-label="update" size="medium">
+                                  <CreateRoundedIcon fontSize="small" />
+                                </IconButton>
+                              </Tooltip>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -123,7 +172,7 @@ function Chatbot(props: ChatbotProps) {
                               src={logo}
                               alt="bot"
                             />
-                            <span>Jaying Young</span>
+                            <span>User</span>
                           </div>
                           <div className="flex ml-auto">
                             <div className="bg-primary/30 rounded-l-xl rounded-br-xl inline-block ml-auto">
