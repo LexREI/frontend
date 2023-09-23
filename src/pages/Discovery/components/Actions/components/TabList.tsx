@@ -1,22 +1,10 @@
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import DriveFolderUploadRoundedIcon from '@mui/icons-material/DriveFolderUploadRounded';
-import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
-import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
-import TocRoundedIcon from '@mui/icons-material/TocRounded';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import {
   Accordion,
   AccordionContent,
@@ -24,6 +12,8 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useState } from 'react';
+import JSZip from 'jszip';
 
 interface Tab {
   name: string;
@@ -33,6 +23,7 @@ interface Tab {
 }
 
 type Props = {
+  documents: API.Documents[];
   tabs: Tab[];
   activeTab: string;
   expanded: boolean;
@@ -41,7 +32,58 @@ type Props = {
 };
 
 function TabList(props: Props) {
-  const { tabs, activeTab, expanded, setExpanded, onClickTab } = props;
+  const { documents, tabs, activeTab, expanded, setExpanded, onClickTab } =
+    props;
+
+  const [urls, setUrls] = useState<string[]>([]);
+  const [downloadLoading, setDownloadLoading] = useState<boolean>(false);
+  const [blobUrl, setBlobUrl] = useState<string>('');
+  const handleFilesSelect = (url: string) => {
+    if (urls.includes(url)) {
+      setUrls((curr) => curr.filter((item) => item !== url));
+    } else {
+      setUrls((curr) => [...curr, url]);
+    }
+  };
+
+  const handleZipFiles = async () => {
+    const zip = new JSZip();
+
+    // Fetch all files
+    const promises = urls.map(async (url, index) => {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      zip.file(`document_${index + 1}.pdf`, blob);
+    });
+
+    // Wait for all files to be added to the zip
+    await Promise.all(promises);
+
+    // Generate the zip file as a Blob
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+
+    // Create a Blob URL for download and return it
+    return window.URL.createObjectURL(zipBlob);
+  };
+
+  const onClickClearSelected = () => {
+    setUrls([]);
+  };
+
+  const downloadPdfs = () => {
+    setDownloadLoading(true);
+    handleZipFiles().then((resultingBlobUrl) => {
+      const link = document.createElement('a');
+      link.href = resultingBlobUrl;
+      link.download = 'LexREI.zip';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+    setUrls([]);
+    setDownloadLoading(false);
+  };
+
   return (
     <Tabs
       className="h-full flex flex-col"
@@ -304,78 +346,49 @@ function TabList(props: Props) {
           >
             <div className="flex flex-col h-full pb-4">
               <div className="space-y-4 px-2 h-full">
-                <Card className="flex items-center space-x-2 px-2 py-2 shadow-md">
-                  <Checkbox id="terms1" />
-                  <div className="text-muted-foreground/70 w-14 h-14">
-                    <DocumentTextIcon />
-                  </div>
+                {documents.map((doc) => {
+                  return (
+                    <Card
+                      key={doc.file_name}
+                      className="flex items-center space-x-2 px-2 py-2 shadow-md"
+                    >
+                      <Checkbox
+                        id={doc.file_name}
+                        checked={urls.includes(doc.download_link)}
+                        onClick={() => handleFilesSelect(doc.download_link)}
+                      />
+                      <div className="text-muted-foreground/70 w-14 h-14">
+                        <DocumentTextIcon className="w-12 h-12" />
+                      </div>
 
-                  <label
-                    htmlFor="terms1"
-                    className="space-y-0.5 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    <div className="text-sm">The Fair Labor Standards</div>
-                    <div className="text-xs text-muted-foreground space-x-2">
-                      <span>Size: 12MB</span>
-                      <span>FORMAT: PDF</span>
-                    </div>
-                  </label>
-                </Card>
-                <Card className="flex items-center space-x-2 px-2 py-2 shadow-md">
-                  <Checkbox id="terms2" />
-                  <div className="text-muted-foreground/70 w-14 h-14">
-                    <DocumentTextIcon />
-                  </div>
-
-                  <label
-                    htmlFor="terms2"
-                    className="space-y-0.5 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    <div className="text-sm">The Fair Labor Standards</div>
-                    <div className="text-xs text-muted-foreground space-x-2">
-                      <span>Size: 12MB</span>
-                      <span>FORMAT: PDF</span>
-                    </div>
-                  </label>
-                </Card>
-                <Card className="flex items-center space-x-2 px-2 py-2 shadow-md">
-                  <Checkbox id="terms3" />
-                  <div className="text-muted-foreground/70 w-14 h-14">
-                    <DocumentTextIcon />
-                  </div>
-
-                  <label
-                    htmlFor="terms3"
-                    className="space-y-0.5 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    <div className="text-sm">The Fair Labor Standards</div>
-                    <div className="text-xs text-muted-foreground space-x-2">
-                      <span>Size: 12MB</span>
-                      <span>FORMAT: PDF</span>
-                    </div>
-                  </label>
-                </Card>
-                <Card className="flex items-center space-x-2 px-2 py-2 shadow-md">
-                  <Checkbox id="terms4" />
-                  <div className="text-muted-foreground/70 w-14 h-14">
-                    <DocumentTextIcon />
-                  </div>
-
-                  <label
-                    htmlFor="terms4"
-                    className="space-y-0.5 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    <div className="text-sm">The Fair Labor Standards</div>
-                    <div className="text-xs text-muted-foreground space-x-2">
-                      <span>Size: 12MB</span>
-                      <span>FORMAT: PDF</span>
-                    </div>
-                  </label>
-                </Card>
+                      <div className="space-y-0.5 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        <div className="text-sm break-all">{doc.file_name}</div>
+                        <div className="text-xs text-muted-foreground space-x-2">
+                          <span>Size: 12MB</span>
+                          <span>FORMAT: PDF</span>
+                        </div>
+                      </div>
+                    </Card>
+                  );
+                })}
               </div>
               <div className="px-4 flex justify-between">
-                <Button variant="secondary">Clear</Button>
-                <Button>Download</Button>
+                <LoadingButton
+                  variant="outlined"
+                  size="medium"
+                  onClick={onClickClearSelected}
+                >
+                  Clear
+                </LoadingButton>
+                <LoadingButton
+                  variant="contained"
+                  size="large"
+                  loading={downloadLoading}
+                  disabled={urls.length === 0}
+                  onClick={() => downloadPdfs()}
+                >
+                  Download
+                </LoadingButton>
               </div>
             </div>
           </TabsContent>

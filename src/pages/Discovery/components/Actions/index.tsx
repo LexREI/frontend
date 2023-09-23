@@ -41,7 +41,12 @@ const tabsInit: Tab[] = [
   },
 ];
 
-function Actions() {
+type ActionsProps = {
+  documents: API.Documents[];
+};
+
+function Actions(props: ActionsProps) {
+  const { documents } = props;
   const [expanded, setExpanded] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<string>('upload');
   const [tabs, setTabs] = useState<Tab[]>(tabsInit);
@@ -83,6 +88,7 @@ function Actions() {
         </div>
 
         <TabList
+          documents={documents}
           tabs={tabs}
           activeTab={activeTab}
           expanded={expanded}

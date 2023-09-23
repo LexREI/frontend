@@ -32,6 +32,7 @@
     "clsx": "^2.0.0",
     "copy-to-clipboard": "^3.3.3",
     "dayjs": "^1.11.7",
+    "jszip": "^3.10.1",
     "lucide-react": "^0.264.0",
     "moment": "^2.29.4",
     "pdfjs-dist": "^3.4.120",
