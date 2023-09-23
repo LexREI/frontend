@@ -70,18 +70,22 @@ function TabList(props: Props) {
     setUrls([]);
   };
 
-  const downloadPdfs = () => {
+  const downloadPdfs = async () => {
     setDownloadLoading(true);
-    handleZipFiles().then((resultingBlobUrl) => {
+    try {
+      const resultingBlobUrl = await handleZipFiles();
       const link = document.createElement('a');
       link.href = resultingBlobUrl;
       link.download = 'LexREI.zip';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    });
-    setUrls([]);
-    setDownloadLoading(false);
+      setUrls([]);
+    } catch (error) {
+      console.error('Error during downloading:', error);
+    } finally {
+      setDownloadLoading(false);
+    }
   };
 
   return (
