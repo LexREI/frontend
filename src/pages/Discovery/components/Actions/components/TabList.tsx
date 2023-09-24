@@ -1,5 +1,7 @@
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { Card } from '@/components/ui/card';
@@ -14,6 +16,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { useState } from 'react';
 import JSZip from 'jszip';
+import { documentUploadUsingPost } from '@/services/DocumentController';
 
 interface Tab {
   name: string;
@@ -35,8 +38,10 @@ function TabList(props: Props) {
   const { documents, tabs, activeTab, expanded, setExpanded, onClickTab } =
     props;
 
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [urls, setUrls] = useState<string[]>([]);
   const [downloadLoading, setDownloadLoading] = useState<boolean>(false);
+  const [uploadLoading, setUploadLoading] = useState<boolean>(false);
   const [blobUrl, setBlobUrl] = useState<string>('');
   const handleFilesSelect = (url: string) => {
     if (urls.includes(url)) {
@@ -85,6 +90,34 @@ function TabList(props: Props) {
       console.error('Error during downloading:', error);
     } finally {
       setDownloadLoading(false);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target;
+    if (file && file.files && file.files.length > 0) {
+      setUploadFile(file.files[0]);
+    }
+  };
+
+  const onClickClearFileUpload = () => {
+    setUploadFile(null);
+  };
+
+  const uploadPdf = async () => {
+    if (!uploadFile) return;
+
+    setUploadLoading(true);
+    const formData = new FormData();
+    formData.append('file', uploadFile);
+
+    try {
+      const response = await documentUploadUsingPost(formData);
+      console.log('File uploaded successfully:', response.data);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    } finally {
+      setUploadLoading(false);
     }
   };
 
@@ -312,7 +345,7 @@ function TabList(props: Props) {
                   </label>
                 </div>
               </div>
-              <div className="px-4">
+              <div className="px-4 space-y-4">
                 <div className="flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                   <div className="text-center">
                     <HelpOutlineRoundedIcon
@@ -322,22 +355,43 @@ function TabList(props: Props) {
                     <div className="mt-4 flex text-sm leading-6 text-gray-600">
                       <label
                         htmlFor="file-upload"
-                        className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                        className="relative cursor-pointer rounded-md bg-white font-semibold text-primary focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                       >
-                        <span>Upload a file</span>
+                        <span>Upload a pdf</span>
                         <input
                           id="file-upload"
                           name="file-upload"
                           type="file"
                           className="sr-only"
+                          onChange={(e) => handleFileChange(e)}
                         />
                       </label>
-                      <p className="pl-1">or drag and drop</p>
+                      <p className="pl-1 font-bold">
+                        {uploadFile ? uploadFile.name : 'or drag and drop '}
+                      </p>
                     </div>
                     <p className="text-xs leading-5 text-gray-600">
                       PDF up to 10MB
                     </p>
                   </div>
+                </div>
+                <div className="flex justify-between">
+                  <LoadingButton
+                    variant="outlined"
+                    size="medium"
+                    onClick={onClickClearFileUpload}
+                  >
+                    Clear
+                  </LoadingButton>
+                  <LoadingButton
+                    variant="contained"
+                    size="large"
+                    loading={uploadLoading}
+                    disabled={uploadFile === null}
+                    onClick={() => uploadPdf()}
+                  >
+                    Upload
+                  </LoadingButton>
                 </div>
               </div>
             </div>
