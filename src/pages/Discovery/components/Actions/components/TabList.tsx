@@ -1,7 +1,5 @@
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import { Card } from '@/components/ui/card';
@@ -17,32 +15,177 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useState } from 'react';
 import JSZip from 'jszip';
 import { documentUploadUsingPost } from '@/services/DocumentController';
+import DriveFolderUploadRoundedIcon from '@mui/icons-material/DriveFolderUploadRounded';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+import TocRoundedIcon from '@mui/icons-material/TocRounded';
+import { useSearchParams } from 'react-router-dom';
 
 interface Tab {
   name: string;
   value: string;
   icon: JSX.Element;
-  current: boolean;
+  isActive: boolean;
 }
+
+interface Question {
+  name: string;
+  value: string;
+  isActive: boolean;
+}
+
+interface QuestionList {
+  title: string;
+  value: string;
+  questions: Question[];
+}
+
+const tabsInit: Tab[] = [
+  {
+    name: 'Upload',
+    value: 'upload',
+    icon: <DriveFolderUploadRoundedIcon />,
+    isActive: true,
+  },
+  {
+    name: 'Download',
+    value: 'download',
+    icon: <DownloadRoundedIcon />,
+    isActive: false,
+  },
+  {
+    name: 'Questions',
+    value: 'questions',
+    icon: <HelpOutlineRoundedIcon />,
+    isActive: false,
+  },
+  {
+    name: 'Contents',
+    value: 'contents',
+    icon: <TocRoundedIcon />,
+    isActive: false,
+  },
+];
+
+const questionsListInit: QuestionList[] = [
+  {
+    title: 'Question list 1',
+    value: 'question-list-1',
+    questions: [
+      {
+        name: 'Question 1',
+        value: 'question-1',
+        isActive: false,
+      },
+      {
+        name: 'Question 2',
+        value: 'question-2',
+        isActive: false,
+      },
+      {
+        name: 'Question 3',
+        value: 'question-3',
+        isActive: false,
+      },
+      {
+        name: 'Question 4',
+        value: 'question-4',
+        isActive: false,
+      },
+    ],
+  },
+  {
+    title: 'Question list 2',
+    value: 'question-list-2',
+    questions: [
+      {
+        name: 'Question 5',
+        value: 'question-5',
+        isActive: false,
+      },
+      {
+        name: 'Question 6',
+        value: 'question-6',
+        isActive: false,
+      },
+      {
+        name: 'Question 7',
+        value: 'question-7',
+        isActive: false,
+      },
+      {
+        name: 'Question 8',
+        value: 'question-8',
+        isActive: false,
+      },
+    ],
+  },
+  {
+    title: 'Question list 3',
+    value: 'question-list-3',
+    questions: [
+      {
+        name: 'Question 9',
+        value: 'question-9',
+        isActive: false,
+      },
+      {
+        name: 'Question 10',
+        value: 'question-10',
+        isActive: false,
+      },
+      {
+        name: 'Question 11',
+        value: 'question-11',
+        isActive: false,
+      },
+      {
+        name: 'Question 12',
+        value: 'question-12',
+        isActive: false,
+      },
+    ],
+  },
+];
 
 type Props = {
   documents: API.Documents[];
-  tabs: Tab[];
-  activeTab: string;
   expanded: boolean;
   setExpanded: (expanded: boolean) => void;
-  onClickTab: (tab: string) => void;
 };
 
 function TabList(props: Props) {
-  const { documents, tabs, activeTab, expanded, setExpanded, onClickTab } =
-    props;
+  const { documents, expanded, setExpanded } = props;
+
+  const [tabs, setTabs] = useState<Tab[]>(tabsInit);
+  const [questionsList, setQuestionsList] =
+    useState<QuestionList[]>(questionsListInit);
+  const [activeTabParams, setActiveTabParams] = useSearchParams({ tab: '' });
+  const activeTab = activeTabParams.get('tab') || 'upload';
 
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [urls, setUrls] = useState<string[]>([]);
   const [downloadLoading, setDownloadLoading] = useState<boolean>(false);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
-  const [blobUrl, setBlobUrl] = useState<string>('');
+
+  const onClickTab = (tab: string) => {
+    setExpanded(true);
+    setActiveTabParams(
+      (prev: any) => {
+        prev.set('tab', tab);
+        return prev;
+      },
+      { replace: true }
+    );
+    setTabs((curr) =>
+      curr.map((item) => {
+        if (item.value === tab) {
+          return { ...item, isActive: true };
+        }
+        return { ...item, isActive: false };
+      })
+    );
+  };
+
   const handleFilesSelect = (url: string) => {
     if (urls.includes(url)) {
       setUrls((curr) => curr.filter((item) => item !== url));
@@ -124,7 +267,7 @@ function TabList(props: Props) {
   return (
     <Tabs
       className="h-full flex flex-col"
-      defaultValue="upload"
+      defaultValue={activeTab}
       onClick={() => setExpanded(true)}
     >
       <TabsList
@@ -149,153 +292,6 @@ function TabList(props: Props) {
       </TabsList>
       {expanded && (
         <div className="h-full">
-          <TabsContent
-            value="questions"
-            className={`${
-              activeTab === 'questions'
-            } ? 'flex flex-col h-full pb-4' : '' `}
-          >
-            <div className="flex flex-col h-full pb-4">
-              <Accordion
-                type="single"
-                collapsible
-                className="w-full h-full px-4"
-              >
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>Question list 1</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="flex flex-col gap-2 px-2 h-full">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="question1" />
-                        <label
-                          htmlFor="question1"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Question 1
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="question2" />
-                        <label
-                          htmlFor="question2"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Question 2
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="question3" />
-                        <label
-                          htmlFor="question3"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Question 3
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="question4" />
-                        <label
-                          htmlFor="question4"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Question 4
-                        </label>
-                      </div>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-2">
-                  <AccordionTrigger>Question list 2</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="flex flex-col gap-2 px-2 h-full">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="question5" />
-                        <label
-                          htmlFor="question5"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Question 5
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="question6" />
-                        <label
-                          htmlFor="question2"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Question 6
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="question3" />
-                        <label
-                          htmlFor="question7"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Question 7
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="question8" />
-                        <label
-                          htmlFor="question8"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Question 8
-                        </label>
-                      </div>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-3">
-                  <AccordionTrigger>Question list 3</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="flex flex-col gap-2 px-2 h-full">
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="question9" />
-                        <label
-                          htmlFor="question9"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Question 9
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="question10" />
-                        <label
-                          htmlFor="question10"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Question 10
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="question11" />
-                        <label
-                          htmlFor="question11"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Question 11
-                        </label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Checkbox id="question12" />
-                        <label
-                          htmlFor="question4"
-                          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                        >
-                          Question 12
-                        </label>
-                      </div>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-              <div className="px-4 flex justify-end">
-                <Button>Ask Questions</Button>
-              </div>
-            </div>
-          </TabsContent>
           <TabsContent
             value="upload"
             className={`${
@@ -447,6 +443,51 @@ function TabList(props: Props) {
                 >
                   Download
                 </LoadingButton>
+              </div>
+            </div>
+          </TabsContent>
+          <TabsContent
+            value="questions"
+            className={`${
+              activeTab === 'questions'
+            } ? 'flex flex-col h-full pb-4' : '' `}
+          >
+            <div className="flex flex-col h-full pb-4">
+              <Accordion
+                type="single"
+                collapsible
+                className="w-full h-full px-4"
+              >
+                {questionsList.map((item) => {
+                  return (
+                    <AccordionItem value={item.title} key={item.title}>
+                      <AccordionTrigger>{item.title}</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="flex flex-col gap-2 px-2 h-full">
+                          {item.questions.map((question) => {
+                            return (
+                              <div
+                                className="flex items-center space-x-2"
+                                key={question.value}
+                              >
+                                <Checkbox id={question.value} />
+                                <label
+                                  htmlFor={question.value}
+                                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
+                                  {question.name}
+                                </label>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  );
+                })}
+              </Accordion>
+              <div className="px-4 flex justify-end">
+                <Button>Ask Questions</Button>
               </div>
             </div>
           </TabsContent>
