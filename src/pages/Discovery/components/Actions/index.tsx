@@ -6,10 +6,11 @@ import TabList from '@/pages/Discovery/components/Actions/components/TabList';
 
 type ActionsProps = {
   documents: API.Documents[];
+  setDocument: (document: string) => void;
 };
 
 function Actions(props: ActionsProps) {
-  const { documents } = props;
+  const { documents, setDocument } = props;
   const [expanded, setExpanded] = useState<boolean>(true);
 
   return (
@@ -37,6 +38,7 @@ function Actions(props: ActionsProps) {
 
         <TabList
           documents={documents}
+          setDocument={setDocument}
           expanded={expanded}
           setExpanded={setExpanded}
         />

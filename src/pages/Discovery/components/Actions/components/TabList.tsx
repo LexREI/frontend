@@ -1,24 +1,24 @@
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { useState } from 'react';
+import JSZip from 'jszip';
+import DriveFolderUploadRoundedIcon from '@mui/icons-material/DriveFolderUploadRounded';
+import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
+import TocRoundedIcon from '@mui/icons-material/TocRounded';
+import { useSearchParams } from 'react-router-dom';
+import { documentUploadUsingPost } from '@/services/DocumentController';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useState } from 'react';
-import JSZip from 'jszip';
-import { documentUploadUsingPost } from '@/services/DocumentController';
-import DriveFolderUploadRoundedIcon from '@mui/icons-material/DriveFolderUploadRounded';
-import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
-import TocRoundedIcon from '@mui/icons-material/TocRounded';
-import { useSearchParams } from 'react-router-dom';
 
 interface Tab {
   name: string;
@@ -139,7 +139,7 @@ const questionsListInit: QuestionList[] = [
         isActive: false,
       },
       {
-        name: 'Question 12',
+        name: 'lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos?',
         value: 'question-12',
         isActive: false,
       },
@@ -151,10 +151,11 @@ type Props = {
   documents: API.Documents[];
   expanded: boolean;
   setExpanded: (expanded: boolean) => void;
+  setDocument: (document: string) => void;
 };
 
 function TabList(props: Props) {
-  const { documents, expanded, setExpanded } = props;
+  const { documents, expanded, setExpanded, setDocument } = props;
 
   const [tabs, setTabs] = useState<Tab[]>(tabsInit);
   const [questionsList, setQuestionsList] =
@@ -415,12 +416,22 @@ function TabList(props: Props) {
                         <DocumentTextIcon className="w-12 h-12" />
                       </div>
 
-                      <div className="space-y-0.5 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        <div className="text-sm break-all">{doc.file_name}</div>
-                        <div className="text-xs text-muted-foreground space-x-2">
-                          <span>Size: 12MB</span>
-                          <span>FORMAT: PDF</span>
+                      <div className="space-y-0.5 w-full font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        <div className="text-sm break-all w-full">
+                          {doc.file_name}
                         </div>
+                        <LoadingButton
+                          variant="contained"
+                          size="small"
+                          onClick={() => setDocument(doc.download_link)}
+                        >
+                          Open
+                        </LoadingButton>
+
+                        {/* <div className="text-xs text-muted-foreground space-x-2"> */}
+                        {/*  <span>Size: 12MB</span> */}
+                        {/*  <span>FORMAT: PDF</span> */}
+                        {/* </div> */}
                       </div>
                     </Card>
                   );
@@ -467,7 +478,7 @@ function TabList(props: Props) {
                           {item.questions.map((question) => {
                             return (
                               <div
-                                className="flex items-center space-x-2"
+                                className="flex space-x-2"
                                 key={question.value}
                               >
                                 <Checkbox id={question.value} />

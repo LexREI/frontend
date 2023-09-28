@@ -39,7 +39,7 @@ function Discovery() {
     <Layout
       component={
         <main className="flex w-full h-full">
-          <Actions documents={documents} />
+          <Actions documents={documents} setDocument={setDocument} />
           <div className="grid grid-cols-2 w-full">
             <PDFViewer
               document={document}
