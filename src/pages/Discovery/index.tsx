@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { documentsListUsingGet } from '@/services/DocumentController';
 
 function Discovery() {
+  const [actionsOpen, setActionsOpen] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
   const [documents, setDocuments] = useState<API.Documents[]>([]); // [{name: 'doc1', url: 'http://example.com/doc1.pdf'}
   const [document, setDocument] = useState<string>('');
@@ -39,8 +40,13 @@ function Discovery() {
     <Layout
       component={
         <main className="flex w-full h-full">
-          <Actions documents={documents} setDocument={setDocument} />
-          <div className="grid grid-cols-2 w-full">
+          <Actions
+            actionsOpen={actionsOpen}
+            setActionsOpen={setActionsOpen}
+            documents={documents}
+            setDocument={setDocument}
+          />
+          <div className="grid grid-cols-2 w-full rounded-2xl">
             <PDFViewer
               document={document}
               page={page}
@@ -51,6 +57,7 @@ function Discovery() {
               setMessages={setMessages}
               setDocument={setDocument}
               onClickSearch={onClickSearch}
+              setActionsOpen={setActionsOpen}
             />
           </div>
         </main>

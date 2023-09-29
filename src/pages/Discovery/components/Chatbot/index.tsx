@@ -12,16 +12,24 @@ import IconButton from '@mui/material/IconButton';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import Tooltip from '@mui/material/Tooltip';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import {
+  RectangleGroupIcon,
+  Bars3BottomRightIcon,
+} from '@heroicons/react/24/outline';
+import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
+import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 
 type ChatbotProps = {
   messages: any[];
   setMessages: any;
   setDocument: (document: string) => void;
   onClickSearch: (pageNumber: number, pageTextHighlight: string) => void;
+  setActionsOpen: (actionsOpen: boolean) => void;
 };
 
 function Chatbot(props: ChatbotProps) {
-  const { messages, setMessages, setDocument, onClickSearch } = props;
+  const { messages, setMessages, setDocument, onClickSearch, setActionsOpen } =
+    props;
   const [userMessage, setUserMessage] = useState<string>(''); // user input
   const [isTyping, setIsTyping] = useState<boolean>(false); // is typing
   const divEditRef = useRef<HTMLDivElement>(null);
@@ -86,12 +94,20 @@ function Chatbot(props: ChatbotProps) {
   }, [messages]);
 
   return (
-    <section className="h-[92vh]">
-      <div className="w-full h-full self-start bg-slate-100">
+    <section>
+      <div className="w-full h-full self-start rounded-r-2xl bg-gradient-to-b from-slate-50 from-20% via-slate-50 via-30% to-slate-100 to-100%">
         <div className="flex flex-col h-full">
-          <CardHeader>
-            <CardTitle>Chatbot name in here</CardTitle>
-          </CardHeader>
+          <div className="p-4 flex items-center justify-between border-b border-slate-300">
+            <h3 className="text-xl font-semibold leading-none tracking-tight">
+              Chatbot name in here
+            </h3>
+            <Button
+              className="w-8 h-8 p-0"
+              onClick={() => setActionsOpen(true)}
+            >
+              <Bars3BottomRightIcon className="w-6 h-6" />
+            </Button>
+          </div>
           <div className="flex flex-col overflow-auto p-4">
             <div>
               {messages.map((message, index) => {
@@ -100,11 +116,11 @@ function Chatbot(props: ChatbotProps) {
                     {message.sender === 'ChatGPT' ||
                     message.sender === 'assistant' ? (
                       <div className="flex p-4 gap-2 backdrop-blur-lg bg-background rounded-2xl shadow-lg">
-                        <img
-                          className="rounded-full w-10 h-10 "
-                          src={logo}
-                          alt="bot"
-                        />
+                        {/*<img*/}
+                        {/*  className="rounded-full w-10 h-10 "*/}
+                        {/*  src={logo}*/}
+                        {/*  alt="bot"*/}
+                        {/*/>*/}
                         <div className="flex flex-col w-full">
                           <div
                             className="text-gray-600"

@@ -89,8 +89,8 @@ function PDFViewer(props: PDFViewerProps) {
   }, [page, searchText]);
 
   return (
-    <section className="border-l-2 border-r-2">
-      <div className="prose h-full webviewer" ref={viewerDiv} />
+    <section className="border-r-2">
+      <div className="prose h-full rounded-l-2xl webviewer" ref={viewerDiv} />
     </section>
   );
 }

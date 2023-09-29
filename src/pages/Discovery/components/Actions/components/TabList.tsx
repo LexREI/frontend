@@ -272,10 +272,10 @@ function TabList(props: Props) {
       onClick={() => setExpanded(true)}
     >
       <TabsList
-        className={` ${
+        className={`${
           expanded
             ? 'grid w-full grid-cols-4'
-            : 'flex flex-col h-full gap-4 justify-start'
+            : 'flex flex-col h-full gap-4 justify-start rounded-none'
         }`}
       >
         {tabs.map((tab) => {
