@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { documentsListUsingGet } from '@/services/DocumentController';
 
 function Discovery() {
-  const [actionsOpen, setActionsOpen] = useState<boolean>(true);
+  const [actionsOpen, setActionsOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [documents, setDocuments] = useState<API.Documents[]>([]); // [{name: 'doc1', url: 'http://example.com/doc1.pdf'}
   const [document, setDocument] = useState<string>('');
