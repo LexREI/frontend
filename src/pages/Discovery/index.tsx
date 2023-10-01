@@ -13,7 +13,7 @@ function Discovery() {
   const [searchText, setSearchText] = useState<string>('');
   const [messages, setMessages] = useState<any[]>([
     {
-      message: '👋 Hello, How I can help you today?',
+      message: 'Ask Lexari with your legal research and analysis!',
       sender: 'ChatGPT',
       metadata: null,
       contentEditable: false,

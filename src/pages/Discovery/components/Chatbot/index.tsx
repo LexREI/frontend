@@ -99,7 +99,7 @@ function Chatbot(props: ChatbotProps) {
         <div className="flex flex-col h-full">
           <div className="p-4 flex items-center justify-between border-b border-slate-300">
             <h3 className="text-xl font-semibold leading-none tracking-tight">
-              Chatbot name in here
+              LEXARI
             </h3>
             <Button
               className="w-8 h-8 p-0"
@@ -237,7 +237,7 @@ function Chatbot(props: ChatbotProps) {
                   type="text"
                   id="simple-search"
                   className="bg-background text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 py-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Chat here..."
+                  placeholder="Send a message"
                   value={userMessage}
                   autoComplete="off"
                   required
@@ -265,8 +265,8 @@ function Chatbot(props: ChatbotProps) {
               )}
             </form>
             <h3 className="flex mt-2 ml-auto text-sm text-gray-500">
-              Power by &nbsp;
-              <p className="font-medium text-gray-700">LexREI</p>
+              Powered by &nbsp;
+              <p className="font-medium text-gray-700">LEXARI</p>
             </h3>
           </div>
         </div>

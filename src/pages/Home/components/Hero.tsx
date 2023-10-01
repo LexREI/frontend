@@ -27,12 +27,12 @@ function Hero() {
         </div>
         <div className="text-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-            Data to enrich your online business
+            LEXARI
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
-            lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat
-            fugiat aliqua.
+            We understand your time is valuable and numerous manual tasks can be
+            simplified so you can focus on high value work and strategic
+            responsibilities.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
             <Link
