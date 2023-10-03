@@ -23,7 +23,7 @@ function PDFViewer(props: PDFViewerProps) {
         path: 'lib',
         licenseKey:
           'demo:1691513661169:7c59c080030000000059df490fe6ee6dde785e616981a571e9dd27ab4b',
-        initialDoc: examplePDF,
+        initialDoc: '',
         fullAPI: true,
       },
       viewerDiv.current as HTMLDivElement
@@ -31,6 +31,7 @@ function PDFViewer(props: PDFViewerProps) {
       // console.log('instant: ', instance.Core.documentViewer.getPageCount());
       const { documentViewer, annotationManager, Annotations, Search } =
         instance.Core;
+      instance.UI.disableElements(['toolbarGroup-Shapes']);
       setInstanceCopy(instance);
       setDocumentViewerCopy(documentViewer);
 
