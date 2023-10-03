@@ -4,7 +4,6 @@ import loading from 'react-useanimations/lib/loading';
 import UseAnimations from 'react-useanimations';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { doChaClientSideUsingPost } from '@/services/ChatbotController';
-import logo from '@/assets/react.svg';
 import { Button } from '@/components/ui/button';
 import RevelantCard from '@/pages/Discovery/components/Chatbot/components/RelevantCard';
 import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
@@ -12,12 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import Tooltip from '@mui/material/Tooltip';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import {
-  RectangleGroupIcon,
-  Bars3BottomRightIcon,
-} from '@heroicons/react/24/outline';
-import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
-import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
+import { Bars3BottomRightIcon } from '@heroicons/react/24/outline';
 
 type ChatbotProps = {
   messages: any[];
@@ -183,11 +177,6 @@ function Chatbot(props: ChatbotProps) {
                             <span className="text-muted-foreground">
                               11:19 AM
                             </span>
-                            <img
-                              className="rounded-full w-4 h-4 bg-amber-50"
-                              src={logo}
-                              alt="bot"
-                            />
                             <span>User</span>
                           </div>
                           <div className="flex ml-auto">
