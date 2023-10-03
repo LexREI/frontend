@@ -5,13 +5,13 @@ import logo from '@/assets/logo.jpg';
 import { Link } from 'react-router-dom';
 
 const navigation = [
-  { name: 'Home', href: '#' },
-  { name: 'About', href: '#' },
+  { name: 'Home', href: '/' },
+  { name: 'About', href: '/about' },
   { name: 'Discovery', href: '/discovery' },
   { name: 'Join the Waitlist', href: '/waitlist' },
 ];
 
-function Header() {
+function HomeHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   return (
     <header className="absolute inset-x-0 top-0 z-50">
@@ -103,4 +103,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default HomeHeader;

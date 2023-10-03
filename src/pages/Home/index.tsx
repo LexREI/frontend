@@ -10,24 +10,25 @@ import Footer from '@/pages/Home/components/Footer';
 import Stats from '@/pages/Home/components/Stats';
 import Team from '@/pages/Home/components/Team';
 import Contact from '@/pages/Home/components/Contact';
+import HomeHeader from '@/layouts/Header/HomeHeader';
 
 export default function Home() {
   return (
-    <div className="bg-white">
-      <Header />
-      <main className="isolate">
+    <div className="h-screen">
+      <HomeHeader />
+      <main className="h-full home_background">
         <Hero />
-        <LogoCloud />
-        <Feature />
-        <Testimonial />
-        <Pricing />
-        <Stats />
-        <Team />
-        <Contact />
-        <FAQs />
-        <CTA />
+        {/*<LogoCloud />*/}
+        {/*<Feature />*/}
+        {/*<Testimonial />*/}
+        {/*<Pricing />*/}
+        {/*<Stats />*/}
+        {/*<Team />*/}
+        {/*<Contact />*/}
+        {/*<FAQs />*/}
+        {/*<CTA />*/}
       </main>
-      <Footer />
+      {/*<Footer />*/}
     </div>
   );
 }
