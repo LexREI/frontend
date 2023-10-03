@@ -1,5 +1,4 @@
 import HomeHeader from '@/layouts/Header/HomeHeader';
-import AboutComponent from '@/pages/About/components/AboutComponent';
 import Hero from '@/pages/About/components/Hero';
 
 export default function about() {
