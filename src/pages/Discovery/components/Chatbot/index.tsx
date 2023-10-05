@@ -90,7 +90,7 @@ function Chatbot(props: ChatbotProps) {
   return (
     <section>
       <div className="w-full h-full self-start rounded-r-2xl bg-gradient-to-b from-slate-50 from-20% via-slate-50 via-30% to-slate-100 to-100%">
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full  max-h-[95vh]">
           <div className="p-4 flex items-center justify-between border-b border-slate-300">
             <h3 className="text-xl font-semibold leading-none tracking-tight">
               LEXARI
@@ -110,11 +110,6 @@ function Chatbot(props: ChatbotProps) {
                     {message.sender === 'ChatGPT' ||
                     message.sender === 'assistant' ? (
                       <div className="flex p-4 gap-2 backdrop-blur-lg bg-background rounded-2xl shadow-lg">
-                        {/*<img*/}
-                        {/*  className="rounded-full w-10 h-10 "*/}
-                        {/*  src={logo}*/}
-                        {/*  alt="bot"*/}
-                        {/*/>*/}
                         <div className="flex flex-col w-full">
                           <div
                             className="text-gray-600"
@@ -173,7 +168,7 @@ function Chatbot(props: ChatbotProps) {
                     ) : (
                       <div className="flex gap-2 my-4">
                         <div className="ml-auto flex-col">
-                          <div className="flex gap-2 items-center ml-auto">
+                          <div className="flex justify-end gap-2 items-center ml-auto w-full">
                             <span className="text-muted-foreground">
                               11:19 AM
                             </span>
@@ -181,9 +176,7 @@ function Chatbot(props: ChatbotProps) {
                           </div>
                           <div className="flex ml-auto">
                             <div className="bg-primary/30 rounded-l-xl rounded-br-xl inline-block ml-auto">
-                              <div className="p-3 whitespace-nowrap">
-                                {message.message}
-                              </div>
+                              <div className="p-3">{message.message}</div>
                             </div>
                           </div>
                         </div>
