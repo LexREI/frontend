@@ -152,10 +152,12 @@ type Props = {
   expanded: boolean;
   setExpanded: (expanded: boolean) => void;
   setDocument: (document: string) => void;
+  getDocumentsList: () => void;
 };
 
 function TabList(props: Props) {
-  const { documents, expanded, setExpanded, setDocument } = props;
+  const { documents, expanded, setExpanded, setDocument, getDocumentsList } =
+    props;
 
   const [tabs, setTabs] = useState<Tab[]>(tabsInit);
   const [questionsList, setQuestionsList] =
@@ -257,7 +259,7 @@ function TabList(props: Props) {
 
     try {
       const response = await documentUploadUsingPost(formData);
-      console.log('File uploaded successfully:', response.data);
+      getDocumentsList();
     } catch (error) {
       console.error('Error uploading file:', error);
     } finally {

@@ -82,10 +82,17 @@ type ActionsProps = {
   setActionsOpen: (actionsOpen: boolean) => void;
   documents: API.Documents[];
   setDocument: (document: string) => void;
+  getDocumentsList: () => void;
 };
 
 export default function Actions(props: ActionsProps) {
-  const { actionsOpen, setActionsOpen, documents, setDocument } = props;
+  const {
+    actionsOpen,
+    setActionsOpen,
+    documents,
+    setDocument,
+    getDocumentsList,
+  } = props;
   const [expanded, setExpanded] = useState<boolean>(true);
 
   return (
@@ -131,6 +138,7 @@ export default function Actions(props: ActionsProps) {
                       setDocument={setDocument}
                       expanded={expanded}
                       setExpanded={setExpanded}
+                      getDocumentsList={getDocumentsList}
                     />
                     {/*<div className="border-b border-gray-200">*/}
                     {/*  <div className="px-6">*/}

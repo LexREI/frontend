@@ -45,6 +45,7 @@ function Discovery() {
             setActionsOpen={setActionsOpen}
             documents={documents}
             setDocument={setDocument}
+            getDocumentsList={getDocumentsList}
           />
           <div className="grid grid-cols-2 w-full rounded-2xl">
             <PDFViewer
