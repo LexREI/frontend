@@ -165,7 +165,7 @@ function TabList(props: Props) {
   const [activeTabParams, setActiveTabParams] = useSearchParams({ tab: '' });
   const activeTab = activeTabParams.get('tab') || 'upload';
 
-  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [uploadFiles, setUploadFiles] = useState<File[] | null>(null);
   const [urls, setUrls] = useState<string[]>([]);
   const [downloadLoading, setDownloadLoading] = useState<boolean>(false);
   const [uploadLoading, setUploadLoading] = useState<boolean>(false);
@@ -240,28 +240,41 @@ function TabList(props: Props) {
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target;
-    if (file && file.files && file.files.length > 0) {
-      setUploadFile(file.files[0]);
-    }
+    const filesArray = Array.from(e.target.files || []);
+    setUploadFiles(filesArray);
+    // const file = e.target;
+    // if (file && file.files && file.files.length > 0) {
+    //   setUploadFiles(file.files);
+    // }
   };
 
   const onClickClearFileUpload = () => {
-    setUploadFile(null);
+    setUploadFiles(null);
   };
 
   const uploadPdf = async () => {
-    if (!uploadFile) return;
+    if (!uploadFiles || uploadFiles.length === 0) return;
 
     setUploadLoading(true);
-    const formData = new FormData();
-    formData.append('file', uploadFile);
+    const uploadPromises = [];
+
+    for (let i = 0; i < uploadFiles.length; i++) {
+      const formData = new FormData();
+      formData.append('file', uploadFiles[i]);
+
+      const uploadPromise = documentUploadUsingPost(formData);
+      uploadPromises.push(uploadPromise);
+    }
 
     try {
-      const response = await documentUploadUsingPost(formData);
+      // Wait for all uploads to finish using Promise.all
+      const responses = await Promise.all(uploadPromises);
+      setUploadFiles(null);
+
+      // Do something with the responses if necessary
       getDocumentsList();
     } catch (error) {
-      console.error('Error uploading file:', error);
+      console.error('Error uploading files:', error);
     } finally {
       setUploadLoading(false);
     }
@@ -301,56 +314,10 @@ function TabList(props: Props) {
               activeTab === 'upload'
             } ? 'flex flex-col h-full pb-4' : '' `}
           >
-            <div className="flex flex-col h-full pb-4">
-              <div className="flex flex-col gap-2 px-2 h-full">
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="terms" />
-                  <InsertDriveFileRoundedIcon />
-                  <label
-                    htmlFor="terms"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    pdf1g ewa aw f
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="terms1" />
-                  <InsertDriveFileRoundedIcon />
-                  <label
-                    htmlFor="terms1"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    pdf2 greawe fg
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="terms2" />
-                  <InsertDriveFileRoundedIcon />
-                  <label
-                    htmlFor="terms2"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    pdf3brseb
-                  </label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="terms3" />
-                  <InsertDriveFileRoundedIcon />
-                  <label
-                    htmlFor="terms3"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    pdf4 fewaf ew
-                  </label>
-                </div>
-              </div>
-              <div className="px-4 space-y-4">
-                <div className="flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+            <div className="flex flex-col h-full">
+              <div className="px-4 space-y-4 my-2 relative">
+                <div className="flex justify-center rounded-lg border border-dashed border-gray-900/25 py-4">
                   <div className="text-center">
-                    <HelpOutlineRoundedIcon
-                      className="mx-auto h-12 w-12 text-gray-300"
-                      aria-hidden="true"
-                    />
                     <div className="mt-4 flex text-sm leading-6 text-gray-600">
                       <label
                         htmlFor="file-upload"
@@ -363,11 +330,19 @@ function TabList(props: Props) {
                           type="file"
                           className="sr-only"
                           onChange={(e) => handleFileChange(e)}
+                          multiple
                         />
                       </label>
-                      <p className="pl-1 font-bold">
-                        {uploadFile ? uploadFile.name : 'or drag and drop '}
-                      </p>
+                      {uploadFiles && uploadFiles.length > 0 ? (
+                        <ul className="pl-1 font-bold">
+                          {uploadFiles.slice(0, 2).map((file, index) => (
+                            <li key={index}>{file.name}</li>
+                          ))}
+                          {uploadFiles.length > 2 && <li>...</li>}
+                        </ul>
+                      ) : (
+                        <p className="pl-1 font-bold">or drag and drop</p>
+                      )}
                     </div>
                     <p className="text-xs leading-5 text-gray-600">
                       PDF up to 10MB
@@ -386,23 +361,14 @@ function TabList(props: Props) {
                     variant="contained"
                     size="large"
                     loading={uploadLoading}
-                    disabled={uploadFile === null}
+                    disabled={uploadFiles === null}
                     onClick={() => uploadPdf()}
                   >
                     Upload
                   </LoadingButton>
                 </div>
               </div>
-            </div>
-          </TabsContent>
-          <TabsContent
-            value="download"
-            className={`${
-              activeTab === 'download'
-            } ? 'flex flex-col h-full pb-4' : '' `}
-          >
-            <div className="flex flex-col h-full pb-4">
-              <div className="space-y-4 px-2 h-full">
+              <div className="space-y-3 px-2">
                 {documents.map((doc) => {
                   return (
                     <Card
@@ -429,17 +395,12 @@ function TabList(props: Props) {
                         >
                           Open
                         </LoadingButton>
-
-                        {/* <div className="text-xs text-muted-foreground space-x-2"> */}
-                        {/*  <span>Size: 12MB</span> */}
-                        {/*  <span>FORMAT: PDF</span> */}
-                        {/* </div> */}
                       </div>
                     </Card>
                   );
                 })}
               </div>
-              <div className="px-4 flex justify-between">
+              <div className="px-4 flex justify-between py-4">
                 <LoadingButton
                   variant="outlined"
                   size="medium"
@@ -457,6 +418,65 @@ function TabList(props: Props) {
                   Download
                 </LoadingButton>
               </div>
+            </div>
+          </TabsContent>
+          <TabsContent
+            value="download"
+            className={`${
+              activeTab === 'download'
+            } ? 'flex flex-col h-full pb-4' : '' `}
+          >
+            <div className="flex flex-col h-full pb-4">
+              {/*<div className="space-y-4 px-2 h-full">*/}
+              {/*  {documents.map((doc) => {*/}
+              {/*    return (*/}
+              {/*      <Card*/}
+              {/*        key={doc.file_name}*/}
+              {/*        className="flex items-center space-x-2 px-2 py-2 shadow-md"*/}
+              {/*      >*/}
+              {/*        <Checkbox*/}
+              {/*          id={doc.file_name}*/}
+              {/*          checked={urls.includes(doc.download_link)}*/}
+              {/*          onClick={() => handleFilesSelect(doc.download_link)}*/}
+              {/*        />*/}
+              {/*        <div className="text-muted-foreground/70 w-14 h-14">*/}
+              {/*          <DocumentTextIcon className="w-12 h-12" />*/}
+              {/*        </div>*/}
+
+              {/*        <div className="space-y-0.5 w-full font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">*/}
+              {/*          <div className="text-sm break-all w-full">*/}
+              {/*            {doc.file_name}*/}
+              {/*          </div>*/}
+              {/*          <LoadingButton*/}
+              {/*            variant="contained"*/}
+              {/*            size="small"*/}
+              {/*            onClick={() => setDocument(doc.download_link)}*/}
+              {/*          >*/}
+              {/*            Open*/}
+              {/*          </LoadingButton>*/}
+              {/*        </div>*/}
+              {/*      </Card>*/}
+              {/*    );*/}
+              {/*  })}*/}
+              {/*</div>*/}
+              {/*<div className="px-4 flex justify-between">*/}
+              {/*  <LoadingButton*/}
+              {/*    variant="outlined"*/}
+              {/*    size="medium"*/}
+              {/*    onClick={onClickClearSelected}*/}
+              {/*  >*/}
+              {/*    Clear*/}
+              {/*  </LoadingButton>*/}
+              {/*  <LoadingButton*/}
+              {/*    variant="contained"*/}
+              {/*    size="large"*/}
+              {/*    loading={downloadLoading}*/}
+              {/*    disabled={urls.length === 0}*/}
+              {/*    onClick={() => downloadPdfs()}*/}
+              {/*  >*/}
+              {/*    Download*/}
+              {/*  </LoadingButton>*/}
+              {/*</div>*/}
             </div>
           </TabsContent>
           <TabsContent

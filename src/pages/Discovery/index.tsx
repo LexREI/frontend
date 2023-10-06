@@ -18,6 +18,32 @@ function Discovery() {
       metadata: null,
       contentEditable: false,
     },
+    {
+      message: 'Ask Lexari with your legal research and analysis!',
+      sender: 'user',
+      metadata: null,
+      contentEditable: false,
+    },
+    {
+      message: 'Ask Lexari with your legal research and analysis!',
+      sender: 'ChatGPT',
+      metadata: null,
+      contentEditable: false,
+    },
+    {
+      message:
+        'Ask Lexari with your legal research and analysis! ewafewa fewaf aew awef grmegl;re mag maew;l fm;elawm f;lawem ',
+      sender: 'user',
+      metadata: null,
+      contentEditable: false,
+    },
+    {
+      message:
+        'Ask Lexari with your legal research and analysis! fewaf eaw fwea fewa fewa feaw fwea fewa faw fewa fewa fe',
+      sender: 'ChatGPT',
+      metadata: null,
+      contentEditable: false,
+    },
   ]);
 
   const onClickSearch = (pageNumber: number, pageTextHighlight: string) => {

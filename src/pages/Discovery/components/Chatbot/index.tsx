@@ -109,10 +109,10 @@ function Chatbot(props: ChatbotProps) {
                   <div key={message.message}>
                     {message.sender === 'ChatGPT' ||
                     message.sender === 'assistant' ? (
-                      <div className="flex p-4 gap-2 backdrop-blur-lg bg-background rounded-2xl shadow-lg">
+                      <div className="flex p-4 gap-2 bg-zinc-200/70 w-[90%] rounded-tl-2xl rounded-r-2xl">
                         <div className="flex flex-col w-full">
                           <div
-                            className="text-gray-600"
+                            className="text-gray-800"
                             contentEditable={message.contentEditable}
                             ref={message.contentEditable ? divEditRef : null}
                           >
@@ -175,8 +175,10 @@ function Chatbot(props: ChatbotProps) {
                             <span>User</span>
                           </div>
                           <div className="flex ml-auto">
-                            <div className="bg-primary/30 rounded-l-xl rounded-br-xl inline-block ml-auto">
-                              <div className="p-3">{message.message}</div>
+                            <div className="bg-primary/30 rounded-l-2xl rounded-br-2xl inline-block ml-auto w-[90%]">
+                              <div className="p-3 text-gray-800">
+                                {message.message}
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -195,56 +197,41 @@ function Chatbot(props: ChatbotProps) {
             </div>
           </div>
           <div className="mt-auto px-6 py-2">
-            <form className="flex items-center">
+            <form className="flex items-center relative">
               <label htmlFor="simple-search" className="sr-only">
                 Chat here...
               </label>
-              <div className="relative w-full">
-                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                  <svg
-                    aria-hidden="true"
-                    className="w-5 h-5 text-gray-500 dark:text-gray-400"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
+              <input
+                type="text"
+                id="simple-search"
+                className="bg-background text-sm rounded-2xl shadow-md block w-full pl-4 pr-12 p-2.5 py-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Send a message"
+                value={userMessage}
+                autoComplete="off"
+                required
+                onChange={(e: any) => handleSendOnChange(e.target.value)}
+              />
+              <div className="absolute inset-y-0 right-2 flex items-center">
+                {isTyping || userMessage.length === 0 ? (
+                  <Button
+                    type="submit"
+                    className="w-10 h-10 text-sm font-medium text-gray-600 bg-transparent rounded-lg"
+                    disabled
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  id="simple-search"
-                  className="bg-background text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 py-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Send a message"
-                  value={userMessage}
-                  autoComplete="off"
-                  required
-                  onChange={(e: any) => handleSendOnChange(e.target.value)}
-                />
+                    <SendRoundedIcon />
+                    <span className="sr-only">Search</span>
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    className="w-10 h-10 text-sm font-medium text-white rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    onClick={(e) => handleSend(e)}
+                  >
+                    <SendRoundedIcon />
+                    <span className="sr-only">Search</span>
+                  </Button>
+                )}
               </div>
-              {isTyping ? (
-                <Button
-                  type="submit"
-                  className="w-10 h-10 ml-2 text-sm font-medium text-white bg-gray-600 rounded-lg border border-blue-700 "
-                  disabled
-                >
-                  <SendRoundedIcon />
-                  <span className="sr-only">Search</span>
-                </Button>
-              ) : (
-                <Button
-                  type="submit"
-                  className="w-10 h-10 ml-2 text-sm font-medium text-white rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                  onClick={(e) => handleSend(e)}
-                >
-                  <SendRoundedIcon />
-                  <span className="sr-only">Search</span>
-                </Button>
-              )}
             </form>
             <h3 className="flex mt-2 ml-auto text-sm text-gray-500">
               Powered by &nbsp;
