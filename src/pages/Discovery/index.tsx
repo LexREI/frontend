@@ -17,8 +17,7 @@ function Discovery() {
       sender: 'ChatGPT',
       metadata: null,
       contentEditable: false,
-    }d .
-
+    },
   ]);
 
   const onClickSearch = (pageNumber: number, pageTextHighlight: string) => {
