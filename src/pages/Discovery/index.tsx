@@ -2,10 +2,17 @@ import Layout from '@/layouts/Layout';
 import Actions from '@/pages/Discovery/components/Actions';
 import PDFViewer from '@/pages/Discovery/components/PDFViewer';
 import Chatbot from '@/pages/Discovery/components/Chatbot';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { documentsListUsingGet } from '@/services/DocumentController';
+import { DefaultContext } from '@/contexts/default_context';
 
 function Discovery() {
+  const {
+    setSuccessDescription,
+    setErrorDescription,
+    fetchLoading,
+    setFetchLoading,
+  } = useContext(DefaultContext);
   const [actionsOpen, setActionsOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [documents, setDocuments] = useState<API.Documents[]>([]); // [{name: 'doc1', url: 'http://example.com/doc1.pdf'}
@@ -26,9 +33,13 @@ function Discovery() {
   };
 
   const getDocumentsList = async () => {
-    const res = await documentsListUsingGet();
-    if (res) {
-      setDocuments(res.data.files);
+    try {
+      const res = await documentsListUsingGet();
+      if (res) {
+        setDocuments(res.data.files);
+      }
+    } catch (err: any) {
+      setErrorDescription(err.response.data.message);
     }
   };
 

@@ -2,7 +2,8 @@ import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRound
 import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { DefaultContext } from '@/contexts/default_context';
 import JSZip from 'jszip';
 import DriveFolderUploadRoundedIcon from '@mui/icons-material/DriveFolderUploadRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
@@ -158,6 +159,12 @@ type Props = {
 function TabList(props: Props) {
   const { documents, expanded, setExpanded, setDocument, getDocumentsList } =
     props;
+  const {
+    setSuccessDescription,
+    setErrorDescription,
+    fetchLoading,
+    setFetchLoading,
+  } = useContext(DefaultContext);
 
   const [tabs, setTabs] = useState<Tab[]>(tabsInit);
   const [questionsList, setQuestionsList] =
@@ -232,8 +239,8 @@ function TabList(props: Props) {
       link.click();
       document.body.removeChild(link);
       setUrls([]);
-    } catch (error) {
-      console.error('Error during downloading:', error);
+    } catch (err: any) {
+      setErrorDescription(err.response.data.message);
     } finally {
       setDownloadLoading(false);
     }
@@ -242,10 +249,6 @@ function TabList(props: Props) {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const filesArray = Array.from(e.target.files || []);
     setUploadFiles(filesArray);
-    // const file = e.target;
-    // if (file && file.files && file.files.length > 0) {
-    //   setUploadFiles(file.files);
-    // }
   };
 
   const onClickClearFileUpload = () => {
@@ -273,8 +276,9 @@ function TabList(props: Props) {
 
       // Do something with the responses if necessary
       getDocumentsList();
-    } catch (error) {
-      console.error('Error uploading files:', error);
+      setSuccessDescription('Successfully uploaded files');
+    } catch (err: any) {
+      setErrorDescription(err.response.data.message);
     } finally {
       setUploadLoading(false);
     }

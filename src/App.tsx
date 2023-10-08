@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy, Suspense, useContext } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import {
   Home,
@@ -9,6 +9,9 @@ import {
   Error,
   PrivateRoute,
 } from './pages';
+import { DefaultContext } from '@/contexts/default_context';
+import AlertDestructive from '@/components/Alert/AlertDestructive';
+import { AlertDefault } from '@/components/Alert/AlertDefault';
 
 const routes = [
   { path: '/', element: <Home />, auth: false },
@@ -20,24 +23,44 @@ const routes = [
 ];
 
 function App() {
+  const {
+    successDescription,
+    setSuccessDescription,
+    errorDescription,
+    setErrorDescription,
+  } = useContext(DefaultContext);
   return (
-    <Routes>
-      {routes.map((route) => {
-        return (
-          <Route
-            key={route.path}
-            path={route.path}
-            element={
-              route.auth ? (
-                <PrivateRoute>{route.element}</PrivateRoute>
-              ) : (
-                route.element
-              )
-            }
-          />
-        );
-      })}
-    </Routes>
+    <Suspense fallback="">
+      {successDescription && (
+        <AlertDefault
+          description={successDescription}
+          setSuccessDescription={setSuccessDescription}
+        />
+      )}
+      {errorDescription && (
+        <AlertDestructive
+          description={errorDescription}
+          setErrorDescription={setErrorDescription}
+        />
+      )}
+      <Routes>
+        {routes.map((route) => {
+          return (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={
+                route.auth ? (
+                  <PrivateRoute>{route.element}</PrivateRoute>
+                ) : (
+                  route.element
+                )
+              }
+            />
+          );
+        })}
+      </Routes>
+    </Suspense>
   );
 }
 

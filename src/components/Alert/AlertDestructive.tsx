@@ -5,10 +5,11 @@ import { AuthContext } from '@/contexts/auth_context';
 
 type AlertDestructiveProps = {
   description: string;
+  setErrorDescription: React.Dispatch<React.SetStateAction<string>>;
 };
 
 function AlertDestructive(props: AlertDestructiveProps) {
-  const { description } = props;
+  const { description, setErrorDescription } = props;
   // const { setErrorDescription } = useContext(AuthContext);
 
   // State to manage visibility of the alert
@@ -18,7 +19,7 @@ function AlertDestructive(props: AlertDestructiveProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
-      // setErrorDescription('');
+      setErrorDescription('');
     }, 4000); // 4000ms = 4s
 
     // Cleanup function to clear the timer if the component is unmounted before the timer finishes

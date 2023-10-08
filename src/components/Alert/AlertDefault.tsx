@@ -1,14 +1,14 @@
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '@/contexts/auth_context';
+import { useEffect, useState } from 'react';
 
 type AlertDefaultProps = {
   description: string;
+  setSuccessDescription: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export function AlertDefault(props: AlertDefaultProps) {
-  const { description } = props;
+  const { description, setSuccessDescription } = props;
 
   // const { setSuccessDescription } = useContext(AuthContext);
 
@@ -19,7 +19,7 @@ export function AlertDefault(props: AlertDefaultProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
-      // setSuccessDescription('');
+      setSuccessDescription('');
     }, 4000); // 4000ms = 4s
 
     // Cleanup function to clear the timer if the component is unmounted before the timer finishes
