@@ -6,6 +6,7 @@ import {
   Waitlist,
   Dashboard,
   Discovery,
+  Login,
   Error,
   PrivateRoute,
 } from './pages';
@@ -19,6 +20,7 @@ const routes = [
   { path: '/waitlist', element: <Waitlist />, auth: false },
   { path: '/dashboard', element: <Dashboard />, auth: false },
   { path: '/discovery', element: <Discovery />, auth: false },
+  { path: '/login', element: <Login />, auth: false },
   { path: '*', element: <Error />, auth: false },
 ];
 

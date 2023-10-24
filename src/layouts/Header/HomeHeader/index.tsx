@@ -1,8 +1,9 @@
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Dialog } from '@headlessui/react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import logo from '@/assets/logo.jpg';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '@/contexts/auth_context';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -12,9 +13,10 @@ const navigation = [
 ];
 
 function HomeHeader() {
+  const { isAuthenticated } = useContext(AuthContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   return (
-    <header className="absolute inset-x-0 top-0 z-50">
+    <header className="fixed backdrop-blur-lg dark:bg-primary-foreground/30 inset-x-0 top-0 z-50">
       <nav
         className="flex items-center justify-between p-6 lg:px-8"
         aria-label="Global"
@@ -47,9 +49,12 @@ function HomeHeader() {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+          <Link
+            to="/login"
+            className="text-sm font-semibold leading-6 text-gray-900"
+          >
             Log in <span aria-hidden="true">&rarr;</span>
-          </a>
+          </Link>
         </div>
       </nav>
       <Dialog
@@ -88,12 +93,12 @@ function HomeHeader() {
                 ))}
               </div>
               <div className="py-6">
-                <a
-                  href="#"
+                <Link
+                  to="/login"
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   Log in
-                </a>
+                </Link>
               </div>
             </div>
           </div>
