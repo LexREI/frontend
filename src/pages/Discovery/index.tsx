@@ -19,7 +19,7 @@ function Discovery() {
     contentLoadingTitle,
     setContentLoadingTitle,
   } = useContext(DefaultContext);
-  const [relevantDialogOpen, setRelevantDialogOpen] = useState<boolean>(true);
+  const [relevantDialogOpen, setRelevantDialogOpen] = useState<boolean>(false);
   const [actionsOpen, setActionsOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [documents, setDocuments] = useState<API.Documents[]>([]); // [{name: 'doc1', url: 'http://example.com/doc1.pdf'}
