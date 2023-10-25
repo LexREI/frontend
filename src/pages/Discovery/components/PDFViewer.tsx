@@ -1,8 +1,9 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import WebViewer from '@pdftron/webviewer';
 import examplePDF from '@/assets/pdf/Fair Labor Standards Act.pdf';
 import examplePDF1 from '@/assets/pdf/example.pdf';
 import { Button } from '@/components/ui/button';
+import { DefaultContext } from '@/contexts/default_context';
 
 type PDFViewerProps = {
   document: string;
@@ -12,6 +13,15 @@ type PDFViewerProps = {
 
 function PDFViewer(props: PDFViewerProps) {
   const { document, page, searchText } = props;
+  const {
+    setSuccessDescription,
+    setErrorDescription,
+    contentLoading,
+    setContentLoading,
+    contentLoadingTitle,
+    setContentLoadingTitle,
+  } = useContext(DefaultContext);
+
   const viewerDiv = useRef<HTMLDivElement>(null);
 
   const [documentViewerCopy, setDocumentViewerCopy] = React.useState<any>(null);
@@ -76,10 +86,19 @@ function PDFViewer(props: PDFViewerProps) {
     documentViewer.textSearchInit(text, mode, searchOptions);
   };
   useEffect(() => {
-    if (document === '') return;
-    documentViewerCopy.loadDocument(document, {
-      filename: 'document.pdf',
-    });
+    try {
+      setContentLoading(true);
+      setContentLoadingTitle('Loading document...');
+      if (document === '') return;
+      documentViewerCopy.loadDocument(document, {
+        filename: 'document.pdf',
+      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setContentLoading(false);
+      setContentLoadingTitle('');
+    }
   }, [document]);
 
   useEffect(() => {

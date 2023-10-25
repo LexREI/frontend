@@ -5,6 +5,8 @@ import Chatbot from '@/pages/Discovery/components/Chatbot';
 import { useContext, useEffect, useState } from 'react';
 import { documentsListUsingGet } from '@/services/DocumentController';
 import { DefaultContext } from '@/contexts/default_context';
+import Loading from '@/components/Loading';
+import { RelevantDialog } from '@/pages/Discovery/components/RelevantDialog';
 
 function Discovery() {
   const {
@@ -12,20 +14,28 @@ function Discovery() {
     setErrorDescription,
     fetchLoading,
     setFetchLoading,
+    contentLoading,
+    setContentLoading,
+    contentLoadingTitle,
+    setContentLoadingTitle,
   } = useContext(DefaultContext);
+  const [relevantDialogOpen, setRelevantDialogOpen] = useState<boolean>(true);
   const [actionsOpen, setActionsOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [documents, setDocuments] = useState<API.Documents[]>([]); // [{name: 'doc1', url: 'http://example.com/doc1.pdf'}
   const [document, setDocument] = useState<string>('');
   const [searchText, setSearchText] = useState<string>('');
   const [messages, setMessages] = useState<any[]>([
-    {
-      message: 'Ask Lexari with your legal research and analysis!',
-      sender: 'ChatGPT',
-      metadata: null,
-      contentEditable: false,
-    },
+    // {
+    //   message: 'Ask Lexari with your legal research and analysis!',
+    //   sender: 'ChatGPT',
+    //   metadata: null,
+    //   contentEditable: false,
+    // },
   ]);
+  const [relevantDialogContent, setRelevantDialogContent] = useState<
+    API.RelevantMetadata[]
+  >([]);
 
   const onClickSearch = (pageNumber: number, pageTextHighlight: string) => {
     setPage(pageNumber);
@@ -66,12 +76,23 @@ function Discovery() {
             />
             <Chatbot
               messages={messages}
+              document={document}
               setMessages={setMessages}
               setDocument={setDocument}
               onClickSearch={onClickSearch}
               setActionsOpen={setActionsOpen}
+              setRelevantDialogOpen={setRelevantDialogOpen}
+              setRelevantDialogContent={setRelevantDialogContent}
             />
           </div>
+          <Loading open={contentLoading} title={contentLoadingTitle} />
+          {relevantDialogOpen && (
+            <RelevantDialog
+              open={relevantDialogOpen}
+              setOpen={setRelevantDialogOpen}
+              content={relevantDialogContent}
+            />
+          )}
         </main>
       }
     />

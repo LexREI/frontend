@@ -11,19 +11,35 @@ import IconButton from '@mui/material/IconButton';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import Tooltip from '@mui/material/Tooltip';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import AlignHorizontalLeftRoundedIcon from '@mui/icons-material/AlignHorizontalLeftRounded';
+import ViewQuiltRoundedIcon from '@mui/icons-material/ViewQuiltRounded';
 import { Bars3BottomRightIcon } from '@heroicons/react/24/outline';
+import ChatSkeleton from '@/components/Skeleton/ChatSkeleton';
 
 type ChatbotProps = {
   messages: any[];
+  document: string;
   setMessages: any;
   setDocument: (document: string) => void;
   onClickSearch: (pageNumber: number, pageTextHighlight: string) => void;
   setActionsOpen: (actionsOpen: boolean) => void;
+  setRelevantDialogOpen: (relevantDialogOpen: boolean) => void;
+  setRelevantDialogContent: (
+    relevantDialogContent: API.RelevantMetadata[]
+  ) => void;
 };
 
 function Chatbot(props: ChatbotProps) {
-  const { messages, setMessages, setDocument, onClickSearch, setActionsOpen } =
-    props;
+  const {
+    messages,
+    document,
+    setMessages,
+    setDocument,
+    onClickSearch,
+    setActionsOpen,
+    setRelevantDialogOpen,
+    setRelevantDialogContent,
+  } = props;
   const [userMessage, setUserMessage] = useState<string>(''); // user input
   const [isTyping, setIsTyping] = useState<boolean>(false); // is typing
   const divEditRef = useRef<HTMLDivElement>(null);
@@ -79,11 +95,47 @@ function Chatbot(props: ChatbotProps) {
     setMessages(newMessages);
   };
 
+  /*
+   * Handle auto scroll to bottom when send the message
+   * */
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const smoothScrollTo = (
+    element: HTMLDivElement,
+    target: number,
+    duration: number
+  ) => {
+    const start = element.scrollTop;
+    const change = target - start;
+    let startTime = 0;
+
+    const easeInOutQuad = (t: number, b: number, c: number, d: number) => {
+      t /= d / 2;
+      if (t < 1) return (c / 2) * t * t + b;
+      t--;
+      return (-c / 2) * (t * (t - 2) - 1) + b;
+    };
+
+    const animateScroll = (currentTime: number) => {
+      if (!startTime) startTime = currentTime;
+      const progress = currentTime - startTime;
+      element.scrollTop = easeInOutQuad(progress, start, change, duration);
+      if (progress < duration) {
+        window.requestAnimationFrame(animateScroll);
+      }
+    };
+    window.requestAnimationFrame(animateScroll);
+  };
+
   // Focus on the contentEditable is True
   useEffect(() => {
     const editableMessage = messages.find((m) => m.contentEditable);
     if (editableMessage && divEditRef.current) {
       divEditRef.current.focus();
+    }
+
+    if (messagesEndRef.current) {
+      const targetScroll = messagesEndRef.current.scrollHeight;
+      smoothScrollTo(messagesEndRef.current, targetScroll, 500);
     }
   }, [messages]);
 
@@ -102,98 +154,153 @@ function Chatbot(props: ChatbotProps) {
               <Bars3BottomRightIcon className="w-6 h-6" />
             </Button>
           </div>
-          <div className="flex flex-col overflow-auto p-4">
+          <div ref={messagesEndRef} className="flex flex-col overflow-auto p-4">
             <div>
               {messages.map((message, index) => {
                 return (
-                  <div key={message.message}>
+                  <div key={index}>
                     {message.sender === 'ChatGPT' ||
                     message.sender === 'assistant' ? (
-                      <div className="flex p-4 gap-2 bg-zinc-200/70 w-[90%] rounded-tl-2xl rounded-r-2xl">
-                        <div className="flex flex-col w-full">
-                          <div
-                            className="text-gray-800"
-                            contentEditable={message.contentEditable}
-                            ref={message.contentEditable ? divEditRef : null}
-                          >
+                      <div className="pb-6">
+                        <div className="mt-4">
+                          <div className="flex items-center gap-1">
+                            <AlignHorizontalLeftRoundedIcon />
+                            <span className="text-xl font-medium">Answer</span>
+                          </div>
+                          <div className="mt-2 text-base font-normal text-popover-foreground/80">
                             {message.message}
                           </div>
-                          {message.metadata && (
-                            <Card className="mt-2">
-                              <CardHeader>
-                                <CardTitle>Relevant</CardTitle>
-                                <CardContent className="grid grid-cols-2 p-0 gap-4 items-start">
-                                  {message.metadata.map((metadata: any) => {
-                                    return (
-                                      <RevelantCard
-                                        key={metadata}
-                                        setDocument={setDocument}
-                                        metadata={metadata}
-                                        onClickSearch={onClickSearch}
-                                      />
-                                    );
-                                  })}
-                                </CardContent>
-                              </CardHeader>
-                            </Card>
-                          )}
-                          <div className="flex items-center mt-4 ml-auto">
-                            <Tooltip title="Copy">
-                              <IconButton aria-label="copy" size="medium">
-                                <ContentCopyRoundedIcon fontSize="small" />
-                              </IconButton>
-                            </Tooltip>
-                            {message.contentEditable ? (
-                              <Tooltip
-                                title="Confirm"
-                                onClick={onClickConfirm(index)}
-                              >
-                                <IconButton aria-label="confirm" size="medium">
-                                  <CheckRoundedIcon fontSize="small" />
-                                </IconButton>
-                              </Tooltip>
-                            ) : (
-                              <Tooltip
-                                title="Update"
-                                onClick={onClickEdit(index)}
-                              >
-                                <IconButton aria-label="update" size="medium">
-                                  <CreateRoundedIcon fontSize="small" />
-                                </IconButton>
-                              </Tooltip>
-                            )}
+                        </div>
+                        <div className="mt-4">
+                          <div className="flex items-center gap-1">
+                            <ViewQuiltRoundedIcon />
+                            <span className="text-xl font-medium">
+                              Relevant
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-3 gap-2 mt-4">
+                            {message.metadata &&
+                              message.metadata.map((metadata: any) => {
+                                return (
+                                  <RevelantCard
+                                    key={metadata}
+                                    document={document}
+                                    setDocument={setDocument}
+                                    metadata={metadata}
+                                    onClickSearch={onClickSearch}
+                                  />
+                                );
+                              })}
                           </div>
                         </div>
+                        <div className="mt-4">
+                          <Tooltip title="View Relevant">
+                            <IconButton
+                              size="small"
+                              onClick={() => {
+                                setRelevantDialogContent(message.metadata);
+                                setRelevantDialogOpen(true);
+                              }}
+                            >
+                              <ViewQuiltRoundedIcon fontSize="small" />
+                            </IconButton>
+                          </Tooltip>
+                        </div>
+                        <hr className="mt-4" />
                       </div>
                     ) : (
-                      <div className="flex gap-2 my-4">
-                        <div className="ml-auto flex-col">
-                          <div className="flex justify-end gap-2 items-center ml-auto w-full">
-                            <span className="text-muted-foreground">
-                              11:19 AM
-                            </span>
-                            <span>User</span>
-                          </div>
-                          <div className="flex ml-auto">
-                            <div className="bg-primary/30 rounded-l-2xl rounded-br-2xl inline-block ml-auto w-[90%]">
-                              <div className="p-3 text-gray-800">
-                                {message.message}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                      <div className="text-2xl font-medium">
+                        {message.message}
                       </div>
                     )}
                   </div>
                 );
               })}
+              {/*{messages.map((message, index) => {*/}
+              {/*  return (*/}
+              {/*    <div key={index}>*/}
+              {/*      {message.sender === 'ChatGPT' ||*/}
+              {/*      message.sender === 'assistant' ? (*/}
+              {/*        <div className="flex p-4 gap-2 bg-zinc-200/70 w-[90%] rounded-tl-2xl rounded-r-2xl">*/}
+              {/*          <div className="flex flex-col w-full">*/}
+              {/*            <div*/}
+              {/*              className="text-gray-800"*/}
+              {/*              contentEditable={message.contentEditable}*/}
+              {/*              ref={message.contentEditable ? divEditRef : null}*/}
+              {/*            >*/}
+              {/*              {message.message}*/}
+              {/*            </div>*/}
+              {/*            {message.metadata && (*/}
+              {/*              <Card className="mt-2">*/}
+              {/*                <CardHeader>*/}
+              {/*                  <CardTitle>Relevant</CardTitle>*/}
+              {/*                  <CardContent className="grid grid-cols-2 p-0 gap-4 items-start">*/}
+              {/*                    {message.metadata.map((metadata: any) => {*/}
+              {/*                      return (*/}
+              {/*                        <RevelantCard*/}
+              {/*                          key={metadata}*/}
+              {/*                          setDocument={setDocument}*/}
+              {/*                          metadata={metadata}*/}
+              {/*                          onClickSearch={onClickSearch}*/}
+              {/*                        />*/}
+              {/*                      );*/}
+              {/*                    })}*/}
+              {/*                  </CardContent>*/}
+              {/*                </CardHeader>*/}
+              {/*              </Card>*/}
+              {/*            )}*/}
+              {/*            <div className="flex items-center mt-4 ml-auto">*/}
+              {/*              <Tooltip title="Copy">*/}
+              {/*                <IconButton aria-label="copy" size="medium">*/}
+              {/*                  <ContentCopyRoundedIcon fontSize="small" />*/}
+              {/*                </IconButton>*/}
+              {/*              </Tooltip>*/}
+              {/*              {message.contentEditable ? (*/}
+              {/*                <Tooltip*/}
+              {/*                  title="Confirm"*/}
+              {/*                  onClick={onClickConfirm(index)}*/}
+              {/*                >*/}
+              {/*                  <IconButton aria-label="confirm" size="medium">*/}
+              {/*                    <CheckRoundedIcon fontSize="small" />*/}
+              {/*                  </IconButton>*/}
+              {/*                </Tooltip>*/}
+              {/*              ) : (*/}
+              {/*                <Tooltip*/}
+              {/*                  title="Update"*/}
+              {/*                  onClick={onClickEdit(index)}*/}
+              {/*                >*/}
+              {/*                  <IconButton aria-label="update" size="medium">*/}
+              {/*                    <CreateRoundedIcon fontSize="small" />*/}
+              {/*                  </IconButton>*/}
+              {/*                </Tooltip>*/}
+              {/*              )}*/}
+              {/*            </div>*/}
+              {/*          </div>*/}
+              {/*        </div>*/}
+              {/*      ) : (*/}
+              {/*        <div className="flex gap-2 my-4">*/}
+              {/*          <div className="ml-auto flex-col">*/}
+              {/*            <div className="flex justify-end gap-2 items-center ml-auto w-full">*/}
+              {/*              <span className="text-muted-foreground">*/}
+              {/*                11:19 AM*/}
+              {/*              </span>*/}
+              {/*              <span>User</span>*/}
+              {/*            </div>*/}
+              {/*            <div className="flex ml-auto">*/}
+              {/*              <div className="bg-primary/30 rounded-l-2xl rounded-br-2xl inline-block ml-auto w-[90%]">*/}
+              {/*                <div className="p-3 text-gray-800">*/}
+              {/*                  {message.message}*/}
+              {/*                </div>*/}
+              {/*              </div>*/}
+              {/*            </div>*/}
+              {/*          </div>*/}
+              {/*        </div>*/}
+              {/*      )}*/}
+              {/*    </div>*/}
+              {/*  );*/}
+              {/*})}*/}
 
-              {isTyping && (
-                <div className="text-black mt-2 flex gap-2">
-                  <UseAnimations animation={loading} />
-                  <div>Thinking...</div>
-                </div>
-              )}
+              {isTyping && <ChatSkeleton />}
             </div>
           </div>
           <div className="mt-auto px-6 py-2">
@@ -205,7 +312,7 @@ function Chatbot(props: ChatbotProps) {
                 type="text"
                 id="simple-search"
                 className="bg-background text-sm rounded-2xl shadow-md block w-full pl-4 pr-12 p-2.5 py-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Send a message"
+                placeholder="Ask anything"
                 value={userMessage}
                 autoComplete="off"
                 required

@@ -17,4 +17,10 @@ declare namespace API {
     last_name: string;
     role: string;
   };
+
+  type RelevantMetadata = {
+    download_link: string;
+    pageNumber: number;
+    pageContent: string;
+  };
 }
