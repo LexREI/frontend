@@ -1,12 +1,12 @@
 import HomeHeader from '@/layouts/Header/HomeHeader';
-import Hero from '@/pages/About/components/Hero';
+import PricingComponent from '@/pages/Pricing/components/PricingComponent';
 
-export default function About() {
+export default function Pricing() {
   return (
     <div className="h-screen">
       <HomeHeader />
       <main className="h-full home_background isolate">
-        <Hero />
+        <PricingComponent />
       </main>
     </div>
   );

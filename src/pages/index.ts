@@ -1,4 +1,5 @@
 import Home from './Home';
+import Pricing from './Pricing';
 import Waitlist from './Waitlist';
 import Login from './Login';
 import About from './About';
@@ -9,6 +10,7 @@ import PrivateRoute from './PrivateRoute';
 
 export {
   Home,
+  Pricing,
   About,
   Waitlist,
   Dashboard,

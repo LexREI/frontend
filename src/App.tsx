@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useContext } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import {
   Home,
+  Pricing,
   About,
   Waitlist,
   Dashboard,
@@ -16,6 +17,7 @@ import { AlertDefault } from '@/components/Alert/AlertDefault';
 
 const routes = [
   { path: '/', element: <Home />, auth: false },
+  { path: '/pricing', element: <Pricing />, auth: false },
   { path: '/about', element: <About />, auth: false },
   { path: '/waitlist', element: <Waitlist />, auth: false },
   { path: '/dashboard', element: <Dashboard />, auth: false },
