@@ -13,7 +13,7 @@ const navigation = [
 ];
 
 function HomeHeader() {
-  const { isAuthenticated } = useContext(AuthContext);
+  const { isAuthenticated, signout } = useContext(AuthContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   return (
     <header className="fixed backdrop-blur-lg dark:bg-primary-foreground/30 inset-x-0 top-0 z-50">
@@ -42,19 +42,36 @@ function HomeHeader() {
             <Link
               key={item.name}
               to={item.href}
-              className="text-sm font-semibold leading-6 text-gray-900"
+              className="text-sm font-semibold leading-6 text-gray-900 hover:bg-muted-foreground/10 px-3 py-2 rounded-lg"
             >
               {item.name}
             </Link>
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link
-            to="/login"
-            className="text-sm font-semibold leading-6 text-gray-900"
-          >
-            Log in <span aria-hidden="true">&rarr;</span>
-          </Link>
+          {isAuthenticated ? (
+            <div className="flex gap-4">
+              <Link
+                to="/discovery"
+                className="text-sm font-semibold leading-6 hover:text-gray-700 duration-100"
+              >
+                Discovery
+              </Link>
+              <span
+                className="text-sm font-semibold leading-6 cursor-pointer hover:text-gray-700 duration-100"
+                onClick={signout}
+              >
+                Sign out
+              </span>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+            >
+              Log in
+            </Link>
+          )}
         </div>
       </nav>
       <Dialog
@@ -93,12 +110,29 @@ function HomeHeader() {
                 ))}
               </div>
               <div className="py-6">
-                <Link
-                  to="/login"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >
-                  Log in
-                </Link>
+                {isAuthenticated ? (
+                  <div className="flex flex-col gap-4">
+                    <Link
+                      to="/discovery"
+                      className="text-sm font-semibold leading-6 hover:text-gray-500 duration-300"
+                    >
+                      Discovery
+                    </Link>
+                    <span
+                      className="text-sm font-semibold leading-6 cursor-pointer hover:text-gray-500 duration-300"
+                      onClick={signout}
+                    >
+                      Sign out
+                    </span>
+                  </div>
+                ) : (
+                  <Link
+                    to="/login"
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    Log in
+                  </Link>
+                )}
               </div>
             </div>
           </div>

@@ -36,7 +36,7 @@ function AuthProvider({ children }: AuthContextProviderProps) {
   const getCurrentUser = async () => {
     try {
       const res = await getCurrentUserUsingGet();
-      if (res.data.code === 200 && res.data.data.googleId !== null) {
+      if (res.data.code === 200) {
         setIsAuthenticated(true);
         setUserInfo(res.data.data);
       }

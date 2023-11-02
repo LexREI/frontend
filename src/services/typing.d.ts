@@ -1,4 +1,14 @@
 declare namespace API {
+  type User = {
+    id: string;
+    stytch_user_id: string;
+    email: string;
+    first_name: string;
+    middle_name: string;
+    last_name: string;
+    role: string;
+  };
+
   type OpenAIChatUsingPostBody = {
     message: string;
   };
