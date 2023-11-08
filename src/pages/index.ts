@@ -1,5 +1,6 @@
 import Home from './Home';
 import Pricing from './Pricing';
+import PaySuccess from './PaySuccess';
 import Waitlist from './Waitlist';
 import Login from './Login';
 import About from './About';
@@ -11,6 +12,7 @@ import PrivateRoute from './PrivateRoute';
 export {
   Home,
   Pricing,
+  PaySuccess,
   About,
   Waitlist,
   Dashboard,

@@ -33,4 +33,20 @@ declare namespace API {
     pageNumber: number;
     pageContent: string;
   };
+
+  type SubscriptionCheckoutItem = {
+    price_id: string;
+    quantity: number;
+  };
+
+  type CheckoutSessionBody = {
+    _id: string;
+    session_id: string;
+  };
+
+  type UserSubscriptionSessionResponse = {
+    _id: string;
+    user_id: string;
+    session_id: string;
+  };
 }

@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import {
   Home,
   Pricing,
+  PaySuccess,
   About,
   Waitlist,
   Dashboard,
@@ -18,6 +19,7 @@ import { AlertDefault } from '@/components/Alert/AlertDefault';
 const routes = [
   { path: '/', element: <Home />, auth: false },
   { path: '/pricing', element: <Pricing />, auth: false },
+  { path: '/pay-success', element: <PaySuccess />, auth: false },
   { path: '/about', element: <About />, auth: false },
   { path: '/waitlist', element: <Waitlist />, auth: false },
   { path: '/dashboard', element: <Dashboard />, auth: false },

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Disclosure, RadioGroup } from '@headlessui/react';
 import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/react/24/outline';
 import { CheckIcon } from '@heroicons/react/20/solid';
+import { createCheckoutSession } from '@/services/SubscriptionController';
 
 const pricing = {
   frequencies: [
@@ -17,6 +18,7 @@ const pricing = {
       description: 'The essentials to provide your best work for clients.',
       features: ['5 products', 'Up to 1,000 subscribers', 'Basic analytics'],
       mostPopular: false,
+      price_id: 'price_1O9t6yJk5oE9YykYUC8JWy4j',
     },
     {
       name: 'Freelancer',
@@ -31,6 +33,7 @@ const pricing = {
         '48-hour support response time',
       ],
       mostPopular: false,
+      price_id: 'price_1O9t6yJk5oE9YykYUC8JWy4j',
     },
     {
       name: 'Startup',
@@ -46,6 +49,7 @@ const pricing = {
         'Marketing automations',
       ],
       mostPopular: true,
+      price_id: 'price_1O9t6yJk5oE9YykYUC8JWy4j',
     },
     {
       name: 'Enterprise',
@@ -62,6 +66,7 @@ const pricing = {
         'Custom reporting tools',
       ],
       mostPopular: false,
+      price_id: 'price_1O9t6yJk5oE9YykYUC8JWy4j',
     },
   ],
 };
@@ -87,6 +92,17 @@ type Price = {
 
 export default function PricingComponent() {
   const [frequency, setFrequency] = useState<Frequency>(pricing.frequencies[0]);
+
+  const onClickBuy = async (price_id: string) => {
+    const body: API.SubscriptionCheckoutItem = {
+      price_id,
+      quantity: 1,
+    };
+    const res = await createCheckoutSession(body);
+    if (res.data.code === 200 && res.data.data.url) {
+      window.location.href = res.data.data.url;
+    }
+  };
 
   return (
     <div className="bg-white">
@@ -161,8 +177,8 @@ export default function PricingComponent() {
                     : frequency.priceSuffix}
                 </span>
               </p>
-              <a
-                href={tier.href}
+              <button
+                onClick={() => onClickBuy(tier.price_id)}
                 aria-describedby={tier.id}
                 className={classNames(
                   tier.mostPopular
@@ -174,7 +190,7 @@ export default function PricingComponent() {
                 {tier.price[frequency.value as keyof Price] === 'Custom'
                   ? 'Talk to Us'
                   : 'Buy plan'}
-              </a>
+              </button>
               <ul
                 role="list"
                 className="mt-8 space-y-3 text-sm leading-6 text-gray-600"
