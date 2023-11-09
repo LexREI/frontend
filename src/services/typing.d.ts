@@ -6,6 +6,7 @@ declare namespace API {
     first_name?: string;
     middle_name?: string;
     last_name?: string;
+    avatar?: string;
     role?: string;
   };
 
