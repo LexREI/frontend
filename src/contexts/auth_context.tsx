@@ -7,22 +7,26 @@ type AuthContextProviderProps = {
 };
 
 type AuthContextType = {
+  userInfo: API.User;
   isAuthenticated: boolean;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   login: (provider: string) => void;
   signout: () => void;
+  getCurrentUser: () => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
+  userInfo: {},
   isAuthenticated: true,
   setIsAuthenticated: () => {},
   login: () => {},
   signout: () => {},
+  getCurrentUser: () => {},
 });
 
 function AuthProvider({ children }: AuthContextProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [userInfo, setUserInfo] = useState<API.User>();
+  const [userInfo, setUserInfo] = useState<API.User>({});
   const [loading, setLoading] = useState<boolean>(true);
 
   const login = (provider: string) => {
@@ -52,7 +56,14 @@ function AuthProvider({ children }: AuthContextProviderProps) {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, setIsAuthenticated, login, signout }}
+      value={{
+        userInfo,
+        isAuthenticated,
+        setIsAuthenticated,
+        login,
+        signout,
+        getCurrentUser,
+      }}
     >
       {loading ? <div> </div> : children}
     </AuthContext.Provider>

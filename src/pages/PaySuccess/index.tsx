@@ -1,13 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import HomeHeader from '@/layouts/Header/HomeHeader';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   getUserSubscriptionSession,
   paymentSuccessUsingPost,
 } from '@/services/SubscriptionController';
 import { Button } from '@/components/ui/button';
+import { AuthContext } from '@/contexts/auth_context';
 
 export default function PaySuccess() {
+  const { getCurrentUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [userSubscriptionSession, setUserSubscriptionSession] =
     useState<API.UserSubscriptionSessionResponse>();
@@ -31,6 +33,7 @@ export default function PaySuccess() {
       };
       const res = await paymentSuccessUsingPost(body);
       if (res.data.code === 200) {
+        await getCurrentUser();
         navigate('/pricing');
       }
     } catch (e) {

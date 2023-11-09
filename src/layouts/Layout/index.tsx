@@ -417,7 +417,7 @@
 //   );
 // }
 
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useContext, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import {
   Bars3Icon,
@@ -429,7 +429,9 @@ import {
   UsersIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
+import WorkspacePremiumRoundedIcon from '@mui/icons-material/WorkspacePremiumRounded';
 import logo from '@/assets/logo.jpg';
+import { AuthContext } from '@/contexts/auth_context';
 
 const navigation = [
   {
@@ -490,6 +492,7 @@ type Props = {
 };
 
 export default function Layout(props: Props) {
+  const { userInfo } = useContext(AuthContext);
   const { component } = props;
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -669,6 +672,10 @@ export default function Layout(props: Props) {
                 </ul>
               </li>
               <li className="-mx-6 mt-auto">
+                <div className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white">
+                  <WorkspacePremiumRoundedIcon className="text-pink-400" />
+                  <span>VIP</span>
+                </div>
                 <a
                   href="#"
                   className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800"
@@ -679,7 +686,10 @@ export default function Layout(props: Props) {
                     alt=""
                   />
                   <span className="sr-only">Your profile</span>
-                  <span aria-hidden="true">Tom Cook</span>
+                  <span aria-hidden="true">
+                    {`${userInfo.first_name} ${userInfo.middle_name} ${userInfo.last_name}`}
+                    ({userInfo.role === 'subscribe' ? 'Premium' : ''})
+                  </span>
                 </a>
               </li>
             </ul>
