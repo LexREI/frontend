@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Disclosure, RadioGroup } from '@headlessui/react';
 import { MinusSmallIcon, PlusSmallIcon } from '@heroicons/react/24/outline';
 import { CheckIcon } from '@heroicons/react/20/solid';
 import { createCheckoutSession } from '@/services/SubscriptionController';
+import { DefaultContext } from '@/contexts/default_context';
+import { Button } from '@/components/ui/button';
+import { ReloadIcon } from '@radix-ui/react-icons';
 
 const pricing = {
   frequencies: [
@@ -19,6 +22,7 @@ const pricing = {
       features: ['5 products', 'Up to 1,000 subscribers', 'Basic analytics'],
       mostPopular: false,
       price_id: 'price_1O9t6yJk5oE9YykYUC8JWy4j',
+      loading: false,
     },
     {
       name: 'Freelancer',
@@ -34,6 +38,7 @@ const pricing = {
       ],
       mostPopular: false,
       price_id: 'price_1O9t6yJk5oE9YykYUC8JWy4j',
+      loading: false,
     },
     {
       name: 'Startup',
@@ -50,6 +55,7 @@ const pricing = {
       ],
       mostPopular: true,
       price_id: 'price_1O9t6yJk5oE9YykYUC8JWy4j',
+      loading: false,
     },
     {
       name: 'Enterprise',
@@ -67,6 +73,7 @@ const pricing = {
       ],
       mostPopular: false,
       price_id: 'price_1O9t6yJk5oE9YykYUC8JWy4j',
+      loading: false,
     },
   ],
 };
@@ -91,16 +98,28 @@ type Price = {
 };
 
 export default function PricingComponent() {
+  const { fetchLoading, setFetchLoading, setErrorDescription } =
+    useContext(DefaultContext);
   const [frequency, setFrequency] = useState<Frequency>(pricing.frequencies[0]);
+  const [loadingName, setLoadingName] = useState<string>('');
 
-  const onClickBuy = async (price_id: string) => {
-    const body: API.SubscriptionCheckoutItem = {
-      price_id,
-      quantity: 1,
-    };
-    const res = await createCheckoutSession(body);
-    if (res.data.code === 200 && res.data.data.url) {
-      window.location.href = res.data.data.url;
+  const onClickBuy = async (price_id: string, name: string) => {
+    try {
+      setLoadingName(name);
+      setFetchLoading(true);
+      const body: API.SubscriptionCheckoutItem = {
+        price_id,
+        quantity: 1,
+      };
+      const res = await createCheckoutSession(body);
+      if (res.data.code === 200 && res.data.data.url) {
+        window.location.href = res.data.data.url;
+      }
+    } catch (err: any) {
+      setErrorDescription(err.response.data.message);
+    } finally {
+      setLoadingName('');
+      setFetchLoading(false);
     }
   };
 
@@ -177,20 +196,24 @@ export default function PricingComponent() {
                     : frequency.priceSuffix}
                 </span>
               </p>
-              <button
-                onClick={() => onClickBuy(tier.price_id)}
+              <Button
+                onClick={() => onClickBuy(tier.price_id, tier.name)}
                 aria-describedby={tier.id}
+                disabled={fetchLoading}
                 className={classNames(
                   tier.mostPopular
                     ? 'bg-indigo-600 text-white shadow-sm hover:bg-indigo-500'
-                    : 'text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300',
-                  'mt-6 block rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+                    : 'bg-white text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300',
+                  'mt-6 flex rounded-md py-2 px-3 text-center text-sm font-semibold leading-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
                 )}
               >
+                {loadingName === tier.name && (
+                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                )}
                 {tier.price[frequency.value as keyof Price] === 'Custom'
                   ? 'Talk to Us'
                   : 'Buy plan'}
-              </button>
+              </Button>
               <ul
                 role="list"
                 className="mt-8 space-y-3 text-sm leading-6 text-gray-600"
