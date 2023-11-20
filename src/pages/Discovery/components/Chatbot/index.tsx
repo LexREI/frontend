@@ -197,12 +197,14 @@ function Chatbot(props: ChatbotProps) {
               LEXARI
             </h3>
             <div className="flex gap-2">
-              <Button
-                className="w-8 h-8 p-0"
-                onClick={() => exportToXlsx('LEXARI_chat_message.xlsx')}
-              >
-                <FileDownloadIcon className="w-6 h-6" />
-              </Button>
+              {messages.length > 0 && (
+                <Button
+                  className="w-8 h-8 p-0"
+                  onClick={() => exportToXlsx('LEXARI_chat_message.xlsx')}
+                >
+                  <FileDownloadIcon className="w-6 h-6" />
+                </Button>
+              )}
               <Button
                 className="w-8 h-8 p-0"
                 onClick={() => setActionsOpen(true)}
