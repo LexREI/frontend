@@ -1,19 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
+import * as XLSX from 'xlsx';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import loading from 'react-useanimations/lib/loading';
-import UseAnimations from 'react-useanimations';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { doChaClientSideUsingPost } from '@/services/ChatbotController';
 import { Button } from '@/components/ui/button';
 import RevelantCard from '@/pages/Discovery/components/Chatbot/components/RelevantCard';
-import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import IconButton from '@mui/material/IconButton';
-import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import Tooltip from '@mui/material/Tooltip';
-import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import AlignHorizontalLeftRoundedIcon from '@mui/icons-material/AlignHorizontalLeftRounded';
 import ViewQuiltRoundedIcon from '@mui/icons-material/ViewQuiltRounded';
-import { Bars3BottomRightIcon } from '@heroicons/react/24/outline';
+import {
+  Bars3BottomRightIcon,
+  TableCellsIcon,
+} from '@heroicons/react/24/outline';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ChatSkeleton from '@/components/Skeleton/ChatSkeleton';
 
 type ChatbotProps = {
@@ -94,6 +93,56 @@ function Chatbot(props: ChatbotProps) {
     newMessages[index].contentEditable = false;
     setMessages(newMessages);
   };
+  const data = [
+    {
+      Question: 'row1col1',
+      Answer: 'row1col2',
+      Reference: 'row1col3',
+      Page: 'row1col4',
+      Link: 'row1col5',
+    },
+    {
+      Question: 'row1col1',
+      Answer: 'row1col2',
+      Reference: 'row1col3',
+      Page: 'row1col4',
+      Link: 'row1col5',
+    },
+  ];
+  function formatMetadata(metadataArray: any[]) {
+    return metadataArray
+      .map((item, index) => {
+        return (
+          `${index + 1}. pageContent: "${item.pageContent}",\r\n` +
+          `${index + 1}. pageNumber: ${item.pageNumber},\r\n` +
+          `${index + 1}. download_link: "${item.download_link}",\r\n` +
+          '==================\r\n'
+        );
+      })
+      .join('');
+  }
+  const exportToXlsx = (filename: string) => {
+    const transformedData = [];
+    for (let i = 0; i < messages.length; i += 2) {
+      const userMessageObj = messages[i];
+      const chatGptResponse = messages[i + 1]; // Assuming there's always a response after a user message
+      transformedData.push({
+        Question: userMessageObj.message,
+        Answer: chatGptResponse.message,
+        metadata: formatMetadata(chatGptResponse.metadata),
+      });
+    }
+    const worksheet = XLSX.utils.json_to_sheet(transformedData);
+    // Set the width of the first three columns
+    worksheet['!cols'] = [
+      { wpx: 300 }, // Width of the first column in pixels
+      { wpx: 400 }, // Width of the second column
+      { wpx: 800 }, // Width of the third column
+    ];
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    XLSX.writeFile(workbook, filename);
+  };
 
   /*
    * Handle auto scroll to bottom when send the message
@@ -147,12 +196,20 @@ function Chatbot(props: ChatbotProps) {
             <h3 className="text-xl font-semibold leading-none tracking-tight">
               LEXARI
             </h3>
-            <Button
-              className="w-8 h-8 p-0"
-              onClick={() => setActionsOpen(true)}
-            >
-              <Bars3BottomRightIcon className="w-6 h-6" />
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                className="w-8 h-8 p-0"
+                onClick={() => exportToXlsx('LEXARI_chat_message.xlsx')}
+              >
+                <FileDownloadIcon className="w-6 h-6" />
+              </Button>
+              <Button
+                className="w-8 h-8 p-0"
+                onClick={() => setActionsOpen(true)}
+              >
+                <Bars3BottomRightIcon className="w-6 h-6" />
+              </Button>
+            </div>
           </div>
           {messages.length === 0 ? (
             <div className="flex flex-col h-full p-4 text-center mt-4">
@@ -233,90 +290,6 @@ function Chatbot(props: ChatbotProps) {
                     </div>
                   );
                 })}
-                {/*{messages.map((message, index) => {*/}
-                {/*  return (*/}
-                {/*    <div key={index}>*/}
-                {/*      {message.sender === 'ChatGPT' ||*/}
-                {/*      message.sender === 'assistant' ? (*/}
-                {/*        <div className="flex p-4 gap-2 bg-zinc-200/70 w-[90%] rounded-tl-2xl rounded-r-2xl">*/}
-                {/*          <div className="flex flex-col w-full">*/}
-                {/*            <div*/}
-                {/*              className="text-gray-800"*/}
-                {/*              contentEditable={message.contentEditable}*/}
-                {/*              ref={message.contentEditable ? divEditRef : null}*/}
-                {/*            >*/}
-                {/*              {message.message}*/}
-                {/*            </div>*/}
-                {/*            {message.metadata && (*/}
-                {/*              <Card className="mt-2">*/}
-                {/*                <CardHeader>*/}
-                {/*                  <CardTitle>Relevant</CardTitle>*/}
-                {/*                  <CardContent className="grid grid-cols-2 p-0 gap-4 items-start">*/}
-                {/*                    {message.metadata.map((metadata: any) => {*/}
-                {/*                      return (*/}
-                {/*                        <RevelantCard*/}
-                {/*                          key={metadata}*/}
-                {/*                          setDocument={setDocument}*/}
-                {/*                          metadata={metadata}*/}
-                {/*                          onClickSearch={onClickSearch}*/}
-                {/*                        />*/}
-                {/*                      );*/}
-                {/*                    })}*/}
-                {/*                  </CardContent>*/}
-                {/*                </CardHeader>*/}
-                {/*              </Card>*/}
-                {/*            )}*/}
-                {/*            <div className="flex items-center mt-4 ml-auto">*/}
-                {/*              <Tooltip title="Copy">*/}
-                {/*                <IconButton aria-label="copy" size="medium">*/}
-                {/*                  <ContentCopyRoundedIcon fontSize="small" />*/}
-                {/*                </IconButton>*/}
-                {/*              </Tooltip>*/}
-                {/*              {message.contentEditable ? (*/}
-                {/*                <Tooltip*/}
-                {/*                  title="Confirm"*/}
-                {/*                  onClick={onClickConfirm(index)}*/}
-                {/*                >*/}
-                {/*                  <IconButton aria-label="confirm" size="medium">*/}
-                {/*                    <CheckRoundedIcon fontSize="small" />*/}
-                {/*                  </IconButton>*/}
-                {/*                </Tooltip>*/}
-                {/*              ) : (*/}
-                {/*                <Tooltip*/}
-                {/*                  title="Update"*/}
-                {/*                  onClick={onClickEdit(index)}*/}
-                {/*                >*/}
-                {/*                  <IconButton aria-label="update" size="medium">*/}
-                {/*                    <CreateRoundedIcon fontSize="small" />*/}
-                {/*                  </IconButton>*/}
-                {/*                </Tooltip>*/}
-                {/*              )}*/}
-                {/*            </div>*/}
-                {/*          </div>*/}
-                {/*        </div>*/}
-                {/*      ) : (*/}
-                {/*        <div className="flex gap-2 my-4">*/}
-                {/*          <div className="ml-auto flex-col">*/}
-                {/*            <div className="flex justify-end gap-2 items-center ml-auto w-full">*/}
-                {/*              <span className="text-muted-foreground">*/}
-                {/*                11:19 AM*/}
-                {/*              </span>*/}
-                {/*              <span>User</span>*/}
-                {/*            </div>*/}
-                {/*            <div className="flex ml-auto">*/}
-                {/*              <div className="bg-primary/30 rounded-l-2xl rounded-br-2xl inline-block ml-auto w-[90%]">*/}
-                {/*                <div className="p-3 text-gray-800">*/}
-                {/*                  {message.message}*/}
-                {/*                </div>*/}
-                {/*              </div>*/}
-                {/*            </div>*/}
-                {/*          </div>*/}
-                {/*        </div>*/}
-                {/*      )}*/}
-                {/*    </div>*/}
-                {/*  );*/}
-                {/*})}*/}
-
                 {isTyping && <ChatSkeleton />}
               </div>
             </div>
