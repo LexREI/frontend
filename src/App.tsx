@@ -15,6 +15,7 @@ import {
 import { DefaultContext } from '@/contexts/default_context';
 import AlertDestructive from '@/components/Alert/AlertDestructive';
 import { AlertDefault } from '@/components/Alert/AlertDefault';
+import Loader from '@/components/Loader';
 
 const routes = [
   { path: '/', element: <Home />, auth: false },
@@ -34,9 +35,12 @@ function App() {
     setSuccessDescription,
     errorDescription,
     setErrorDescription,
+    processLoading,
+    processLoadingTitle,
   } = useContext(DefaultContext);
   return (
     <Suspense fallback="">
+      <Loader open={processLoading} title={processLoadingTitle} />
       {successDescription && (
         <AlertDefault
           description={successDescription}

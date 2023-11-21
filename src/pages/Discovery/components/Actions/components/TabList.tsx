@@ -1,8 +1,7 @@
-import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
 import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useState, useContext } from 'react';
+import { useContext, useState } from 'react';
 import { DefaultContext } from '@/contexts/default_context';
 import JSZip from 'jszip';
 import DriveFolderUploadRoundedIcon from '@mui/icons-material/DriveFolderUploadRounded';
@@ -159,12 +158,8 @@ type Props = {
 function TabList(props: Props) {
   const { documents, expanded, setExpanded, setDocument, getDocumentsList } =
     props;
-  const {
-    setSuccessDescription,
-    setErrorDescription,
-    fetchLoading,
-    setFetchLoading,
-  } = useContext(DefaultContext);
+  const { setSuccessDescription, setErrorDescription } =
+    useContext(DefaultContext);
 
   const [tabs, setTabs] = useState<Tab[]>(tabsInit);
   const [questionsList, setQuestionsList] =

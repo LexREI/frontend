@@ -8,10 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import AlignHorizontalLeftRoundedIcon from '@mui/icons-material/AlignHorizontalLeftRounded';
 import ViewQuiltRoundedIcon from '@mui/icons-material/ViewQuiltRounded';
-import {
-  Bars3BottomRightIcon,
-  TableCellsIcon,
-} from '@heroicons/react/24/outline';
+import { Bars3BottomRightIcon } from '@heroicons/react/24/outline';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ChatSkeleton from '@/components/Skeleton/ChatSkeleton';
 
@@ -19,13 +16,13 @@ type ChatbotProps = {
   messages: any[];
   document: string;
   setMessages: any;
-  setDocument: (document: string) => void;
   onClickSearch: (pageNumber: number, pageTextHighlight: string) => void;
   setActionsOpen: (actionsOpen: boolean) => void;
   setRelevantDialogOpen: (relevantDialogOpen: boolean) => void;
   setRelevantDialogContent: (
     relevantDialogContent: API.RelevantMetadata[]
   ) => void;
+  onClickSetDocument: (doc: string) => void;
 };
 
 function Chatbot(props: ChatbotProps) {
@@ -33,11 +30,11 @@ function Chatbot(props: ChatbotProps) {
     messages,
     document,
     setMessages,
-    setDocument,
     onClickSearch,
     setActionsOpen,
     setRelevantDialogOpen,
     setRelevantDialogContent,
+    onClickSetDocument,
   } = props;
   const [userMessage, setUserMessage] = useState<string>(''); // user input
   const [isTyping, setIsTyping] = useState<boolean>(false); // is typing
@@ -261,9 +258,9 @@ function Chatbot(props: ChatbotProps) {
                                     <RevelantCard
                                       key={metadata}
                                       document={document}
-                                      setDocument={setDocument}
                                       metadata={metadata}
                                       onClickSearch={onClickSearch}
+                                      onClickSetDocument={onClickSetDocument}
                                     />
                                   );
                                 })}

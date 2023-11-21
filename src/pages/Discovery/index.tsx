@@ -5,20 +5,11 @@ import Chatbot from '@/pages/Discovery/components/Chatbot';
 import { useContext, useEffect, useState } from 'react';
 import { documentsListUsingGet } from '@/services/DocumentController';
 import { DefaultContext } from '@/contexts/default_context';
-import Loading from '@/components/Loading';
 import { RelevantDialog } from '@/pages/Discovery/components/RelevantDialog';
 
 function Discovery() {
-  const {
-    setSuccessDescription,
-    setErrorDescription,
-    fetchLoading,
-    setFetchLoading,
-    contentLoading,
-    setContentLoading,
-    contentLoadingTitle,
-    setContentLoadingTitle,
-  } = useContext(DefaultContext);
+  const { setErrorDescription, setProcessLoading, setProcessLoadingTitle } =
+    useContext(DefaultContext);
   const [relevantDialogOpen, setRelevantDialogOpen] = useState<boolean>(false);
   const [actionsOpen, setActionsOpen] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -40,6 +31,12 @@ function Discovery() {
   const onClickSearch = (pageNumber: number, pageTextHighlight: string) => {
     setPage(pageNumber);
     setSearchText(pageTextHighlight);
+  };
+
+  const onClickSetDocument = (doc: string) => {
+    setProcessLoading(true);
+    setProcessLoadingTitle('Loading document...');
+    setDocument(doc);
   };
 
   const getDocumentsList = async () => {
@@ -78,14 +75,13 @@ function Discovery() {
               messages={messages}
               document={document}
               setMessages={setMessages}
-              setDocument={setDocument}
               onClickSearch={onClickSearch}
               setActionsOpen={setActionsOpen}
               setRelevantDialogOpen={setRelevantDialogOpen}
               setRelevantDialogContent={setRelevantDialogContent}
+              onClickSetDocument={onClickSetDocument}
             />
           </div>
-          <Loading open={contentLoading} title={contentLoadingTitle} />
           {relevantDialogOpen && (
             <RelevantDialog
               open={relevantDialogOpen}
