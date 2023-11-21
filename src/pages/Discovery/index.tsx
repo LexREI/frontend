@@ -34,8 +34,8 @@ function Discovery() {
   };
 
   const onClickSetDocument = (doc: string) => {
-    setProcessLoading(true);
-    setProcessLoadingTitle('Loading document...');
+    // setProcessLoading(true);
+    // setProcessLoadingTitle('Loading document...');
     setDocument(doc);
   };
 
