@@ -10,8 +10,6 @@ type AlertDefaultProps = {
 export function AlertDefault(props: AlertDefaultProps) {
   const { description, setSuccessDescription } = props;
 
-  // const { setSuccessDescription } = useContext(AuthContext);
-
   // State to manage visibility of the alert
   const [isVisible, setIsVisible] = useState<boolean>(true);
 
@@ -27,7 +25,7 @@ export function AlertDefault(props: AlertDefaultProps) {
   }, []); // Empty dependency array means this effect runs once when the component mounts
 
   return isVisible ? (
-    <Alert className="fixed top-10 right-10 w-80 z-[60] animate__animated animate__bounceInRight border-green-500  text-green-600">
+    <Alert className="fixed top-10 right-10 w-80 z-[60] animate__animated animate__bounceInRight border-green-500 text-green-600">
       <CheckCircleOutlineOutlinedIcon
         style={{ color: 'rgb(22 163 74)', height: '1.25rem', width: '1.25rem' }}
       />

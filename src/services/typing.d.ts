@@ -25,6 +25,26 @@ declare namespace API {
     pageContent: string;
   };
 
+  type Message = {
+    message: string;
+    sender: 'ChatGPT' | 'user';
+    metadata: (RelevantWebpageMetadata | RelevantFileMetadata)[] | null;
+    contentEditable: boolean;
+  };
+
+  type RelevantWebpageMetadata = {
+    document_type: 'webpage';
+    page_content: string;
+    source_url: string;
+  };
+
+  type RelevantFileMetadata = {
+    document_type: 'file';
+    download_link: string;
+    page_content: string;
+    page_number: number;
+  };
+
   type SubscriptionCheckoutItem = {
     price_id: string;
     quantity: number;

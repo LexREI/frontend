@@ -13,14 +13,16 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ChatSkeleton from '@/components/Skeleton/ChatSkeleton';
 
 type ChatbotProps = {
-  messages: any[];
+  messages: API.Message[];
   document: string;
-  setMessages: any;
+  setMessages: (messages: (prevMessages: any) => any[]) => void;
   onClickSearch: (pageNumber: number, pageTextHighlight: string) => void;
   setActionsOpen: (actionsOpen: boolean) => void;
   setRelevantDialogOpen: (relevantDialogOpen: boolean) => void;
   setRelevantDialogContent: (
-    relevantDialogContent: API.RelevantMetadata[]
+    relevantDialogContent:
+      | (API.RelevantWebpageMetadata | API.RelevantFileMetadata)[]
+      | null
   ) => void;
   onClickSetDocument: (doc: string) => void;
 };
@@ -50,8 +52,9 @@ function Chatbot(props: ChatbotProps) {
     };
     setUserMessage('');
     const response = await doChaClientSideUsingPost(body);
+    console.log(response.data);
 
-    const newMessage = {
+    const newMessage: API.Message = {
       message: response.data.answer,
       sender: 'ChatGPT',
       metadata: response.data.metadata,
@@ -78,43 +81,36 @@ function Chatbot(props: ChatbotProps) {
   };
 
   // Confirm the contentEditable is True, allow user to edit
-  const onClickEdit = (index: number) => () => {
-    const newMessages = [...messages];
-    newMessages[index].contentEditable = true;
-    setMessages(newMessages);
-  };
+  // const onClickEdit = (index: number) => () => {
+  //   const newMessages = [...messages];
+  //   newMessages[index].contentEditable = true;
+  //   setMessages(newMessages);
+  // };
+  //
+  // // Confirm the contentEditable is False, confirm and save the message
+  // const onClickConfirm = (index: number) => () => {
+  //   const newMessages = [...messages];
+  //   newMessages[index].contentEditable = false;
+  //   setMessages(newMessages);
+  // };
 
-  // Confirm the contentEditable is False, confirm and save the message
-  const onClickConfirm = (index: number) => () => {
-    const newMessages = [...messages];
-    newMessages[index].contentEditable = false;
-    setMessages(newMessages);
-  };
-  const data = [
-    {
-      Question: 'row1col1',
-      Answer: 'row1col2',
-      Reference: 'row1col3',
-      Page: 'row1col4',
-      Link: 'row1col5',
-    },
-    {
-      Question: 'row1col1',
-      Answer: 'row1col2',
-      Reference: 'row1col3',
-      Page: 'row1col4',
-      Link: 'row1col5',
-    },
-  ];
-  function formatMetadata(metadataArray: any[]) {
+  /*
+   * Format the metadata array to string for export to xlsx
+   * */
+  function formatMetadata(
+    metadataArray:
+      | (API.RelevantWebpageMetadata | API.RelevantFileMetadata)[]
+      | null
+  ) {
+    if (!metadataArray) {
+      return '';
+    }
     return metadataArray
       .map((item, index) => {
-        return (
-          `${index + 1}. pageContent: "${item.pageContent}",\r\n` +
-          `${index + 1}. pageNumber: ${item.pageNumber},\r\n` +
-          `${index + 1}. download_link: "${item.download_link}",\r\n` +
-          '==================\r\n'
-        );
+        return `${index + 1}. pageContent: "${item.page_content}",\r\n`;
+        // `${index + 1}. pageNumber: ${item.pageNumber},\r\n` +
+        // `${index + 1}. download_link: "${item.download_link}",\r\n` +
+        // '==================\r\n'
       })
       .join('');
   }
@@ -230,8 +226,7 @@ function Chatbot(props: ChatbotProps) {
                 {messages.map((message, index) => {
                   return (
                     <div key={index}>
-                      {message.sender === 'ChatGPT' ||
-                      message.sender === 'assistant' ? (
+                      {message.sender === 'ChatGPT' ? (
                         <div className="pb-6">
                           <div className="mt-4">
                             <div className="flex items-center gap-1">
