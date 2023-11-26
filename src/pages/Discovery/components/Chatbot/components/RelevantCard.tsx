@@ -36,7 +36,7 @@ export default function RevelantCard(props: RevelantCardProps) {
                 <img src={file} alt="file" className="w-14 h-14" />
                 <div className="flex flex-col justify-evenly">
                   <h3 className="text-sm font-semibold">File name</h3>
-                  <p className="text-xs text-muted-foreground">PDF Document</p>
+                  <p className="text-xs text-muted-foreground">File</p>
                   <p className=" mb-1 text-xs text-muted-foreground">
                     Page Number · {metadata.page_number + 1}
                   </p>
@@ -78,9 +78,7 @@ export default function RevelantCard(props: RevelantCardProps) {
                   <img src={webpage} alt="file" className="w-14 h-14" />
                   <div className="flex flex-col justify-evenly">
                     <h3 className="text-sm font-semibold">File name</h3>
-                    <p className="text-xs text-muted-foreground">
-                      Webpage Document
-                    </p>
+                    <p className="text-xs text-muted-foreground">Webpage</p>
                   </div>
                 </div>
               </Link>

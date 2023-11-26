@@ -38,7 +38,7 @@ export function RelevantDialog(props: RelevantDialogProps) {
       ) : null}
       <DialogContent className="sm:max-w-[760px] ">
         <DialogHeader>
-          <DialogTitle>Relevant</DialogTitle>
+          <DialogTitle>References</DialogTitle>
         </DialogHeader>
         <div className="max-h-[80vh] overflow-y-auto">
           {content &&
@@ -60,14 +60,14 @@ export function RelevantDialog(props: RelevantDialogProps) {
                     </Tooltip>
                     {item.document_type === 'webpage' ? (
                       <Link to={item.source_url} target="_blank">
-                        <Tooltip title="Open Reference">
+                        <Tooltip title="Open Webpage">
                           <IconButton size="small">
                             <MenuBookRoundedIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
                       </Link>
                     ) : (
-                      <Tooltip title="Open PDF">
+                      <Tooltip title="Open File">
                         <IconButton
                           size="small"
                           onClick={() => {
