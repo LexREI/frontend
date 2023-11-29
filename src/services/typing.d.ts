@@ -34,12 +34,14 @@ declare namespace API {
 
   type RelevantWebpageMetadata = {
     document_type: 'webpage';
+    title: string;
     page_content: string;
     source_url: string;
   };
 
   type RelevantFileMetadata = {
     document_type: 'file';
+    title: string;
     download_link: string;
     page_content: string;
     page_number: number;
