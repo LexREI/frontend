@@ -243,7 +243,7 @@ function Chatbot(props: ChatbotProps) {
                             <div className="flex items-center gap-1">
                               <ViewQuiltRoundedIcon />
                               <span className="text-xl font-medium">
-                                References
+                                Legal Sources
                               </span>
                             </div>
                             <div className="grid grid-cols-3 gap-2 mt-4">

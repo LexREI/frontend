@@ -38,7 +38,7 @@ export function RelevantDialog(props: RelevantDialogProps) {
       ) : null}
       <DialogContent className="sm:max-w-[760px] ">
         <DialogHeader>
-          <DialogTitle>References</DialogTitle>
+          <DialogTitle>Legal Sources</DialogTitle>
         </DialogHeader>
         <div className="max-h-[80vh] overflow-y-auto">
           {content &&
