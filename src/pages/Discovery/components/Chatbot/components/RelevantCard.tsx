@@ -35,7 +35,7 @@ export default function RevelantCard(props: RevelantCardProps) {
               <div className="flex gap-2">
                 <img src={file} alt="file" className="w-14 h-14" />
                 <div className="flex flex-col justify-evenly">
-                  <h3 className="text-sm font-semibold">File name</h3>
+                  <h3 className="text-sm font-semibold">{metadata.title}</h3>
                   <p className="text-xs text-muted-foreground">File</p>
                   <p className=" mb-1 text-xs text-muted-foreground">
                     Page Number · {metadata.page_number + 1}
@@ -63,7 +63,7 @@ export default function RevelantCard(props: RevelantCardProps) {
           <HoverCardContent className="w-80">
             <div className="flex justify-between space-x-4">
               <div className="space-y-1">
-                <h4 className="text-sm font-semibold">Relevant</h4>
+                <h4 className="text-sm font-semibold">Snippet</h4>
                 <p className="text-sm">{metadata.page_content}</p>
               </div>
             </div>
