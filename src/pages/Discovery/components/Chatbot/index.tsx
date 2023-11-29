@@ -183,7 +183,11 @@ function Chatbot(props: ChatbotProps) {
 
   return (
     <section>
-      <div className="w-full h-full self-start rounded-r-2xl bg-gradient-to-b from-slate-50 from-20% via-slate-50 via-30% to-slate-100 to-100%">
+      <div
+        className={`w-full h-full self-start bg-gradient-to-b from-slate-50 from-20% via-slate-50 via-30% to-slate-100 to-100% ${
+          document.length === 0 ? 'rounded-2xl' : 'rounded-r-2xl'
+        }`}
+      >
         <div className="flex flex-col h-full  max-h-[95vh]">
           <div className="p-4 flex items-center justify-between border-b border-slate-300">
             <h3 className="text-xl font-semibold leading-none tracking-tight">

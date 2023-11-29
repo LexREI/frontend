@@ -58,7 +58,11 @@ function Discovery() {
             setDocument={setDocument}
             getDocumentsList={getDocumentsList}
           />
-          <div className="grid grid-cols-2 w-full rounded-2xl">
+          <div
+            className={`grid w-full rounded-2xl ${
+              document.length === 0 ? 'grid-cols-1' : 'grid-cols-2'
+            }`}
+          >
             <PDFViewer
               document={document}
               page={page}

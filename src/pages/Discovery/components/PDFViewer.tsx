@@ -99,7 +99,7 @@ function PDFViewer(props: PDFViewerProps) {
   }, [page, searchText]);
 
   return (
-    <section className="border-r-2">
+    <section className={`border-r-2  ${document.length === 0 ? 'hidden' : ''}`}>
       <div className="prose h-full rounded-l-2xl webviewer" ref={viewerDiv} />
     </section>
   );
