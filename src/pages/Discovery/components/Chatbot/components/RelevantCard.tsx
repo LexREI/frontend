@@ -12,17 +12,18 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
+import { useAppDispatch } from '@/hooks/useReduxHooks';
+import { onClickSearch } from '@/stores/chatbotSlice';
 
 type RevelantCardProps = {
   document: string;
   metadata: API.RelevantWebpageMetadata | API.RelevantFileMetadata;
-  onClickSearch: (pageNumber: number, pageTextHighlight: string) => void;
   onClickSetDocument: (doc: string) => void;
 };
 
 export default function RevelantCard(props: RevelantCardProps) {
-  const { document, metadata, onClickSearch, onClickSetDocument } = props;
-
+  const { document, metadata, onClickSetDocument } = props;
+  const dispatch = useAppDispatch();
   return (
     <>
       {metadata.document_type === 'file' ? (
@@ -47,9 +48,11 @@ export default function RevelantCard(props: RevelantCardProps) {
                       aria-label="delete"
                       size="small"
                       onClick={() =>
-                        onClickSearch(
-                          metadata.page_number + 1,
-                          metadata.page_content
+                        dispatch(
+                          onClickSearch({
+                            pageNumber: metadata.page_number + 1,
+                            pageTextHighlight: metadata.page_content,
+                          })
                         )
                       }
                     >

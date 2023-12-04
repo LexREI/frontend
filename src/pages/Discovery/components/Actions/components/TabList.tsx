@@ -2,12 +2,12 @@ import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 import { DocumentTextIcon } from '@heroicons/react/24/outline';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useContext, useState } from 'react';
-import { DefaultContext } from '@/contexts/default_context';
 import JSZip from 'jszip';
 import DriveFolderUploadRoundedIcon from '@mui/icons-material/DriveFolderUploadRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 import TocRoundedIcon from '@mui/icons-material/TocRounded';
 import { useSearchParams } from 'react-router-dom';
+import { DefaultContext } from '@/contexts/default_context';
 import { documentUploadUsingPost } from '@/services/DocumentController';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
@@ -19,6 +19,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { useAppDispatch, useAppSelector } from '@/hooks/useReduxHooks';
+import { setDocument } from '@/stores/chatbotSlice';
 
 interface Tab {
   name: string;
@@ -148,18 +150,17 @@ const questionsListInit: QuestionList[] = [
 ];
 
 type Props = {
-  documents: API.Documents[];
   expanded: boolean;
   setExpanded: (expanded: boolean) => void;
-  setDocument: (document: string) => void;
   getDocumentsList: () => void;
 };
 
 function TabList(props: Props) {
-  const { documents, expanded, setExpanded, setDocument, getDocumentsList } =
-    props;
+  const { expanded, setExpanded, getDocumentsList } = props;
   const { setSuccessDescription, setErrorDescription } =
     useContext(DefaultContext);
+  const { documents } = useAppSelector((state) => state.chatbot);
+  const dispatch = useAppDispatch();
 
   const [tabs, setTabs] = useState<Tab[]>(tabsInit);
   const [questionsList, setQuestionsList] =
@@ -390,7 +391,9 @@ function TabList(props: Props) {
                         <LoadingButton
                           variant="contained"
                           size="small"
-                          onClick={() => setDocument(doc.download_link)}
+                          onClick={() =>
+                            dispatch(setDocument(doc.download_link))
+                          }
                         >
                           Open
                         </LoadingButton>
@@ -425,58 +428,7 @@ function TabList(props: Props) {
               activeTab === 'download'
             } ? 'flex flex-col h-full pb-4' : '' `}
           >
-            <div className="flex flex-col h-full pb-4">
-              {/*<div className="space-y-4 px-2 h-full">*/}
-              {/*  {documents.map((doc) => {*/}
-              {/*    return (*/}
-              {/*      <Card*/}
-              {/*        key={doc.file_name}*/}
-              {/*        className="flex items-center space-x-2 px-2 py-2 shadow-md"*/}
-              {/*      >*/}
-              {/*        <Checkbox*/}
-              {/*          id={doc.file_name}*/}
-              {/*          checked={urls.includes(doc.download_link)}*/}
-              {/*          onClick={() => handleFilesSelect(doc.download_link)}*/}
-              {/*        />*/}
-              {/*        <div className="text-muted-foreground/70 w-14 h-14">*/}
-              {/*          <DocumentTextIcon className="w-12 h-12" />*/}
-              {/*        </div>*/}
-
-              {/*        <div className="space-y-0.5 w-full font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">*/}
-              {/*          <div className="text-sm break-all w-full">*/}
-              {/*            {doc.file_name}*/}
-              {/*          </div>*/}
-              {/*          <LoadingButton*/}
-              {/*            variant="contained"*/}
-              {/*            size="small"*/}
-              {/*            onClick={() => setDocument(doc.download_link)}*/}
-              {/*          >*/}
-              {/*            Open*/}
-              {/*          </LoadingButton>*/}
-              {/*        </div>*/}
-              {/*      </Card>*/}
-              {/*    );*/}
-              {/*  })}*/}
-              {/*</div>*/}
-              {/*<div className="px-4 flex justify-between">*/}
-              {/*  <LoadingButton*/}
-              {/*    variant="outlined"*/}
-              {/*    size="medium"*/}
-              {/*    onClick={onClickClearSelected}*/}
-              {/*  >*/}
-              {/*    Clear*/}
-              {/*  </LoadingButton>*/}
-              {/*  <LoadingButton*/}
-              {/*    variant="contained"*/}
-              {/*    size="large"*/}
-              {/*    loading={downloadLoading}*/}
-              {/*    disabled={urls.length === 0}*/}
-              {/*    onClick={() => downloadPdfs()}*/}
-              {/*  >*/}
-              {/*    Download*/}
-              {/*  </LoadingButton>*/}
-              {/*</div>*/}
-            </div>
+            <div className="flex flex-col h-full pb-4"></div>
           </TabsContent>
           <TabsContent
             value="questions"

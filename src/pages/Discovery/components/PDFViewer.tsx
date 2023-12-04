@@ -1,15 +1,12 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import WebViewer from '@pdftron/webviewer';
 import { DefaultContext } from '@/contexts/default_context';
+import { useAppSelector } from '@/hooks/useReduxHooks';
 
-type PDFViewerProps = {
-  document: string;
-  page: number;
-  searchText: string;
-};
-
-function PDFViewer(props: PDFViewerProps) {
-  const { document, page, searchText } = props;
+function PDFViewer() {
+  const { page, document, searchText } = useAppSelector(
+    (state) => state.chatbot
+  );
   const { setErrorDescription, setProcessLoading, setProcessLoadingTitle } =
     useContext(DefaultContext);
 

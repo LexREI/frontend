@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import TabList from '@/pages/Discovery/components/Actions/components/TabList';
+import { useAppDispatch, useAppSelector } from '@/hooks/useReduxHooks';
 
 const tabs = [
   { name: 'Upload', value: 'upload', isActive: true },
@@ -28,20 +29,14 @@ function classNames(...classes: any[]) {
 type ActionsProps = {
   actionsOpen: boolean;
   setActionsOpen: (actionsOpen: boolean) => void;
-  documents: API.Documents[];
-  setDocument: (document: string) => void;
   getDocumentsList: () => void;
 };
 
 export default function Actions(props: ActionsProps) {
-  const {
-    actionsOpen,
-    setActionsOpen,
-    documents,
-    setDocument,
-    getDocumentsList,
-  } = props;
+  const { actionsOpen, setActionsOpen, getDocumentsList } = props;
   const [expanded, setExpanded] = useState<boolean>(true);
+  const { documents } = useAppSelector((state) => state.chatbot);
+  const dispatch = useAppDispatch();
 
   return (
     <Transition.Root show={actionsOpen} as={Fragment}>
@@ -82,8 +77,6 @@ export default function Actions(props: ActionsProps) {
                     </div>
 
                     <TabList
-                      documents={documents}
-                      setDocument={setDocument}
                       expanded={expanded}
                       setExpanded={setExpanded}
                       getDocumentsList={getDocumentsList}

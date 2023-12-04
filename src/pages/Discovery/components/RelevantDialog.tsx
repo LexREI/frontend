@@ -16,16 +16,17 @@ import { Link } from 'react-router-dom';
 import useCopyToClipboard from '@/hooks/useCopyToClipboard';
 import { AlertDefault } from '@/components/Alert/AlertDefault';
 import { DefaultContext } from '@/contexts/default_context';
+import { useAppSelector } from '@/hooks/useReduxHooks';
 
 type RelevantDialogProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
-  content: (API.RelevantWebpageMetadata | API.RelevantFileMetadata)[] | null;
   onClickSetDocument: (doc: string) => void;
 };
 
 export function RelevantDialog(props: RelevantDialogProps) {
-  const { open, setOpen, content, onClickSetDocument } = props;
+  const { open, setOpen, onClickSetDocument } = props;
+  const { relevantDialogContent } = useAppSelector((state) => state.chatbot);
   const [copyToClipboard, { success }] = useCopyToClipboard();
   const { setSuccessDescription } = useContext(DefaultContext);
   return (
@@ -41,8 +42,8 @@ export function RelevantDialog(props: RelevantDialogProps) {
           <DialogTitle>Legal Sources</DialogTitle>
         </DialogHeader>
         <div className="max-h-[80vh] overflow-y-auto">
-          {content &&
-            content.map((item, index) => {
+          {relevantDialogContent &&
+            relevantDialogContent.map((item, index) => {
               return (
                 <div className="mt-2" key={index}>
                   <h3 className="font-bold">Content:</h3>

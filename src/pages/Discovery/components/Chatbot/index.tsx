@@ -11,33 +11,20 @@ import ViewQuiltRoundedIcon from '@mui/icons-material/ViewQuiltRounded';
 import { Bars3BottomRightIcon } from '@heroicons/react/24/outline';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ChatSkeleton from '@/components/Skeleton/ChatSkeleton';
+import { useAppDispatch, useAppSelector } from '@/hooks/useReduxHooks';
+import { setMessages, setRelevantDialogContent } from '@/stores/chatbotSlice';
 
 type ChatbotProps = {
-  messages: API.Message[];
-  document: string;
-  setMessages: (messages: (prevMessages: any) => any[]) => void;
-  onClickSearch: (pageNumber: number, pageTextHighlight: string) => void;
   setActionsOpen: (actionsOpen: boolean) => void;
   setRelevantDialogOpen: (relevantDialogOpen: boolean) => void;
-  setRelevantDialogContent: (
-    relevantDialogContent:
-      | (API.RelevantWebpageMetadata | API.RelevantFileMetadata)[]
-      | null
-  ) => void;
   onClickSetDocument: (doc: string) => void;
 };
 
 function Chatbot(props: ChatbotProps) {
-  const {
-    messages,
-    document,
-    setMessages,
-    onClickSearch,
-    setActionsOpen,
-    setRelevantDialogOpen,
-    setRelevantDialogContent,
-    onClickSetDocument,
-  } = props;
+  const { setActionsOpen, setRelevantDialogOpen, onClickSetDocument } = props;
+  const { page, document, messages } = useAppSelector((state) => state.chatbot);
+  const dispatch = useAppDispatch();
+
   const [userMessage, setUserMessage] = useState<string>(''); // user input
   const [isTyping, setIsTyping] = useState<boolean>(false); // is typing
   const divEditRef = useRef<HTMLDivElement>(null);
@@ -60,7 +47,8 @@ function Chatbot(props: ChatbotProps) {
       metadata: response.data.metadata,
       contentEditable: false,
     };
-    setMessages((prevMessages: any) => [...prevMessages, newMessage]);
+    // setMessages((prevMessages: any) => [...prevMessages, newMessage]);
+    dispatch(setMessages(newMessage));
 
     setIsTyping(false);
   };
@@ -68,14 +56,14 @@ function Chatbot(props: ChatbotProps) {
   const handleSend = async (e: any) => {
     setIsTyping(true);
     e.preventDefault();
-    const newMessage = {
+    const newMessage: API.Message = {
       message: userMessage,
       sender: 'user',
       metadata: null,
       contentEditable: false,
     };
 
-    setMessages((prevMessages: any) => [...prevMessages, newMessage]);
+    dispatch(setMessages(newMessage));
     // Initial system message
     await processMessage(userMessage);
   };
@@ -258,7 +246,6 @@ function Chatbot(props: ChatbotProps) {
                                       key={metadata}
                                       document={document}
                                       metadata={metadata}
-                                      onClickSearch={onClickSearch}
                                       onClickSetDocument={onClickSetDocument}
                                     />
                                   );
@@ -270,7 +257,9 @@ function Chatbot(props: ChatbotProps) {
                               <IconButton
                                 size="small"
                                 onClick={() => {
-                                  setRelevantDialogContent(message.metadata);
+                                  dispatch(
+                                    setRelevantDialogContent(message.metadata)
+                                  );
                                   setRelevantDialogOpen(true);
                                 }}
                               >
