@@ -16,7 +16,7 @@ function HomeHeader() {
   const { isAuthenticated, signout } = useContext(AuthContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   return (
-    <header className="fixed backdrop-blur-lg dark:bg-primary-foreground/30 inset-x-0 top-0 z-50">
+    <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-lg dark:bg-primary-foreground/30">
       <nav
         className="flex items-center justify-between p-6 lg:px-8"
         aria-label="Global"
@@ -42,7 +42,7 @@ function HomeHeader() {
             <Link
               key={item.name}
               to={item.href}
-              className="text-sm font-semibold leading-6 text-gray-900 hover:bg-muted-foreground/10 px-3 py-2 rounded-lg"
+              className="rounded-lg px-3 py-2 text-sm font-semibold leading-6 text-gray-900 hover:bg-muted-foreground/10"
             >
               {item.name}
             </Link>
@@ -53,12 +53,12 @@ function HomeHeader() {
             <div className="flex gap-4">
               <Link
                 to="/discovery"
-                className="text-sm font-semibold leading-6 hover:text-gray-700 duration-100"
+                className="text-sm font-semibold leading-6 duration-100 hover:text-gray-700"
               >
                 Discovery
               </Link>
               <span
-                className="text-sm font-semibold leading-6 cursor-pointer hover:text-gray-700 duration-100"
+                className="cursor-pointer text-sm font-semibold leading-6 duration-100 hover:text-gray-700"
                 onClick={signout}
               >
                 Sign out
@@ -114,12 +114,12 @@ function HomeHeader() {
                   <div className="flex flex-col gap-4">
                     <Link
                       to="/discovery"
-                      className="text-sm font-semibold leading-6 hover:text-gray-500 duration-300"
+                      className="text-sm font-semibold leading-6 duration-300 hover:text-gray-500"
                     >
                       Discovery
                     </Link>
                     <span
-                      className="text-sm font-semibold leading-6 cursor-pointer hover:text-gray-500 duration-300"
+                      className="cursor-pointer text-sm font-semibold leading-6 duration-300 hover:text-gray-500"
                       onClick={signout}
                     >
                       Sign out

@@ -282,7 +282,7 @@ function TabList(props: Props) {
 
   return (
     <Tabs
-      className="h-full flex flex-col"
+      className="flex h-full flex-col"
       defaultValue={activeTab}
       onClick={() => setExpanded(true)}
     >
@@ -290,7 +290,7 @@ function TabList(props: Props) {
         className={`${
           expanded
             ? 'grid w-full grid-cols-4'
-            : 'flex flex-col h-full gap-4 justify-start rounded-none'
+            : 'flex h-full flex-col justify-start gap-4 rounded-none'
         }`}
       >
         {tabs.map((tab) => {
@@ -312,10 +312,10 @@ function TabList(props: Props) {
             value="upload"
             className={`${
               activeTab === 'upload'
-            } ? 'flex flex-col h-full pb-4' : '' `}
+            } ? 'flex pb-4' : '' h-full flex-col `}
           >
-            <div className="flex flex-col h-full">
-              <div className="px-4 space-y-4 my-2 relative">
+            <div className="flex h-full flex-col">
+              <div className="relative my-2 space-y-4 px-4">
                 <div className="flex justify-center rounded-lg border border-dashed border-gray-900/25 py-4">
                   <div className="text-center">
                     <div className="mt-4 flex text-sm leading-6 text-gray-600">
@@ -380,12 +380,12 @@ function TabList(props: Props) {
                         checked={urls.includes(doc.download_link)}
                         onClick={() => handleFilesSelect(doc.download_link)}
                       />
-                      <div className="text-muted-foreground/70 w-14 h-14">
-                        <DocumentTextIcon className="w-12 h-12" />
+                      <div className="h-14 w-14 text-muted-foreground/70">
+                        <DocumentTextIcon className="h-12 w-12" />
                       </div>
 
-                      <div className="space-y-0.5 w-full font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                        <div className="text-sm break-all w-full">
+                      <div className="w-full space-y-0.5 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        <div className="w-full break-all text-sm">
                           {doc.file_name}
                         </div>
                         <LoadingButton
@@ -402,7 +402,7 @@ function TabList(props: Props) {
                   );
                 })}
               </div>
-              <div className="px-4 flex justify-between py-4">
+              <div className="flex justify-between px-4 py-4">
                 <LoadingButton
                   variant="outlined"
                   size="medium"
@@ -426,28 +426,28 @@ function TabList(props: Props) {
             value="download"
             className={`${
               activeTab === 'download'
-            } ? 'flex flex-col h-full pb-4' : '' `}
+            } ? 'flex pb-4' : '' h-full flex-col `}
           >
-            <div className="flex flex-col h-full pb-4"></div>
+            <div className="flex h-full flex-col pb-4"></div>
           </TabsContent>
           <TabsContent
             value="questions"
             className={`${
               activeTab === 'questions'
-            } ? 'flex flex-col h-full pb-4' : '' `}
+            } ? 'flex pb-4' : '' h-full flex-col `}
           >
-            <div className="flex flex-col h-full pb-4">
+            <div className="flex h-full flex-col pb-4">
               <Accordion
                 type="single"
                 collapsible
-                className="w-full h-full px-4"
+                className="h-full w-full px-4"
               >
                 {questionsList.map((item) => {
                   return (
                     <AccordionItem value={item.title} key={item.title}>
                       <AccordionTrigger>{item.title}</AccordionTrigger>
                       <AccordionContent>
-                        <div className="flex flex-col gap-2 px-2 h-full">
+                        <div className="flex h-full flex-col gap-2 px-2">
                           {item.questions.map((question) => {
                             return (
                               <div
@@ -470,7 +470,7 @@ function TabList(props: Props) {
                   );
                 })}
               </Accordion>
-              <div className="px-4 flex justify-end">
+              <div className="flex justify-end px-4">
                 <Button>Ask Questions</Button>
               </div>
             </div>

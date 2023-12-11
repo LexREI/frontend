@@ -17,7 +17,7 @@ function Hero() {
       </div>
       <div className="mx-auto py-14">
         <div className="text-center">
-          <h1 className="text-[8em] tracking-wider font-medium text-gray-900 sm:text-[10em] md:text-[12em] lg:text-[16em]">
+          <h1 className="text-[8em] font-medium tracking-wider text-gray-900 sm:text-[10em] md:text-[12em] lg:text-[16em]">
             <span className="text-white">LEX</span>
             <span>ARI</span>
           </h1>
@@ -28,13 +28,13 @@ function Hero() {
           Harnessing AI and advanced research innovations to enable legal
           professionals.
         </p>
-        <p className="text-xl font-light  mt-4 leading-8 text-gray-100 md:text-2xl lg:text-3xl">
+        <p className="mt-4 text-xl  font-light leading-8 text-gray-100 md:text-2xl lg:text-3xl">
           Simple yet powerful.
         </p>
         <div className="mt-10 flex items-center justify-center gap-x-6">
           <Link
             to="/waitlist"
-            className="rounded-full border-2 border-white bg-transparent text-primary-foreground px-3.5 py-2.5 text-sm text-black shadow duration-300 hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="rounded-full border-2 border-white bg-transparent px-3.5 py-2.5 text-sm text-primary-foreground text-black shadow duration-300 hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             Join the Waitlist
           </Link>

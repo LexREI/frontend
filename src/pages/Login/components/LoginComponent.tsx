@@ -7,7 +7,7 @@ export default function LoginComponent() {
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md mt-10">
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-md">
           <img className="mx-auto h-10 w-auto" src={logo} alt="LEXARI" />
         </div>
 
@@ -106,7 +106,7 @@ export default function LoginComponent() {
               <div className="mt-6 grid grid-cols-1 gap-4">
                 <div
                   onClick={() => login('google')}
-                  className="flex w-full items-center justify-center gap-3 rounded-md bg-card border-2 border-border px-3 py-1.5 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D9BF0]"
+                  className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-md border-2 border-border bg-card px-3 py-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D9BF0]"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +140,7 @@ export default function LoginComponent() {
 
                 <div
                   onClick={() => login('microsoft')}
-                  className="flex w-full items-center justify-center gap-3 rounded-md bg-card border-2 border-border  px-3 py-1.5 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24292F]"
+                  className="flex w-full cursor-pointer items-center justify-center gap-3 rounded-md border-2 border-border  bg-card px-3 py-1.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24292F]"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

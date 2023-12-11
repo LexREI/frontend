@@ -30,11 +30,11 @@ export default function RevelantCard(props: RevelantCardProps) {
         <HoverCard>
           <HoverCardTrigger asChild>
             <Card
-              className="flex flex-col justify-between p-2 bg-primary/10 border-0 cursor-pointer hover:bg-primary/5 transition duration-300"
+              className="flex cursor-pointer flex-col justify-between border-0 bg-primary/10 p-2 transition duration-300 hover:bg-primary/5"
               onClick={() => onClickSetDocument(metadata.download_link)}
             >
               <div className="flex gap-2">
-                <img src={file} alt="file" className="w-14 h-14" />
+                <img src={file} alt="file" className="h-14 w-14" />
                 <div className="flex flex-col justify-evenly">
                   <h3 className="text-sm font-semibold">{metadata.title}</h3>
                   <p className="text-xs text-muted-foreground">File</p>
@@ -75,10 +75,10 @@ export default function RevelantCard(props: RevelantCardProps) {
       ) : (
         <HoverCard>
           <HoverCardTrigger asChild>
-            <Card className="flex flex-col justify-between p-2 bg-primary/10 border-0 cursor-pointer hover:bg-primary/5 transition duration-300">
+            <Card className="flex cursor-pointer flex-col justify-between border-0 bg-primary/10 p-2 transition duration-300 hover:bg-primary/5">
               <Link to={metadata.source_url} target="_blank">
                 <div className="flex gap-2">
-                  <img src={webpage} alt="file" className="w-14 h-14" />
+                  <img src={webpage} alt="file" className="h-14 w-14" />
                   <div className="flex flex-col justify-evenly">
                     <h3 className="text-sm font-semibold">{metadata.title}</h3>
                     <p className="text-xs text-muted-foreground">Webpage</p>

@@ -172,36 +172,36 @@ function Chatbot(props: ChatbotProps) {
   return (
     <section>
       <div
-        className={`w-full h-full self-start bg-gradient-to-b from-slate-50 from-20% via-slate-50 via-30% to-slate-100 to-100% ${
+        className={`from-20% via-30% to-100% h-full w-full self-start bg-gradient-to-b from-slate-50 via-slate-50 to-slate-100 ${
           document.length === 0 ? 'rounded-2xl' : 'rounded-r-2xl'
         }`}
       >
-        <div className="flex flex-col h-full  max-h-[95vh]">
-          <div className="p-4 flex items-center justify-between border-b border-slate-300">
+        <div className="flex h-full max-h-[95vh]  flex-col">
+          <div className="flex items-center justify-between border-b border-slate-300 p-4">
             <h3 className="text-xl font-semibold leading-none tracking-tight">
               LEXARI
             </h3>
             <div className="flex gap-2">
               {messages.length > 0 && (
                 <Button
-                  className="w-8 h-8 p-0"
+                  className="h-8 w-8 p-0"
                   onClick={() => exportToXlsx('LEXARI_chat_message.xlsx')}
                 >
-                  <FileDownloadIcon className="w-6 h-6" />
+                  <FileDownloadIcon className="h-6 w-6" />
                 </Button>
               )}
               <Button
-                className="w-8 h-8 p-0"
+                className="h-8 w-8 p-0"
                 onClick={() => setActionsOpen(true)}
               >
-                <Bars3BottomRightIcon className="w-6 h-6" />
+                <Bars3BottomRightIcon className="h-6 w-6" />
               </Button>
             </div>
           </div>
           {messages.length === 0 ? (
-            <div className="flex flex-col h-full p-4 text-center mt-4">
+            <div className="mt-4 flex h-full flex-col p-4 text-center">
               <h2 className="text-3xl font-bold text-primary">LEXARI</h2>
-              <div className="text-muted-foreground/80 h-full flex flex-col justify-center items-center mb-20">
+              <div className="mb-20 flex h-full flex-col items-center justify-center text-muted-foreground/80">
                 <p>
                   Harnessing AI and advanced research innovations to enable
                   legal professionals.
@@ -238,7 +238,7 @@ function Chatbot(props: ChatbotProps) {
                                 Legal Sources
                               </span>
                             </div>
-                            <div className="grid grid-cols-3 gap-2 mt-4">
+                            <div className="mt-4 grid grid-cols-3 gap-2">
                               {message.metadata &&
                                 message.metadata.map((metadata: any) => {
                                   return (
@@ -282,14 +282,14 @@ function Chatbot(props: ChatbotProps) {
             </div>
           )}
           <div className="mt-auto px-6 py-2">
-            <form className="flex items-center relative">
+            <form className="relative flex items-center">
               <label htmlFor="simple-search" className="sr-only">
                 Chat here...
               </label>
               <input
                 type="text"
                 id="simple-search"
-                className="bg-background text-sm rounded-2xl shadow-md block w-full pl-4 pr-12 p-2.5 py-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="block w-full rounded-2xl bg-background p-2.5 py-4 pl-4 pr-12 text-sm shadow-md dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 placeholder="Ask anything"
                 value={userMessage}
                 autoComplete="off"
@@ -300,7 +300,7 @@ function Chatbot(props: ChatbotProps) {
                 {isTyping || userMessage.length === 0 ? (
                   <Button
                     type="submit"
-                    className="w-10 h-10 text-sm font-medium text-gray-600 bg-transparent rounded-lg"
+                    className="h-10 w-10 rounded-lg bg-transparent text-sm font-medium text-gray-600"
                     disabled
                   >
                     <SendRoundedIcon />
@@ -309,7 +309,7 @@ function Chatbot(props: ChatbotProps) {
                 ) : (
                   <Button
                     type="submit"
-                    className="w-10 h-10 text-sm font-medium text-white rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    className="h-10 w-10 rounded-lg border border-blue-700 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     onClick={(e) => handleSend(e)}
                   >
                     <SendRoundedIcon />
@@ -318,7 +318,7 @@ function Chatbot(props: ChatbotProps) {
                 )}
               </div>
             </form>
-            <h3 className="flex mt-2 ml-auto text-sm text-gray-500">
+            <h3 className="mt-2 ml-auto flex text-sm text-gray-500">
               Powered by &nbsp;
               <p className="font-medium text-gray-700">LEXARI</p>
             </h3>

@@ -566,8 +566,8 @@ export default function Layout(props: Props) {
                                 className={classNames(
                                   item.current
                                     ? 'bg-gray-800 text-white'
-                                    : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                                    : 'text-gray-400 hover:bg-gray-800 hover:text-white',
+                                  'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
                                 )}
                               >
                                 <item.icon
@@ -592,8 +592,8 @@ export default function Layout(props: Props) {
                                 className={classNames(
                                   team.current
                                     ? 'bg-gray-800 text-white'
-                                    : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                                    : 'text-gray-400 hover:bg-gray-800 hover:text-white',
+                                  'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
                                 )}
                               >
                                 <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
@@ -632,8 +632,8 @@ export default function Layout(props: Props) {
                         className={classNames(
                           item.current
                             ? 'bg-gradient-to-r from-gray-700 text-white'
-                            : 'text-gray-400 hover:text-white hover:bg-gradient-to-r hover:from-gray-700',
-                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                            : 'text-gray-400 hover:bg-gradient-to-r hover:from-gray-700 hover:text-white',
+                          'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
                         )}
                       >
                         <item.icon
@@ -658,8 +658,8 @@ export default function Layout(props: Props) {
                         className={classNames(
                           team.current
                             ? 'bg-gray-800 text-white'
-                            : 'text-gray-400 hover:text-white hover:bg-gray-800',
-                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
+                            : 'text-gray-400 hover:bg-gray-800 hover:text-white',
+                          'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
                         )}
                       >
                         <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">
@@ -724,8 +724,8 @@ export default function Layout(props: Props) {
       {/*<main className="h-full rounded-lg bg-zinc-900 p-4">*/}
       {/*  <div className="h-full rounded-lg bg-zinc-900  shadow">{component}</div>*/}
       {/*</main>*/}
-      <main className="py-6 lg:pl-60 bg-zinc-900 h-full">
-        <div className="px-4 h-full">{component}</div>
+      <main className="h-full bg-zinc-900 py-6 lg:pl-60">
+        <div className="h-full px-4">{component}</div>
       </main>
     </div>
   );

@@ -81,7 +81,7 @@ export function RelevantDialog(props: RelevantDialogProps) {
                       </Tooltip>
                     )}
                   </div>
-                  <div className="text-secondary-foreground/70 mt-1 text-sm">
+                  <div className="mt-1 text-sm text-secondary-foreground/70">
                     {/*Page Number · {item.pageNumber + 1}*/}
                   </div>
                   <hr className="mt-2" />

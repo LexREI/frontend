@@ -40,7 +40,7 @@ export default function PaySuccess() {
   return (
     <div className="h-screen">
       <HomeHeader />
-      <main className="h-full home_background isolate">
+      <main className="home_background isolate h-full">
         <div className="py-40">
           <p>pay success</p>
           <Link to="/pricing">Proceed</Link>

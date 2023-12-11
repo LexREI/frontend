@@ -8,13 +8,13 @@ function Hero() {
               <h1 className="text-5xl font-bold tracking-tight text-white sm:text-6xl">
                 Why LEXARI?
               </h1>
-              <p className="relative italic mt-6 leading-8 text-gray-100 sm:max-w-md lg:max-w-none">
+              <p className="relative mt-6 italic leading-8 text-gray-100 sm:max-w-md lg:max-w-none">
                 Constantly adapting to new legal technologies and software can
                 be a challenge. We understand your time is valuable and numerous
                 analytical/manual tasks can be streamlined so you can focus on
                 more strategic responsibilities.
               </p>
-              <p className="relative italic mt-6 leading-8 text-gray-100 sm:max-w-md lg:max-w-none">
+              <p className="relative mt-6 italic leading-8 text-gray-100 sm:max-w-md lg:max-w-none">
                 We also understand the hesitance towards new technology because
                 security and privacy is a major concern.
               </p>

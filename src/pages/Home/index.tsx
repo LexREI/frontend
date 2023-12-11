@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <div className="h-screen">
       <HomeHeader />
-      <main className="h-full home_background">
+      <main className="home_background h-full">
         <Hero />
         {/*<LogoCloud />*/}
         {/*<Feature />*/}

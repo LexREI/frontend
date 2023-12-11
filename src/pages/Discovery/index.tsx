@@ -43,7 +43,7 @@ function Discovery() {
   return (
     <Layout
       component={
-        <main className="flex w-full h-full">
+        <main className="flex h-full w-full">
           <Actions
             actionsOpen={actionsOpen}
             setActionsOpen={setActionsOpen}

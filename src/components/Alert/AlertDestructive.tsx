@@ -30,7 +30,7 @@ function AlertDestructive(props: AlertDestructiveProps) {
   return isVisible ? (
     <Alert
       variant="destructive"
-      className="fixed top-10 right-10 w-80 z-[60] animate__animated animate__bounceInRight"
+      className="animate__animated animate__bounceInRight fixed top-10 right-10 z-[60] w-80"
     >
       <AlertCircle className="h-4 w-4" />
       <AlertTitle>Error</AlertTitle>

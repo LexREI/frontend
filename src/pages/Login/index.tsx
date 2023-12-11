@@ -5,7 +5,7 @@ export default function Login() {
   return (
     <div className="h-screen">
       <HomeHeader />
-      <main className="h-full home_background">
+      <main className="home_background h-full">
         <LoginComponent />
       </main>
     </div>

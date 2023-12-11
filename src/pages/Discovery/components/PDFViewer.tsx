@@ -97,7 +97,7 @@ function PDFViewer() {
 
   return (
     <section className={`border-r-2  ${document.length === 0 ? 'hidden' : ''}`}>
-      <div className="prose h-full rounded-l-2xl webviewer" ref={viewerDiv} />
+      <div className="prose webviewer h-full rounded-l-2xl" ref={viewerDiv} />
     </section>
   );
 }

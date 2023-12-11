@@ -234,7 +234,7 @@ export default function PricingComponent() {
       </div>
 
       {/* FAQ section */}
-      <div className="mx-auto my-24 max-w-7xl pb-16 sm:pb-24 lg:pb-32 px-6 sm:my-56 lg:px-8">
+      <div className="mx-auto my-24 max-w-7xl px-6 pb-16 sm:my-56 sm:pb-24 lg:px-8 lg:pb-32">
         <div className="mx-auto max-w-4xl divide-y divide-gray-900/10">
           <h2 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
             Frequently asked questions
