@@ -11,6 +11,7 @@ import {
   Error,
   PrivateRoute,
 } from './pages';
+import { WebCrawler } from './pages/admins';
 import { DefaultContext } from '@/contexts/default_context';
 import AlertDestructive from '@/components/Alert/AlertDestructive';
 import { AlertDefault } from '@/components/Alert/AlertDefault';
@@ -24,6 +25,7 @@ const routes = [
   { path: '/waitlist', element: <Waitlist />, auth: false },
   { path: '/discovery', element: <Discovery />, auth: false },
   { path: '/login', element: <Login />, auth: false },
+  { path: '/admin/web-crawler', element: <WebCrawler />, auth: true },
   { path: '*', element: <Error />, auth: false },
 ];
 
