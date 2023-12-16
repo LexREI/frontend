@@ -62,4 +62,14 @@ declare namespace API {
     user_id: string;
     session_id: string;
   };
+
+  type WebCrawlerBody = {
+    websiteName: string;
+    startUrls: string[];
+    includeUrls: string[][];
+    titleCSS: string;
+    contentCSS: string;
+    maxRequestsPerCrawl?: number;
+    maxDepth: number;
+  };
 }

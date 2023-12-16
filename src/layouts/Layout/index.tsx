@@ -497,7 +497,7 @@ export default function Layout(props: Props) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="h-screen">
+    <div className="min-h-screen bg-zinc-900">
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -724,7 +724,7 @@ export default function Layout(props: Props) {
       {/*<main className="h-full rounded-lg bg-zinc-900 p-4">*/}
       {/*  <div className="h-full rounded-lg bg-zinc-900  shadow">{component}</div>*/}
       {/*</main>*/}
-      <main className="h-full bg-zinc-900 py-6 lg:pl-60">
+      <main className="bg-zinc-900 py-6 lg:pl-60">
         <div className="h-full px-4">{component}</div>
       </main>
     </div>
