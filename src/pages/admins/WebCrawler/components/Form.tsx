@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { webCrawlerUsingPost } from '@/services/WebCrawlerController';
+import { DefaultContext } from '@/contexts/default_context';
 
 export default function Form() {
+  const { setErrorDescription } = useContext(DefaultContext);
+
   const [form, setForm] = useState<API.WebCrawlerBody>({
-    startUrl: '',
-    includeUrls: [],
+    websiteName: '',
+    startUrls: [''],
+    includeUrls: [['']],
     titleCSS: '',
     contentCSS: '',
     maxRequestsPerCrawl: 0,
@@ -14,24 +19,42 @@ export default function Form() {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === 'includeUrls') {
-      // Update the specific URL at the index
-      const index = parseInt(e.target.dataset.index ?? '0', 10);
+      const arrayIndex = parseInt(e.target.dataset.arrayIndex ?? '0', 10);
+      const urlIndex = parseInt(e.target.dataset.urlIndex ?? '0', 10);
+
       const newIncludeUrls = [...form.includeUrls];
-      newIncludeUrls[index] = value;
+      newIncludeUrls[arrayIndex] = [...newIncludeUrls[arrayIndex]];
+      newIncludeUrls[arrayIndex][urlIndex] = value;
+
       setForm({ ...form, includeUrls: newIncludeUrls });
+    } else if (name === 'startUrls') {
+      setForm({ ...form, startUrls: [value] });
     } else {
       setForm({ ...form, [name]: value });
     }
-    console.log(form);
+    console.log('form:', form);
   };
 
-  const addUrlInput = () => {
-    setForm({ ...form, includeUrls: [...form.includeUrls, ''] });
+  const addUrlArray = () => {
+    setForm({ ...form, includeUrls: [...form.includeUrls, ['']] });
   };
 
-  const removeUrlInput = (index: number) => {
-    const newIncludeUrls = form.includeUrls.filter((_, idx) => idx !== index);
+  const removeUrlArray = (arrayIndex: number) => {
+    const newIncludeUrls = form.includeUrls.filter(
+      (_, idx) => idx !== arrayIndex
+    );
     setForm({ ...form, includeUrls: newIncludeUrls });
+  };
+
+  const onClickWebCrawler = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const res = await webCrawlerUsingPost(form);
+      console.log('res:', res);
+    } catch (err: any) {
+      setErrorDescription(err.response.data.message);
+    }
   };
 
   return (
@@ -49,7 +72,28 @@ export default function Form() {
             </div>
             <div className="sm:col-span-4">
               <label
-                htmlFor="startUrl"
+                htmlFor="websiteName"
+                className="block text-sm font-medium leading-6 text-white"
+              >
+                Website Name
+              </label>
+              <div className="mt-2">
+                <div className="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
+                  <input
+                    type="text"
+                    name="websiteName"
+                    id="websiteName"
+                    autoComplete="text"
+                    className="flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6"
+                    placeholder="Website name(do not duplicate)"
+                    onChange={onChange}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="sm:col-span-4">
+              <label
+                htmlFor="startUrls"
                 className="block text-sm font-medium leading-6 text-white"
               >
                 Start URL
@@ -58,8 +102,8 @@ export default function Form() {
                 <div className="flex rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
                   <input
                     type="url"
-                    name="startUrl"
-                    id="startUrl"
+                    name="startUrls"
+                    id="startUrls"
                     autoComplete="url"
                     className="flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6"
                     placeholder="https://"
@@ -71,34 +115,40 @@ export default function Form() {
 
             <div className="col-span-full">
               <label
-                htmlFor="startUrl"
+                htmlFor="includeUrls"
                 className="block text-sm font-medium leading-6 text-white"
               >
                 Include URLs (globs) (optional)
               </label>
               <div className="col-span-full">
-                {/* ... other labels and inputs ... */}
-                {form.includeUrls.map((url, index) => (
-                  <div key={index} className="mt-2 flex gap-2">
-                    <div className="flex w-full rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
-                      <input
-                        type="url"
-                        name="includeUrls"
-                        data-index={index} // Add index to distinguish inputs
-                        value={url}
-                        className="flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6"
-                        placeholder="https://"
-                        onChange={onChange}
-                      />
-                    </div>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      type="button"
-                      onClick={() => removeUrlInput(index)}
-                    >
-                      X
-                    </Button>
+                {form.includeUrls.map((urlArray, arrayIndex) => (
+                  <div key={arrayIndex}>
+                    {urlArray.map((url, urlIndex) => (
+                      <div className="flex gap-2 mt-2">
+                        <div
+                          key={urlIndex}
+                          className="flex w-full rounded-md bg-white/5 ring-1 ring-inset ring-white/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500"
+                        >
+                          <input
+                            className="flex-1 border-0 bg-transparent py-1.5 pl-1 text-white focus:ring-0 sm:text-sm sm:leading-6"
+                            type="url"
+                            name="includeUrls"
+                            data-array-index={arrayIndex}
+                            data-url-index={urlIndex}
+                            value={url}
+                            onChange={onChange}
+                          />
+                        </div>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          type="button"
+                          onClick={() => removeUrlArray(arrayIndex)}
+                        >
+                          X
+                        </Button>
+                      </div>
+                    ))}
                   </div>
                 ))}
                 <div className="mt-4">
@@ -106,9 +156,9 @@ export default function Form() {
                     size="sm"
                     type="button"
                     variant="secondary"
-                    onClick={addUrlInput}
+                    onClick={addUrlArray}
                   >
-                    Add
+                    Add URL
                   </Button>
                 </div>
               </div>
@@ -208,7 +258,9 @@ export default function Form() {
         >
           Cancel
         </button>
-        <Button type="submit">Save</Button>
+        <Button type="button" onClick={(e) => onClickWebCrawler(e)}>
+          Save
+        </Button>
       </div>
     </form>
   );

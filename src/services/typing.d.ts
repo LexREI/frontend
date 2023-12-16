@@ -64,8 +64,9 @@ declare namespace API {
   };
 
   type WebCrawlerBody = {
-    startUrl: string;
-    includeUrls: string[];
+    websiteName: string;
+    startUrls: string[];
+    includeUrls: string[][];
     titleCSS: string;
     contentCSS: string;
     maxRequestsPerCrawl?: number;
