@@ -59,7 +59,7 @@
     "@types/react-lazy-load-image-component": "^1.5.2",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
-    "@vitejs/plugin-react": "^3.1.0",
+    "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.14",
     "eslint": "8.22.0",
     "eslint-config-airbnb": "^19.0.4",
