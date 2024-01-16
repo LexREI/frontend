@@ -39,6 +39,9 @@ export const ChatbotSlice = createSlice({
     setMessages: (state, action: PayloadAction<API.Message>) => {
       state.messages = [...state.messages, action.payload];
     },
+    removeLastMessage: (state) => {
+      state.messages.pop();
+    },
     setRelevantDialogContent: (
       state,
       action: PayloadAction<
@@ -68,6 +71,7 @@ export const {
   setMessages,
   setRelevantDialogContent,
   onClickSearch,
+  removeLastMessage,
 } = ChatbotSlice.actions;
 
 export default ChatbotSlice.reducer;

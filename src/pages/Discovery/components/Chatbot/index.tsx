@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import * as XLSX from 'xlsx';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import { doChaClientSideUsingPost } from '@/services/ChatbotController';
@@ -12,7 +12,12 @@ import { Bars3BottomRightIcon } from '@heroicons/react/24/outline';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ChatSkeleton from '@/components/Skeleton/ChatSkeleton';
 import { useAppDispatch, useAppSelector } from '@/hooks/useReduxHooks';
-import { setMessages, setRelevantDialogContent } from '@/stores/chatbotSlice';
+import {
+  removeLastMessage,
+  setMessages,
+  setRelevantDialogContent,
+} from '@/stores/chatbotSlice';
+import { DefaultContext } from '@/contexts/default_context';
 
 type ChatbotProps = {
   setActionsOpen: (actionsOpen: boolean) => void;
@@ -22,6 +27,7 @@ type ChatbotProps = {
 
 function Chatbot(props: ChatbotProps) {
   const { setActionsOpen, setRelevantDialogOpen, onClickSetDocument } = props;
+  const { setErrorDescription } = useContext(DefaultContext);
   const { page, document, messages } = useAppSelector((state) => state.chatbot);
   const dispatch = useAppDispatch();
 
@@ -34,23 +40,26 @@ function Chatbot(props: ChatbotProps) {
   };
 
   const processMessage = async (chatMessages: any) => {
-    const body: API.OpenAIChatUsingPostBody = {
-      message: chatMessages,
-    };
-    setUserMessage('');
-    const response = await doChaClientSideUsingPost(body);
-    console.log(response.data);
+    try {
+      const body: API.OpenAIChatUsingPostBody = {
+        message: chatMessages,
+      };
+      setUserMessage('');
+      const response = await doChaClientSideUsingPost(body);
 
-    const newMessage: API.Message = {
-      message: response.data.answer,
-      sender: 'ChatGPT',
-      metadata: response.data.metadata,
-      contentEditable: false,
-    };
-    // setMessages((prevMessages: any) => [...prevMessages, newMessage]);
-    dispatch(setMessages(newMessage));
-
-    setIsTyping(false);
+      const newMessage: API.Message = {
+        message: response.data.answer,
+        sender: 'ChatGPT',
+        metadata: response.data.metadata,
+        contentEditable: false,
+      };
+      dispatch(setMessages(newMessage));
+    } catch (err: any) {
+      setErrorDescription(err.response.data.detail);
+      dispatch(removeLastMessage());
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   const handleSend = async (e: any) => {
