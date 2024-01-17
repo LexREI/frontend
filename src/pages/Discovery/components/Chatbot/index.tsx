@@ -55,7 +55,7 @@ function Chatbot(props: ChatbotProps) {
       };
       dispatch(setMessages(newMessage));
     } catch (err: any) {
-      setErrorDescription(err.response.data.detail);
+      setErrorDescription(err.message);
       dispatch(removeLastMessage());
     } finally {
       setIsTyping(false);
