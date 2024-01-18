@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from '@/contexts/auth_context';
 
 function Hero() {
+  const { isAuthenticated } = useContext(AuthContext);
   return (
     <div className="relative isolate px-6 pt-14 lg:px-8">
       <div
@@ -32,12 +35,22 @@ function Hero() {
           Simple yet powerful.
         </p>
         <div className="mt-10 flex items-center justify-center gap-x-6">
-          <Link
-            to="/waitlist"
-            className="rounded-full border-2 border-white bg-transparent px-3.5 py-2.5 text-sm text-primary-foreground text-black shadow duration-300 hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Join the Waitlist
-          </Link>
+          {isAuthenticated ? (
+            <Link
+              to="/discovery"
+              className="rounded-full border-2 border-white bg-transparent px-3.5 py-2.5 text-sm text-primary-foreground text-black shadow duration-300 hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Start now
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="rounded-full border-2 border-white bg-transparent px-3.5 py-2.5 text-sm text-primary-foreground text-black shadow duration-300 hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Start now
+            </Link>
+          )}
+
           {/*<Link*/}
           {/*  to="/discovery"*/}
           {/*  className="rounded-full border-2 border-white bg-transparent text-primary-foreground px-3.5 py-2.5 text-sm text-black shadow duration-300 hover:bg-white hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"*/}
