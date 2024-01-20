@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import RevelantCard from '@/pages/Discovery/components/Chatbot/components/RelevantCard';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import AlignHorizontalLeftRoundedIcon from '@mui/icons-material/AlignHorizontalLeftRounded';
 import ViewQuiltRoundedIcon from '@mui/icons-material/ViewQuiltRounded';
 import { Bars3BottomRightIcon } from '@heroicons/react/24/outline';
@@ -236,8 +238,16 @@ function Chatbot(props: ChatbotProps) {
                                 Answer
                               </span>
                             </div>
-                            <div className="mt-2 text-base font-normal text-popover-foreground/80">
-                              {message.message}
+                            <div className="mt-2 text-base font-normal text-popover-foreground/80 list-decimal">
+                              <ReactMarkdown
+                                remarkPlugins={[
+                                  [remarkGfm, { singleTilde: false }],
+                                ]}
+                                className="prose max-w-none prose-stone dark:text-gray-50"
+                              >
+                                {message.message}
+                              </ReactMarkdown>
+                              {/*{message.message}*/}
                             </div>
                           </div>
                           <div className="mt-4">
