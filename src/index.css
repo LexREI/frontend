@@ -89,6 +89,20 @@
   transition: opacity 0.5s ease-in-out;
 }
 
+@keyframes blink {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.cursor_streaming {
+  display: inline-block;
+  width: 4px;
+  height: 1em;
+  background-color: currentColor;
+  animation: blink 1s step-start 0s infinite;
+}
+
 @layer base {
   * {
     @apply border-border;

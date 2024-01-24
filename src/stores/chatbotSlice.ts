@@ -39,6 +39,18 @@ export const ChatbotSlice = createSlice({
     setMessages: (state, action: PayloadAction<API.Message>) => {
       state.messages = [...state.messages, action.payload];
     },
+    updateLastMessage: (state, action: PayloadAction<API.Message>) => {
+      state.messages[state.messages.length - 1].message =
+        state.messages[state.messages.length - 1].message + action.payload;
+    },
+    updateLastMessageMetadata: (
+      state,
+      action: PayloadAction<
+        (API.RelevantWebpageMetadata | API.RelevantFileMetadata)[] | null
+      >
+    ) => {
+      state.messages[state.messages.length - 1].metadata = action.payload;
+    },
     removeLastMessage: (state) => {
       state.messages.pop();
     },
@@ -69,6 +81,8 @@ export const {
   setSearchText,
   setDocuments,
   setMessages,
+  updateLastMessage,
+  updateLastMessageMetadata,
   setRelevantDialogContent,
   onClickSearch,
   removeLastMessage,

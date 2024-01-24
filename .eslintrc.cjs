@@ -31,5 +31,6 @@ module.exports = {
     'import/extensions': 'off',
     'react/no-array-index-key': 'off',
     'no-param-reassign': 'off',
+    'no-continue': 'off',
   },
 };
