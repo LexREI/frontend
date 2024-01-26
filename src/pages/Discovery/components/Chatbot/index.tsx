@@ -1,9 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import * as XLSX from 'xlsx';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import { doChaClientSideUsingPost } from '@/services/ChatbotController';
-import { Button } from '@/components/ui/button';
-import RevelantCard from '@/pages/Discovery/components/Chatbot/components/RelevantCard';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import ReactMarkdown from 'react-markdown';
@@ -12,14 +9,20 @@ import AlignHorizontalLeftRoundedIcon from '@mui/icons-material/AlignHorizontalL
 import ViewQuiltRoundedIcon from '@mui/icons-material/ViewQuiltRounded';
 import { Bars3BottomRightIcon } from '@heroicons/react/24/outline';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import RevelantCard from '@/pages/Discovery/components/Chatbot/components/RelevantCard';
+import { Button } from '@/components/ui/button';
+import { doChaClientSideUsingPost } from '@/services/ChatbotController';
 import ChatSkeleton from '@/components/Skeleton/ChatSkeleton';
 import { useAppDispatch, useAppSelector } from '@/hooks/useReduxHooks';
 import {
   removeLastMessage,
   setMessages,
   setRelevantDialogContent,
+  updateLastMessage,
+  updateLastMessageMetadata,
 } from '@/stores/chatbotSlice';
 import { DefaultContext } from '@/contexts/default_context';
+import { BASE_URL } from '@/config/domain';
 
 type ChatbotProps = {
   setActionsOpen: (actionsOpen: boolean) => void;
@@ -35,6 +38,7 @@ function Chatbot(props: ChatbotProps) {
 
   const [userMessage, setUserMessage] = useState<string>(''); // user input
   const [isTyping, setIsTyping] = useState<boolean>(false); // is typing
+  const [isStreaming, setIsStreaming] = useState<boolean>(false); // is streaming
   const divEditRef = useRef<HTMLDivElement>(null);
 
   const handleSendOnChange = (message: string) => {
@@ -64,6 +68,119 @@ function Chatbot(props: ChatbotProps) {
     }
   };
 
+  const processMessage1 = (chatMessages: any) => {
+    let buffer = '';
+
+    const handleJson = (json: any) => {
+      if (json.type === 'start') {
+        const newMessage: API.Message = {
+          message: '',
+          sender: 'ChatGPT',
+          metadata: [],
+          contentEditable: false,
+        };
+        dispatch(setMessages(newMessage));
+        setIsTyping(false);
+        setIsStreaming(true);
+        setUserMessage('');
+      } else if (json.type === 'stream') {
+        dispatch(updateLastMessage(json.message));
+      } else if (json.type === 'info') {
+        dispatch(updateLastMessageMetadata(json.metadata));
+      } else if (json.type === 'end') {
+        setIsStreaming(false);
+      }
+    };
+
+    const processChunk = (chunk: string) => {
+      buffer += chunk;
+
+      // Utility function to find the end of a complete JSON object
+      function findEndOfJsonObject(str: string) {
+        let depth = 0;
+        let inString = false;
+        let escape = false;
+        for (let i = 0; i < str.length; i += 1) {
+          const char = str[i];
+          if (escape) {
+            escape = false;
+            continue;
+          }
+          if (char === '\\') {
+            escape = true;
+            continue;
+          }
+          if (char === '"') {
+            inString = !inString;
+            continue;
+          }
+          if (inString) continue;
+          if (char === '{') depth += 1;
+          else if (char === '}') depth -= 1;
+          if (depth === 0) return i; // End of JSON object found
+        }
+        return -1; // Complete JSON object not found
+      }
+      // Continuously process the buffer to extract complete JSON objects
+      let endOfObjectIndex;
+      // eslint-disable-next-line no-cond-assign
+      while ((endOfObjectIndex = findEndOfJsonObject(buffer)) !== -1) {
+        const jsonChunk = buffer.substring(0, endOfObjectIndex + 1);
+        try {
+          const json = JSON.parse(jsonChunk);
+          handleJson(json); // Process the JSON object
+        } catch (error) {
+          console.error('Error parsing JSON chunk:', error);
+          break; // Break if parsing fails, wait for more data
+        }
+        buffer = buffer.substring(endOfObjectIndex + 1); // Update the buffer
+      }
+    };
+
+    try {
+      const body = {
+        conversation_id: 'string',
+        message: chatMessages,
+      };
+      fetch(`${BASE_URL}/openai/chat/streaming`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      })
+        .then((response) => {
+          if (response.body) {
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+
+            const readStream = () => {
+              reader.read().then(({ done, value }) => {
+                if (done) {
+                  console.log('Stream complete');
+                  return;
+                }
+
+                const chunk = decoder.decode(value, { stream: true });
+                processChunk(chunk);
+                readStream();
+              });
+            };
+
+            readStream();
+          }
+        })
+        .catch((error) => {
+          console.error('Fetch error:', error);
+        });
+    } catch (err: any) {
+      setErrorDescription(err.message);
+      dispatch(removeLastMessage());
+    } finally {
+      // setIsTyping(false);
+    }
+  };
+
   const handleSend = async (e: any) => {
     setIsTyping(true);
     e.preventDefault();
@@ -76,7 +193,7 @@ function Chatbot(props: ChatbotProps) {
 
     dispatch(setMessages(newMessage));
     // Initial system message
-    await processMessage(userMessage);
+    processMessage1(userMessage);
   };
 
   // Confirm the contentEditable is True, allow user to edit
@@ -238,7 +355,7 @@ function Chatbot(props: ChatbotProps) {
                                 Answer
                               </span>
                             </div>
-                            <div className="mt-2 text-base font-normal text-popover-foreground/80 list-decimal">
+                            <div className="mt-2 flex items-center text-base font-normal text-popover-foreground/80 list-decimal">
                               <ReactMarkdown
                                 remarkPlugins={[
                                   [remarkGfm, { singleTilde: false }],
@@ -247,7 +364,9 @@ function Chatbot(props: ChatbotProps) {
                               >
                                 {message.message}
                               </ReactMarkdown>
-                              {/*{message.message}*/}
+                              {isStreaming && (
+                                <span className="cursor_streaming" />
+                              )}
                             </div>
                           </div>
                           <div className="mt-4">

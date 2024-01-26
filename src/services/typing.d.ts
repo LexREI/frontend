@@ -14,6 +14,11 @@ declare namespace API {
     message: string;
   };
 
+  type OpenAIChatStreamingUsingPostBody = {
+    conversation_id: string;
+    message: string;
+  };
+
   type Documents = {
     file_name: string;
     download_link: string;
