@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import TabList from '@/pages/Discovery/components/Actions/components/TabList';
+import TabList from '@/pages/dashboard/Discovery/components/Actions/components/TabList';
 import { useAppDispatch, useAppSelector } from '@/hooks/useReduxHooks';
 
 const tabs = [

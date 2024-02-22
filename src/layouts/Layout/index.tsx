@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from 'react';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import {
   Bars3Icon,
@@ -13,37 +13,6 @@ import logo from '@/assets/logo.jpg';
 import { AuthContext } from '@/contexts/auth_context';
 import IconButton from '@mui/material/IconButton';
 import { Link } from 'react-router-dom';
-
-const navigation = [
-  {
-    name: 'Dashboard',
-    href: '#',
-    icon: HomeIcon,
-    current: true,
-    color: 'text-blue-400',
-  },
-  {
-    name: 'Legal Research',
-    href: '/dashboard/legal-research',
-    icon: DocumentMagnifyingGlassIcon,
-    current: false,
-    color: 'text-blue-400',
-  },
-  {
-    name: 'Legal AI Copilot',
-    href: '/dashboard/legal-ai-copilot',
-    icon: GlobeAltIcon,
-    current: false,
-    color: 'text-blue-400',
-  },
-  {
-    name: '(WIP) Legal Drafting',
-    href: '/dashboard/legal-drafting',
-    icon: PencilSquareIcon,
-    current: false,
-    color: 'text-blue-400',
-  },
-];
 const teams = [
   { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
   { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
@@ -62,6 +31,47 @@ export default function Layout(props: Props) {
   const { userInfo } = useContext(AuthContext);
   const { component } = props;
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [navigation, setNavigation] = useState([
+    {
+      name: 'Dashboard',
+      href: '/discovery',
+      icon: HomeIcon,
+      current: true,
+      color: 'text-blue-400',
+    },
+    {
+      name: 'Legal Research',
+      href: '/dashboard/legal-research',
+      icon: DocumentMagnifyingGlassIcon,
+      current: false,
+      color: 'text-blue-400',
+    },
+    {
+      name: 'Legal AI Copilot',
+      href: '/dashboard/legal-ai-copilot',
+      icon: GlobeAltIcon,
+      current: false,
+      color: 'text-blue-400',
+    },
+    {
+      name: '(WIP) Legal Drafting',
+      href: '/dashboard/legal-drafting',
+      icon: PencilSquareIcon,
+      current: false,
+      color: 'text-blue-400',
+    },
+  ]);
+
+  useEffect(() => {
+    // set navigation data current status based on url
+    const newNavigationData = navigation.map((item) => {
+      return {
+        ...item,
+        current: item.href === window.location.pathname,
+      };
+    });
+    setNavigation(newNavigationData);
+  }, []);
 
   return (
     <div className="min-h-screen">

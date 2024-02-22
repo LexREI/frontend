@@ -6,12 +6,12 @@ import {
   PaySuccess,
   About,
   Waitlist,
-  Discovery,
   Login,
   Error,
   PrivateRoute,
 } from './pages';
 import {
+  Discovery,
   LegalAICopilot,
   LegalDrafting,
   LegalResearch,

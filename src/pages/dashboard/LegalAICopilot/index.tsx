@@ -1,13 +1,13 @@
 import Layout from '@/layouts/Layout';
-import Actions from '@/pages/Discovery/components/Actions';
-import PDFViewer from '@/pages/Discovery/components/PDFViewer';
-import Chatbot from '@/pages/Discovery/components/Chatbot';
+import Actions from '@/pages/dashboard/Discovery/components/Actions';
+import PDFViewer from '@/pages/dashboard/Discovery/components/PDFViewer';
 import { useContext, useEffect, useState } from 'react';
 import { documentsListUsingGet } from '@/services/DocumentController';
 import { DefaultContext } from '@/contexts/default_context';
-import { RelevantDialog } from '@/pages/Discovery/components/RelevantDialog';
+import { RelevantDialog } from '@/pages/dashboard/Discovery/components/RelevantDialog';
 import { useAppDispatch, useAppSelector } from '@/hooks/useReduxHooks';
 import { setDocument, setDocuments } from '@/stores/chatbotSlice';
+import Chatbot from '@/pages/dashboard/LegalAICopilot/components/Chatbot';
 
 function LegalAICopilot() {
   const { setErrorDescription, setProcessLoading, setProcessLoadingTitle } =

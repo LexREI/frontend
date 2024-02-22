@@ -9,7 +9,7 @@ import AlignHorizontalLeftRoundedIcon from '@mui/icons-material/AlignHorizontalL
 import ViewQuiltRoundedIcon from '@mui/icons-material/ViewQuiltRounded';
 import { Bars3BottomRightIcon } from '@heroicons/react/24/outline';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import RevelantCard from '@/pages/Discovery/components/Chatbot/components/RelevantCard';
+import RevelantCard from '@/pages/dashboard/Discovery/components/Chatbot/components/RelevantCard';
 import { Button } from '@/components/ui/button';
 import { doChaClientSideUsingPost } from '@/services/ChatbotController';
 import ChatSkeleton from '@/components/Skeleton/ChatSkeleton';
@@ -300,32 +300,11 @@ function Chatbot(props: ChatbotProps) {
   return (
     <section>
       <div
-        className={`from-20% via-30% to-100% h-full w-full self-start bg-gradient-to-b from-slate-50 via-slate-50 to-slate-100 ${
+        className={`from-20% via-30% to-100% h-full w-full self-start ${
           document.length === 0 ? 'rounded-2xl' : 'rounded-r-2xl'
         }`}
       >
         <div className="flex h-full max-h-[95vh]  flex-col">
-          <div className="flex items-center justify-between border-b border-slate-300 p-4">
-            <h3 className="text-xl font-semibold leading-none tracking-tight">
-              LEXARI
-            </h3>
-            <div className="flex gap-2">
-              {messages.length > 0 && (
-                <Button
-                  className="h-8 w-8 p-0"
-                  onClick={() => exportToXlsx('LEXARI_chat_message.xlsx')}
-                >
-                  <FileDownloadIcon className="h-6 w-6" />
-                </Button>
-              )}
-              <Button
-                className="h-8 w-8 p-0"
-                onClick={() => setActionsOpen(true)}
-              >
-                <Bars3BottomRightIcon className="h-6 w-6" />
-              </Button>
-            </div>
-          </div>
           {messages.length === 0 ? (
             <div className="mt-4 flex h-full flex-col p-4 text-center">
               <h2 className="text-3xl font-bold text-primary">LEXARI</h2>
@@ -456,10 +435,6 @@ function Chatbot(props: ChatbotProps) {
                 )}
               </div>
             </form>
-            <h3 className="mt-2 ml-auto flex text-sm text-gray-500">
-              Powered by &nbsp;
-              <p className="font-medium text-gray-700">LEXARI</p>
-            </h3>
           </div>
         </div>
       </div>
