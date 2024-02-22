@@ -11,6 +11,11 @@ import {
   Error,
   PrivateRoute,
 } from './pages';
+import {
+  LegalAICopilot,
+  LegalDrafting,
+  LegalResearch,
+} from './pages/dashboard';
 import { WebCrawler } from './pages/admins';
 import { DefaultContext } from '@/contexts/default_context';
 import AlertDestructive from '@/components/Alert/AlertDestructive';
@@ -26,6 +31,13 @@ const routes = [
   { path: '/discovery', element: <Discovery />, auth: false },
   { path: '/login', element: <Login />, auth: false },
   { path: '/admin/web-crawler', element: <WebCrawler />, auth: true },
+  {
+    path: '/dashboard/legal-ai-copilot',
+    element: <LegalAICopilot />,
+    auth: true,
+  },
+  { path: '/dashboard/legal-drafting', element: <LegalDrafting />, auth: true },
+  { path: '/dashboard/legal-research', element: <LegalResearch />, auth: true },
   { path: '*', element: <Error />, auth: false },
 ];
 
