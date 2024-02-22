@@ -9,7 +9,6 @@ import AlignHorizontalLeftRoundedIcon from '@mui/icons-material/AlignHorizontalL
 import ViewQuiltRoundedIcon from '@mui/icons-material/ViewQuiltRounded';
 import { Bars3BottomRightIcon } from '@heroicons/react/24/outline';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import RevelantCard from '@/pages/Discovery/components/Chatbot/components/RelevantCard';
 import { Button } from '@/components/ui/button';
 import { doChaClientSideUsingPost } from '@/services/ChatbotController';
 import ChatSkeleton from '@/components/Skeleton/ChatSkeleton';
@@ -23,6 +22,7 @@ import {
 } from '@/stores/chatbotSlice';
 import { DefaultContext } from '@/contexts/default_context';
 import { BASE_URL } from '@/config/domain';
+import RevelantCard from '@/pages/dashboard/Discovery/components/Chatbot/components/RelevantCard';
 
 type ChatbotProps = {
   setActionsOpen: (actionsOpen: boolean) => void;
