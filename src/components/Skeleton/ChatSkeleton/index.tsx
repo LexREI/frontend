@@ -13,27 +13,17 @@ export default function ChatSkeleton() {
         width: '100%',
       }}
     >
-      <div className="mt-4">
-        <div className="flex items-center gap-1">
-          <AlignHorizontalLeftRoundedIcon />
-          <span className="text-xl font-medium">Answer</span>
-        </div>
+      <div className="flex flex-col items-center mt-4">
+        {/*<div className="flex items-center gap-1">*/}
+        {/*  <AlignHorizontalLeftRoundedIcon />*/}
+        {/*  <span className="text-xl font-medium">Answer</span>*/}
+        {/*</div>*/}
+        {/*<UseAnimations animation={loading} size={40} />*/}
+
         <UseAnimations animation={loading} size={40} />
-        {/*<Skeleton*/}
-        {/*  sx={{*/}
-        {/*    width: '80%',*/}
-        {/*    marginTop: 1,*/}
-        {/*    backgroundColor: 'rgba(0, 0, 0, 0.11)',*/}
-        {/*  }}*/}
-        {/*/>*/}
-        {/*<Skeleton*/}
-        {/*  sx={{*/}
-        {/*    width: '60%',*/}
-        {/*    backgroundColor: 'rgba(0, 0, 0, 0.11)',*/}
-        {/*  }}*/}
-        {/*  animation="wave"*/}
-        {/*/>*/}
-        {/*<Skeleton animation={false} />*/}
+        <div className="flex items-center gap-1">
+          <span className="text-xl">AI thinking...</span>
+        </div>
       </div>
       {/*<div className="mt-4">*/}
       {/*  <div className="flex items-center gap-1">*/}

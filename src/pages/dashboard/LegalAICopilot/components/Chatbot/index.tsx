@@ -11,6 +11,7 @@ import { Bars3BottomRightIcon } from '@heroicons/react/24/outline';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import RevelantCard from '@/pages/dashboard/Discovery/components/Chatbot/components/RelevantCard';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { doChaClientSideUsingPost } from '@/services/ChatbotController';
 import ChatSkeleton from '@/components/Skeleton/ChatSkeleton';
 import { useAppDispatch, useAppSelector } from '@/hooks/useReduxHooks';
@@ -23,6 +24,8 @@ import {
 } from '@/stores/chatbotSlice';
 import { DefaultContext } from '@/contexts/default_context';
 import { BASE_URL } from '@/config/domain';
+import lexari_avatar from '@/assets/lexari_avatar.jpg';
+import { Link } from 'react-router-dom';
 
 type ChatbotProps = {
   setActionsOpen: (actionsOpen: boolean) => void;
@@ -326,14 +329,103 @@ function Chatbot(props: ChatbotProps) {
                   return (
                     <div key={index}>
                       {message.sender === 'ChatGPT' ? (
-                        <div className="pb-6">
-                          <div className="mt-4">
-                            <div className="flex items-center gap-1">
-                              <AlignHorizontalLeftRoundedIcon />
-                              <span className="text-xl font-medium">
-                                Answer
-                              </span>
+                        <div className="pb-6 mt-4">
+                          <div className="flex gap-4">
+                            <Avatar>
+                              <AvatarImage src={lexari_avatar} />
+                              <AvatarFallback>CN</AvatarFallback>
+                            </Avatar>
+                            <div className="flex flex-col">
+                              <div className="inline-block bg-blue-100 py-2 px-4">
+                                <span className="text-lg font-medium">
+                                  LexARI AI
+                                </span>
+                                <div className="mt-2 flex items-center text-base font-normal text-popover-foreground/80 list-decimal">
+                                  <ReactMarkdown
+                                    remarkPlugins={[
+                                      [remarkGfm, { singleTilde: false }],
+                                    ]}
+                                    className="prose max-w-none prose-stone dark:text-gray-50"
+                                  >
+                                    {message.message}
+                                  </ReactMarkdown>
+                                  {isStreaming && (
+                                    <span className="cursor_streaming" />
+                                  )}
+                                </div>
+                              </div>
+                              <div className="inline-block bg-orange-100 py-2 px-4 mt-2">
+                                <span className="text-lg font-medium">
+                                  References
+                                </span>
+                                <div className="mt-2 flex flex-col text-base font-normal text-popover-foreground/80 list-decimal">
+                                  {message.metadata &&
+                                    message.metadata.map((metadata: any, i) => {
+                                      return (
+                                        <li key={i}>
+                                          <Link
+                                            to={metadata.source_url}
+                                            target="_blank"
+                                            className="text-sky-300 underline"
+                                          >
+                                            {metadata.title}
+                                          </Link>
+                                        </li>
+                                      );
+                                    })}
+                                </div>
+                              </div>
                             </div>
+                          </div>
+
+                          {/*<div className="mt-4">*/}
+                          {/*  <div className="flex items-center gap-1">*/}
+                          {/*    <ViewQuiltRoundedIcon />*/}
+                          {/*    <span className="text-xl font-medium">*/}
+                          {/*      Legal Sources*/}
+                          {/*    </span>*/}
+                          {/*  </div>*/}
+                          {/*  <div className="mt-4 grid grid-cols-3 gap-2">*/}
+                          {/*    {message.metadata &&*/}
+                          {/*      message.metadata.map((metadata: any) => {*/}
+                          {/*        return (*/}
+                          {/*          <RevelantCard*/}
+                          {/*            key={metadata}*/}
+                          {/*            document={document}*/}
+                          {/*            metadata={metadata}*/}
+                          {/*            onClickSetDocument={onClickSetDocument}*/}
+                          {/*          />*/}
+                          {/*        );*/}
+                          {/*      })}*/}
+                          {/*  </div>*/}
+                          {/*</div>*/}
+                          {/*<div className="mt-4">*/}
+                          {/*  <Tooltip title="View Relevant">*/}
+                          {/*    <IconButton*/}
+                          {/*      size="small"*/}
+                          {/*      onClick={() => {*/}
+                          {/*        dispatch(*/}
+                          {/*          setRelevantDialogContent(message.metadata)*/}
+                          {/*        );*/}
+                          {/*        setRelevantDialogOpen(true);*/}
+                          {/*      }}*/}
+                          {/*    >*/}
+                          {/*      <ViewQuiltRoundedIcon fontSize="small" />*/}
+                          {/*    </IconButton>*/}
+                          {/*  </Tooltip>*/}
+                          {/*</div>*/}
+                          {/*<hr className="mt-4" />*/}
+                        </div>
+                      ) : (
+                        <div className="flex gap-4 mt-8">
+                          <Avatar>
+                            <AvatarImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=2360&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+                            <AvatarFallback>CN</AvatarFallback>
+                          </Avatar>
+                          <div className="inline-block bg-yellow-100 py-2 px-4">
+                            <span className="text-lg font-medium">
+                              John Doe
+                            </span>
                             <div className="mt-2 flex items-center text-base font-normal text-popover-foreground/80 list-decimal">
                               <ReactMarkdown
                                 remarkPlugins={[
@@ -348,47 +440,6 @@ function Chatbot(props: ChatbotProps) {
                               )}
                             </div>
                           </div>
-                          <div className="mt-4">
-                            <div className="flex items-center gap-1">
-                              <ViewQuiltRoundedIcon />
-                              <span className="text-xl font-medium">
-                                Legal Sources
-                              </span>
-                            </div>
-                            <div className="mt-4 grid grid-cols-3 gap-2">
-                              {message.metadata &&
-                                message.metadata.map((metadata: any) => {
-                                  return (
-                                    <RevelantCard
-                                      key={metadata}
-                                      document={document}
-                                      metadata={metadata}
-                                      onClickSetDocument={onClickSetDocument}
-                                    />
-                                  );
-                                })}
-                            </div>
-                          </div>
-                          <div className="mt-4">
-                            <Tooltip title="View Relevant">
-                              <IconButton
-                                size="small"
-                                onClick={() => {
-                                  dispatch(
-                                    setRelevantDialogContent(message.metadata)
-                                  );
-                                  setRelevantDialogOpen(true);
-                                }}
-                              >
-                                <ViewQuiltRoundedIcon fontSize="small" />
-                              </IconButton>
-                            </Tooltip>
-                          </div>
-                          <hr className="mt-4" />
-                        </div>
-                      ) : (
-                        <div className="text-2xl font-medium">
-                          {message.message}
                         </div>
                       )}
                     </div>
