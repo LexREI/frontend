@@ -435,9 +435,6 @@ function Chatbot(props: ChatbotProps) {
                               >
                                 {message.message}
                               </ReactMarkdown>
-                              {isStreaming && (
-                                <span className="cursor_streaming" />
-                              )}
                             </div>
                           </div>
                         </div>
