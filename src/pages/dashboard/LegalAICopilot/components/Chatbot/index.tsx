@@ -442,7 +442,7 @@ function Chatbot(props: ChatbotProps) {
                     </div>
                   );
                 })}
-                {isTyping && <ChatSkeleton />}
+                {isTyping && <ChatSkeleton title="AI thinking..." />}
               </div>
             </div>
           )}

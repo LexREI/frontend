@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Link } from 'react-router-dom';
 
 const data = [
   {
@@ -37,17 +38,22 @@ const data = [
   },
 ];
 
-function Results() {
+type ResultsProps = {
+  searchCases: API.CasesSearchUsingPostResponse[];
+};
+
+function Results(props: ResultsProps) {
+  const { searchCases } = props;
   return (
-    <div className="flex flex-col gap-4">
-      {data.map((item) => {
+    <div className="flex flex-col gap-4 pb-12">
+      {searchCases.map((item, id) => {
         return (
-          <Card key={item.id} className="flex flex-col gap-2">
+          <Card key={id} className="flex flex-col gap-2">
             <CardHeader>
-              <CardTitle>{item.title}</CardTitle>
-              <CardDescription>{item.subtitle}</CardDescription>
+              <CardTitle>{item.case_name}</CardTitle>
+              <CardDescription>{item.citation_string}</CardDescription>
             </CardHeader>
-            <CardContent>{item.content}</CardContent>
+            <CardContent>{item.page_content}</CardContent>
           </Card>
         );
       })}

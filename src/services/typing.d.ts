@@ -77,4 +77,17 @@ declare namespace API {
     maxRequestsPerCrawl?: number;
     maxDepth: number;
   };
+
+  type CasesSearchUsingPostBody = {
+    query: string;
+  };
+
+  type CasesSearchUsingPostResponse = {
+    document_type: string;
+    title: string;
+    case_name: string;
+    citation_string: string;
+    page_content: string;
+    source_url: string;
+  };
 }

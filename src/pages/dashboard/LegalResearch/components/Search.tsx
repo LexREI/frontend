@@ -3,6 +3,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import FilterListRoundedIcon from '@mui/icons-material/FilterListRounded';
 import * as React from 'react';
 import { CalendarIcon } from '@radix-ui/react-icons';
+import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import { addDays, format } from 'date-fns';
 import { DateRange } from 'react-day-picker';
 
@@ -14,18 +15,29 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { useContext } from 'react';
+import { DefaultContext } from '@/contexts/default_context';
 
-function Search() {
+type SearchProps = {
+  onSubmitCasesSearch: (e: any, query: string) => void;
+};
+
+function Search(props: SearchProps) {
+  const { onSubmitCasesSearch } = props;
+  const { fetchLoading } = useContext(DefaultContext);
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(2022, 0, 20),
     to: addDays(new Date(2022, 0, 20), 20),
   });
   return (
-    <div className="relative flex items-center gap-2">
+    <form
+      className="relative flex items-center gap-2"
+      onSubmit={(e) => onSubmitCasesSearch(e, 'what is us law')}
+    >
       <MagnifyingGlassIcon className="absolute left-2 h-4 w-4 text-muted-foreground" />
       <Input
         className="pl-8"
-        type="email"
+        type="text"
         placeholder="clickwrap agreement cases"
       />
       <div className="grid gap-2">
@@ -66,11 +78,14 @@ function Search() {
           </PopoverContent>
         </Popover>
       </div>
-      <Button variant="outline" size="icon" className="w-32">
+      <Button variant="outline" size="icon" className="w-32" type="button">
         <FilterListRoundedIcon className="h-4 w-4" />
         <span>Filters</span>
       </Button>
-    </div>
+      <Button className="w-56" type="submit" disabled={fetchLoading}>
+        Apply filters
+      </Button>
+    </form>
   );
 }
 

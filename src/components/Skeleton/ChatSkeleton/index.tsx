@@ -6,7 +6,12 @@ import UseAnimations from 'react-useanimations';
 import loading from 'react-useanimations/lib/loading';
 import AlignHorizontalLeftRoundedIcon from '@mui/icons-material/AlignHorizontalLeftRounded';
 
-export default function ChatSkeleton() {
+type ChatSkeletonProps = {
+  title: string;
+};
+
+export default function ChatSkeleton(props: ChatSkeletonProps) {
+  const { title } = props;
   return (
     <Box
       sx={{
@@ -22,7 +27,7 @@ export default function ChatSkeleton() {
 
         <UseAnimations animation={loading} size={40} />
         <div className="flex items-center gap-1">
-          <span className="text-xl">AI thinking...</span>
+          <span className="text-xl">{title}</span>
         </div>
       </div>
       {/*<div className="mt-4">*/}
