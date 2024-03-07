@@ -50,7 +50,11 @@ function Results(props: ResultsProps) {
         return (
           <Card key={id} className="flex flex-col gap-2">
             <CardHeader>
-              <CardTitle>{item.case_name}</CardTitle>
+              <CardTitle>
+                <Link to={item.source_url} target="_blank">
+                  {item.case_name}
+                </Link>
+              </CardTitle>
               <CardDescription>{item.citation_string}</CardDescription>
             </CardHeader>
             <CardContent>{item.page_content}</CardContent>
