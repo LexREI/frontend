@@ -40,10 +40,11 @@ const data = [
 
 type ResultsProps = {
   searchCases: API.CasesSearchUsingPostResponse[];
+  onClickExpand: (id: number) => void;
 };
 
 function Results(props: ResultsProps) {
-  const { searchCases } = props;
+  const { searchCases, onClickExpand } = props;
   return (
     <div className="flex flex-col gap-4 pb-12">
       {searchCases.map((item, id) => {
@@ -51,13 +52,37 @@ function Results(props: ResultsProps) {
           <Card key={id} className="flex flex-col gap-2">
             <CardHeader>
               <CardTitle>
-                <Link to={item.source_url} target="_blank">
+                <Link
+                  to={item.source_url}
+                  target="_blank"
+                  className="transition duration-300 hover:underline "
+                >
                   {item.case_name}
                 </Link>
               </CardTitle>
               <CardDescription>{item.citation_string}</CardDescription>
             </CardHeader>
-            <CardContent>{item.page_content}</CardContent>
+            <CardContent className="text-muted-foreground">
+              {item.page_content.length > 500 ? (
+                <div>
+                  <p>
+                    {item.expand
+                      ? item.page_content
+                      : `${item.page_content.slice(0, 700)}...`}
+                  </p>
+                  <button
+                    onClick={() => onClickExpand(id)}
+                    className="text-blue-500"
+                    type="button"
+                  >
+                    {item.expand ? 'Collapse' : 'Expand'}
+                  </button>
+                </div>
+              ) : (
+                <p>{item.page_content}</p>
+              )}
+              {/*{item.page_content}*/}
+            </CardContent>
           </Card>
         );
       })}

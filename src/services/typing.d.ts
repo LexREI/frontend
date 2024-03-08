@@ -83,11 +83,13 @@ declare namespace API {
   };
 
   type CasesSearchUsingPostResponse = {
+    id: number;
     document_type: string;
     title: string;
     case_name: string;
     citation_string: string;
     page_content: string;
     source_url: string;
+    expand: boolean;
   };
 }

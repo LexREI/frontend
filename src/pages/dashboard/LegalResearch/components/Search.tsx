@@ -82,9 +82,9 @@ function Search(props: SearchProps) {
         <FilterListRoundedIcon className="h-4 w-4" />
         <span>Filters</span>
       </Button>
-      <Button className="w-56" type="submit" disabled={fetchLoading}>
-        Apply filters
-      </Button>
+      {/*<Button className="w-56" type="submit" disabled={fetchLoading}>*/}
+      {/*  Apply filters*/}
+      {/*</Button>*/}
     </form>
   );
 }
